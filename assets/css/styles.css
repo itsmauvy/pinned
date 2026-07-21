@@ -66,8 +66,8 @@ button { font-family: inherit; cursor: pointer; }
   mix-blend-mode: multiply; pointer-events: none;
 }
 .masthead a, .masthead button { pointer-events: auto; }
-.wordmark { font-family: var(--serif); font-size: 1.2rem; display: inline-flex; align-items: baseline; gap: .3rem; }
-.pin-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blush-deep); box-shadow: 0 0 0 3px rgba(201,158,151,.25); }
+.wordmark { display: inline-flex; align-items: center; }
+.wordmark img { height: clamp(20px, 2.4vw, 26px); width: auto; display: block; }
 /* GNB — one item per spread; active follows the page you're on */
 .gnb { display: flex; align-items: center; gap: clamp(.7rem, 1.8vw, 1.6rem); }
 .gnb button {
@@ -77,11 +77,15 @@ button { font-family: inherit; cursor: pointer; }
 }
 .gnb button:hover { color: var(--ink); }
 .gnb button.active { color: var(--ink); border-color: var(--ink); }
-.mast-right { display: flex; align-items: center; gap: 1.1rem; }
-.mast-issue { font-family: var(--mono); font-size: .6rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-.board-btn { font-family: var(--mono); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; background: var(--ink); color: var(--paper); border: none; border-radius: 100px; padding: .45rem .8rem; display: inline-flex; align-items: center; gap: .45rem; transition: transform .3s var(--ease); }
-.board-btn:hover { transform: translateY(-1px); }
-.board-count { background: var(--blush); color: var(--ink); border-radius: 100px; min-width: 17px; height: 17px; display: inline-grid; place-items: center; font-size: .58rem; padding: 0 5px; }
+.mast-right { display: flex; align-items: center; gap: clamp(.7rem, 1.6vw, 1.4rem); }
+.mast-tool {
+  font-family: var(--mono); font-size: .62rem; letter-spacing: .16em; text-transform: uppercase;
+  background: none; border: none; padding: 4px 0; color: var(--ink-soft);
+  border-bottom: 1px solid transparent; transition: color .3s, border-color .3s;
+}
+.mast-tool:hover { color: var(--ink); }
+.mast-tool.bag { color: var(--ink); }
+.board-count { font-variant-numeric: tabular-nums; }
 
 /* =====================================================================
    BOOK — sticky stage + tall scroll track drive the page turns

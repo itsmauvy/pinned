@@ -157,7 +157,12 @@
     b.classList.toggle("pinned", now); b.textContent = now ? "pinned ✓" : "pin this piece";
     toast(now ? "pinned to your board" : "removed from board");
   });
-  $("#detailBag").addEventListener("click", () => toast("added to bag — checkout is a demo"));
+  $("#detailBag").addEventListener("click", () => {
+    if (!currentDetail) return;
+    if (!isPinned(currentDetail)) togglePin(currentDetail);
+    const b = $("#detailPin"); b.classList.add("pinned"); b.textContent = "pinned ✓";
+    toast("added to your bag");
+  });
 
   /* =================================================================
      BOARD slide-over
@@ -218,6 +223,8 @@
   $("#openBoard").addEventListener("click", openBoard);
   $("#openBoard2").addEventListener("click", openBoard);
   $("#featureCta").addEventListener("click", () => openDetail("p05"));
+  $("#navSearch").addEventListener("click", () => { goToSpread(3); toast("browse the shelf — live search coming soon"); });
+  $("#navAccount").addEventListener("click", () => toast("account — demo, no sign-in yet"));
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") { if (!overlay.hidden) closeDetail(); else if (!boardPanel.hidden) closeBoard(); return; }
     if (mode === "flip" && overlay.hidden && boardPanel.hidden && !animating) {
@@ -231,15 +238,13 @@
      ================================================================= */
   const bar = $("#progressBar");
   const gnb = $("#gnb");
-  const SPREAD_TITLES = ["cover", "index", "lookbook", "archive", "detail", "colophon"];
   const pageFaces = mode === "scroll" ? $$(".page-face") : null;
   const spreadCount = mode === "flip" ? numSpreads : pageFaces.length / 2;
 
-  /* one GNB item per spread; active follows the page you're on */
-  gnb.innerHTML = SPREAD_TITLES.slice(0, spreadCount)
-    .map((t, i) => `<button data-spread="${i}">${t}</button>`).join("");
+  /* GNB items are authored in the masthead (data-spread maps each to a page);
+     the active item follows the spread you're on */
   const gnbBtns = $$(".gnb button");
-  const setActiveGNB = (k) => gnbBtns.forEach((b, i) => b.classList.toggle("active", i === k));
+  const setActiveGNB = (k) => gnbBtns.forEach((b) => b.classList.toggle("active", +b.dataset.spread === k));
 
   // gentle sine ease — no fast whip through the middle, like a real page turn
   const ease = (t) => -(Math.cos(Math.PI * clamp(t, 0, 1)) - 1) / 2;
@@ -307,7 +312,7 @@
       bar.style.width = `${clamp(doc.scrollTop / (doc.scrollHeight - doc.clientHeight || 1), 0, 1) * 100}%`;
       let idx = 0;
       pageFaces.forEach((el, i) => { if (el.getBoundingClientRect().top < window.innerHeight * 0.5) idx = i; });
-      setActiveGNB(clamp(Math.round(idx / 2), 0, gnbBtns.length - 1));
+      setActiveGNB(clamp(Math.round(idx / 2), 0, spreadCount - 1));
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();

@@ -15,13 +15,19 @@
 
   <!-- masthead -->
   <header class="masthead">
-    <a class="wordmark" href="#" id="goCover">pinned<span class="pin-dot" aria-hidden="true"></span></a>
-    <nav class="gnb" id="gnb" aria-label="pages"></nav>
+    <a class="wordmark" href="#" id="goCover" aria-label="pinned — home">
+      <img src="assets/img/pinned%20logo%201.svg" alt="pinned" />
+    </a>
+    <nav class="gnb" id="gnb" aria-label="primary">
+      <button data-spread="2">new finds</button>
+      <button data-spread="3">shop</button>
+      <button data-spread="4">archive</button>
+      <button data-spread="1">editorial</button>
+    </nav>
     <div class="mast-right">
-      <span class="mast-issue" id="mastIssue"></span>
-      <button class="board-btn" id="openBoard" aria-haspopup="dialog">
-        pinned <span class="board-count" id="boardCount">0</span>
-      </button>
+      <button class="mast-tool" id="navSearch">search</button>
+      <button class="mast-tool" id="navAccount">account</button>
+      <button class="mast-tool bag" id="openBoard" aria-haspopup="dialog">bag (<span id="boardCount">0</span>)</button>
     </div>
   </header>
 
