@@ -44,24 +44,70 @@
   <!-- page source (moved into the book by JS) -->
   <div id="pageSource" hidden>
 
-    <!-- P0 · inside front — imprint -->
-    <div class="page-face imprint">
-      <div class="imprint-mark"><span class="safety-pin big" aria-hidden="true"></span></div>
-      <p class="colo-line" id="imprintIssue"></p>
-      <p class="imprint-lede">an archive,<br />edited for now.</p>
-      <p class="colo-line muted">everything here existed before.<br />we just chose it again.</p>
-      <p class="folio">i</p>
-    </div>
-
-    <!-- P1 · cover -->
+    <!-- P0 · inside front — now the cover content -->
     <div class="page-face cover">
       <p class="issue-line" id="issueLine"></p>
-      <h1 class="cover-title">pinned</h1>
-      <p class="tagline">pieces worth pinning.</p>
+      <h1 class="cover-title">pieces worth pinning.</h1>
+      <p class="tagline">an archive, edited for now.</p>
       <p class="cover-sub">a vintage fashion archive — collected across decades,
         edited through one taste, pinned back down for now.</p>
-      <span class="cover-turn">turn the page →</span>
-      <span class="folio">01</span>
+
+      <div class="hero-stage cover-stage">
+        <figure class="pinned-photo photo-real full">
+          <div class="plate-fill photo"><img src="assets/img/new%20arrival%20summer%20collection%20full%20model%20shot.png" alt="new arrival — cutout top with cargo maxi denim skirt" /></div>
+          <figcaption class="hero-vcaption">pinned is a fashion archive, not a marketplace. it exists to choose pieces worth remembering, and pin them back into the present — one at a time, one of one.</figcaption>
+        </figure>
+        <div class="hero-inset">
+          <div class="inset-item">
+            <button class="arch-item" data-id="p09">
+              <figure class="pinned-photo photo-real">
+                <div class="plate-fill photo"><img src="assets/img/new%20arrival%20summer%20collection%20black%20t.png" alt="henley top zip up" /></div>
+              </figure>
+            </button>
+            <div class="inset-label">
+              <span class="inset-name">henley top zip up</span>
+              <span class="inset-color">black</span>
+            </div>
+          </div>
+          <div class="inset-item">
+            <button class="arch-item" data-id="p10">
+              <figure class="pinned-photo photo-real">
+                <div class="plate-fill photo"><img src="assets/img/new%20arrival%20summer%20collection%20black%20denim%20skirt.png" alt="cargo denim skirt" /></div>
+              </figure>
+            </button>
+            <div class="inset-label">
+              <span class="inset-name">cargo denim skirt</span>
+              <span class="inset-color">charcoal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <span class="folio">i</span>
+    </div>
+
+    <!-- P1 · cover — summer collection, companion spread -->
+    <div class="page-face cover">
+      <div class="mag-top">
+        <span class="mag-eyebrow">summer collection</span>
+      </div>
+
+      <div class="mag-stage">
+        <figure class="pinned-photo photo-real full mag-detail">
+          <div class="plate-fill photo"><img src="assets/img/new%20arrival%20summer%20collection%20right.png" alt="mary jane loafers and collar socks, with full look" /></div>
+        </figure>
+      </div>
+
+      <div class="mag-labels">
+        <div class="mag-label">
+          <span class="mag-name">mary jane loafers</span>
+          <span class="mag-color">black</span>
+        </div>
+        <div class="mag-label">
+          <span class="mag-name">collar socks</span>
+          <span class="mag-color">gray</span>
+        </div>
+      </div>
     </div>
 
     <!-- P2 · manifesto text -->
@@ -101,10 +147,24 @@
 
     <!-- P5 · model hero + hotspots -->
     <div class="page-face hero-page">
-      <figure class="pinned-photo tone-ink full" data-shape="model" data-seed="9">
-        <div class="hotspots" id="lookHotspots"></div>
-        <figcaption>look 01 — coat over slip, boots that have been somewhere</figcaption>
-      </figure>
+      <div class="hero-top">
+        <span class="hero-eyebrow">look 01 · discovery</span>
+        <span class="hero-issue">ss 2026</span>
+      </div>
+      <div class="hero-stage">
+        <figure class="pinned-photo tone-ink full" data-shape="model" data-seed="9">
+          <div class="hotspots" id="lookHotspots"></div>
+          <figcaption class="hero-vcaption">coat over slip — boots that have been somewhere</figcaption>
+        </figure>
+        <div class="hero-inset">
+          <button class="arch-item" data-id="p01">
+            <figure class="pinned-photo tone-graphite" data-shape="coat" data-seed="2"></figure>
+          </button>
+          <button class="arch-item" data-id="p03">
+            <figure class="pinned-photo tone-blush" data-shape="dress" data-seed="6"></figure>
+          </button>
+        </div>
+      </div>
       <span class="folio">05</span>
     </div>
 

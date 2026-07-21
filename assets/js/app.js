@@ -11,7 +11,9 @@
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const money = (p) => `${p.currency}${p.price}`;
-  const plate = (piece, seed) => `<div class="plate-fill">${window.plateSVG(piece.shape, { seed: seed || piece.id.charCodeAt(2) })}</div>`;
+  const plate = (piece, seed) => piece.image
+    ? `<div class="plate-fill photo"><img src="${piece.image}" alt="${piece.name}" loading="lazy" /></div>`
+    : `<div class="plate-fill">${window.plateSVG(piece.shape, { seed: seed || piece.id.charCodeAt(2) })}</div>`;
 
   /* ---- pin board state ------------------------------------------- */
   const STORE = "pinned.board.v1";
@@ -111,7 +113,7 @@
     const list = cat === "all" ? pieces : pieces.filter((p) => p.category === cat);
     wall.innerHTML = list.map((p) => `
       <button class="arch-item" data-id="${p.id}" aria-label="${p.name}">
-        <figure class="pinned-photo tone-${p.tone}">
+        <figure class="pinned-photo ${p.image ? "photo-real" : `tone-${p.tone}`}">
           ${plate(p)}
           <span class="arch-pin${isPinned(p.id) ? " pinned" : ""}" data-pin="${p.id}" title="pin this piece">${isPinned(p.id) ? "✓" : "+"}</span>
           <figcaption>${p.caption}</figcaption>
@@ -133,8 +135,11 @@
   function openDetail(id) {
     const p = byId(id); if (!p) return;
     currentDetail = id;
-    $("#detailFigure").className = `pinned-photo tone-${p.tone}`;
-    $("#detailPlate").innerHTML = window.plateSVG(p.shape, { seed: 3 });
+    $("#detailFigure").className = p.image ? "pinned-photo photo-real" : `pinned-photo tone-${p.tone}`;
+    $("#detailPlate").className = p.image ? "plate-fill photo" : "plate-fill";
+    $("#detailPlate").innerHTML = p.image
+      ? `<img src="${p.image}" alt="${p.name}" loading="lazy" />`
+      : window.plateSVG(p.shape, { seed: 3 });
     $("#detailCaption").textContent = p.caption;
     $("#detailHouse").textContent = p.house;
     $("#detailName").textContent = p.name;
@@ -179,7 +184,7 @@
     const list = pins.map(byId).filter(Boolean);
     body.innerHTML = list.map((p) => `
       <div class="board-row">
-        <div class="board-thumb tone-${p.tone}">${plate(p)}<span class="safety-pin" aria-hidden="true"></span></div>
+        <div class="board-thumb ${p.image ? "photo-real" : `tone-${p.tone}`}">${plate(p)}<span class="safety-pin" aria-hidden="true"></span></div>
         <div class="board-info"><h4>${p.name}</h4><p>${p.house} · ${p.era}</p><div class="bprice">${money(p)}</div></div>
         <button class="board-remove" data-remove="${p.id}">unpin</button>
       </div>`).join("");
@@ -200,7 +205,7 @@
     const prev = $("#boardPreview");
     if (prev) {
       prev.innerHTML = pins.length
-        ? pins.slice(0, 8).map((id) => { const p = byId(id); return `<div class="bp-thumb tone-${p.tone}">${plate(p)}</div>`; }).join("")
+        ? pins.slice(0, 8).map((id) => { const p = byId(id); return `<div class="bp-thumb ${p.image ? "photo-real" : `tone-${p.tone}`}">${plate(p)}</div>`; }).join("")
         : `<span class="bp-empty">no pieces pinned yet — your board fills as you go.</span>`;
     }
     if (!boardPanel.hidden) renderBoard();
