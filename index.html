@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pinned — pieces worth pinning.</title>
+  <meta name="description" content="pinned — a vintage fashion archive, edited for now. a book you flip through." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <!-- masthead -->
+  <header class="masthead">
+    <a class="wordmark" href="#" id="goCover">pinned<span class="pin-dot" aria-hidden="true"></span></a>
+    <nav class="gnb" id="gnb" aria-label="pages"></nav>
+    <div class="mast-right">
+      <span class="mast-issue" id="mastIssue"></span>
+      <button class="board-btn" id="openBoard" aria-haspopup="dialog">
+        pinned <span class="board-count" id="boardCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- =================================================================
+       THE BOOK — pages authored here in reading order, then JS builds
+       them into flippable leaves (or a vertical stack on small screens).
+       ================================================================= -->
+  <div class="book-scroll" id="bookScroll">
+    <div class="book-stage">
+      <div class="book" id="book" aria-label="pinned — flip through the archive"></div>
+    </div>
+  </div>
+
+  <!-- page source (moved into the book by JS) -->
+  <div id="pageSource" hidden>
+
+    <!-- P0 · inside front — imprint -->
+    <div class="page-face imprint">
+      <div class="imprint-mark"><span class="safety-pin big" aria-hidden="true"></span></div>
+      <p class="colo-line" id="imprintIssue"></p>
+      <p class="imprint-lede">an archive,<br />edited for now.</p>
+      <p class="colo-line muted">everything here existed before.<br />we just chose it again.</p>
+      <p class="folio">i</p>
+    </div>
+
+    <!-- P1 · cover -->
+    <div class="page-face cover">
+      <p class="issue-line" id="issueLine"></p>
+      <h1 class="cover-title">pinned</h1>
+      <p class="tagline">pieces worth pinning.</p>
+      <p class="cover-sub">a vintage fashion archive — collected across decades,
+        edited through one taste, pinned back down for now.</p>
+      <span class="cover-turn">turn the page →</span>
+      <span class="folio">01</span>
+    </div>
+
+    <!-- P2 · manifesto text -->
+    <div class="page-face pad">
+      <p class="kicker">what pinned is</p>
+      <p class="lede">Not an antique shop.<br />A magazine you can buy from.</p>
+      <p class="body">We find pieces across several eras and houses, choose them through
+        one point of view, and lay them out like an editorial spread. You arrive into a
+        mood first. The clothes appear inside it.</p>
+      <ul class="keywords" id="keywordList" aria-label="brand keywords"></ul>
+      <span class="folio">02</span>
+    </div>
+
+    <!-- P3 · two plates -->
+    <div class="page-face plates-page">
+      <figure class="pinned-photo tone-fog" data-shape="coat" data-seed="2">
+        <figcaption>fig. 01 — margins, kept wide</figcaption>
+        <span class="safety-pin" aria-hidden="true"></span>
+      </figure>
+      <figure class="pinned-photo tone-graphite offset" data-shape="boot" data-seed="4">
+        <figcaption>fig. 02 — worn-in, left honest</figcaption>
+      </figure>
+      <span class="folio">03</span>
+    </div>
+
+    <!-- P4 · lookbook copy -->
+    <div class="page-face pad">
+      <p class="kicker">look 01 · discovery</p>
+      <h2 class="page-head">Find the piece inside the picture.</h2>
+      <p class="body">Tap a pin on the image opposite to lift the piece out of the
+        styling. Keep what you want with <em>pin this piece</em> — it goes to your board,
+        not a checkout you didn't ask for.</p>
+      <p class="look-legend"><span class="dot-legend" aria-hidden="true"></span>
+        three pieces pinned in this look</p>
+      <span class="folio">04</span>
+    </div>
+
+    <!-- P5 · model hero + hotspots -->
+    <div class="page-face hero-page">
+      <figure class="pinned-photo tone-ink full" data-shape="model" data-seed="9">
+        <div class="hotspots" id="lookHotspots"></div>
+        <figcaption>look 01 — coat over slip, boots that have been somewhere</figcaption>
+      </figure>
+      <span class="folio">05</span>
+    </div>
+
+    <!-- P6 · archive intro + filters -->
+    <div class="page-face pad">
+      <p class="kicker">the archive</p>
+      <h2 class="page-head">Everything currently pinned down.</h2>
+      <p class="body">Korean labels, European tailoring, a few things with no label at all —
+        each one of one. When it's gone, it's gone.</p>
+      <div class="filters" id="filters" role="tablist" aria-label="filter archive"></div>
+      <p class="folio-note">turn to browse the shelf →</p>
+      <span class="folio">06</span>
+    </div>
+
+    <!-- P7 · archive grid -->
+    <div class="page-face grid-page">
+      <div class="archive-wall" id="archiveWall"></div>
+      <span class="folio">07</span>
+    </div>
+
+    <!-- P8 · material lace plate -->
+    <div class="page-face plate-solo">
+      <figure class="pinned-photo tone-ink full lace-plate" data-shape="top" data-seed="5">
+        <figcaption>detail — black lace against organza</figcaption>
+      </figure>
+      <span class="folio">08</span>
+    </div>
+
+    <!-- P9 · detail copy + care note -->
+    <div class="page-face pad">
+      <p class="kicker">the detail</p>
+      <h2 class="page-head">We photograph the wear, not around it.</h2>
+      <p class="body">A softened zip pull. A resoled heel. A collar that still closes with
+        its original safety pin. Not flaws to hide — the reason the piece is worth pinning.</p>
+      <div class="pvc-note">
+        <span class="pvc-tab" aria-hidden="true"></span>
+        <p class="care"><strong>care note</strong> — dry clean cold. store on a wide hanger.
+          let the piece keep its history; add yours slowly.</p>
+      </div>
+      <button class="cta feature-cta" id="featureCta">view the featured piece →</button>
+      <span class="folio">09</span>
+    </div>
+
+    <!-- P10 · board preview -->
+    <div class="page-face pad">
+      <p class="kicker">your board</p>
+      <h2 class="page-head">The pieces you pinned.</h2>
+      <div class="board-preview" id="boardPreview"></div>
+      <button class="cta ghost" id="openBoard2">open pinned board →</button>
+      <span class="folio">10</span>
+    </div>
+
+    <!-- P11 · colophon -->
+    <div class="page-face colophon">
+      <p class="tagline big">pieces worth<br /><em>pinning.</em></p>
+      <div class="colo-block">
+        <p class="colo-line">pinned — vintage fashion archive</p>
+        <p class="colo-line" id="issueFoot"></p>
+        <p class="colo-line muted">editorial &amp; selection, one taste.</p>
+        <p class="colo-line muted">every piece one of one.</p>
+        <p class="colo-line muted">© 2026 pinned. an archive, edited for now.</p>
+      </div>
+      <span class="folio">fin</span>
+    </div>
+
+  </div>
+
+  <!-- PRODUCT DETAIL OVERLAY -->
+  <div class="overlay" id="detailOverlay" role="dialog" aria-modal="true" aria-labelledby="detailName" hidden>
+    <div class="overlay-scrim" data-close></div>
+    <article class="detail-card">
+      <button class="overlay-close" data-close aria-label="close">×</button>
+      <div class="detail-plate">
+        <figure class="pinned-photo tone-fog" id="detailFigure">
+          <div class="plate-fill" id="detailPlate"></div>
+          <figcaption id="detailCaption"></figcaption>
+        </figure>
+      </div>
+      <div class="detail-body">
+        <p class="detail-house" id="detailHouse"></p>
+        <h3 class="detail-name" id="detailName"></h3>
+        <p class="detail-era" id="detailEra"></p>
+        <p class="detail-note" id="detailNote"></p>
+        <dl class="detail-specs" id="detailSpecs"></dl>
+        <div class="detail-foot">
+          <span class="detail-price" id="detailPrice"></span>
+          <div class="detail-actions">
+            <button class="cta pin-btn" id="detailPin">pin this piece</button>
+            <button class="cta solid" id="detailBag">add to bag</button>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <!-- PINNED BOARD SLIDE-OVER -->
+  <div class="board-panel" id="boardPanel" role="dialog" aria-modal="true" aria-labelledby="boardTitle" hidden>
+    <div class="board-scrim" data-board-close></div>
+    <aside class="board-sheet">
+      <header class="board-header">
+        <div>
+          <p class="kicker">pinned board</p>
+          <h2 id="boardTitle" class="board-h">Pieces you kept.</h2>
+        </div>
+        <button class="overlay-close" data-board-close aria-label="close board">×</button>
+      </header>
+      <div class="board-body" id="boardBody"></div>
+      <footer class="board-footer" id="boardFooter"></footer>
+    </aside>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/silhouettes.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
