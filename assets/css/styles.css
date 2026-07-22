@@ -172,14 +172,18 @@ button { font-family: inherit; cursor: pointer; }
 
 /* left cover page — text + full look on the left, big close-up + back view on the right */
 .cover-split { display: flex; gap: 1.2rem; flex: 1; min-height: 0; margin-top: 1rem; }
-.cover-left { display: flex; flex-direction: column; width: 34%; flex: none; }
+.cover-left { display: flex; flex-direction: column; width: 34%; flex: none; min-height: 0; }
 .cover-left .cover-title { font-size: clamp(1.4rem, 2vw, 1.8rem); }
 .cover-left .cover-full-shot { margin-top: 1rem; flex: 1; min-height: 0; align-self: flex-start; width: auto; aspect-ratio: 315 / 662; }
 .cover-full-shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-.cover-right { position: relative; flex: 1; min-height: 0; display: flex; justify-content: center; }
-.cover-big-shot { flex: 0 1 auto; height: 100%; width: auto; aspect-ratio: 646 / 995; }
-.cover-big-shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cover-right { position: relative; flex: 1; min-height: 0; min-width: 0; display: flex; justify-content: flex-end; }
+.cover-big-shot {
+  z-index: 7; flex: 0 1 auto; width: auto; aspect-ratio: 646 / 995;
+  height: calc(100% + clamp(2rem, 5vw, 5rem));
+  margin: 0 calc(-1 * clamp(2rem, 5vw, 5.5rem)) calc(-1 * clamp(2rem, 5vw, 5rem)) 0;
+}
+.cover-big-shot img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
 
 .cover-back-shot {
   position: absolute; z-index: 6; top: 8%; right: 0; width: 34%;
