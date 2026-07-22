@@ -187,10 +187,15 @@ button { font-family: inherit; cursor: pointer; }
 
 .cover-back-shot {
   position: absolute; z-index: 6; top: 1%; right: -6%; width: 36%;
-  background: var(--paper); padding: 4px; border-radius: 2px;
+  background: #fff; padding: 10px 10px 14px; border-radius: 1px;
   box-shadow: 0 24px 50px -26px rgba(23,20,15,.5);
 }
 .cover-back-shot img { width: 100%; height: auto; display: block; }
+.cover-back-pin {
+  position: absolute; z-index: 1; top: -1.1rem; left: 50%; width: 2.4rem; height: auto;
+  transform: translateX(-50%) rotate(-14deg);
+  filter: drop-shadow(0 6px 6px rgba(23,20,15,.45));
+}
 
 /* right-page companion spread — "summer collection" */
 .mag-stage {
