@@ -154,10 +154,10 @@ button { font-family: inherit; cursor: pointer; }
 .page-face.pad > * { max-width: 34rem; }
 .body, .cover-sub, .lede { max-width: 42ch; }
 
-/* collection — full-bleed look photo, one per page */
-.page-face.collection-page { padding: 0; justify-content: flex-start; }
-.collection-shot { margin: 0; width: 100%; height: 100%; }
-.collection-shot img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+/* collection — look photo, one per page, framed with breathing room */
+.page-face.collection-page { padding: clamp(1.5rem, 4vw, 3rem); justify-content: center; align-items: center; }
+.collection-shot { margin: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+.collection-shot img { width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; object-position: center; display: block; }
 
 /* imprint (inside front) */
 .imprint { justify-content: center; align-items: flex-start; gap: .5rem; }
