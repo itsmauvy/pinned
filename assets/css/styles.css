@@ -171,9 +171,6 @@ button { font-family: inherit; cursor: pointer; }
 .cover-turn { font-family: var(--mono); font-size: .64rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink); }
 
 /* right-page companion spread — "summer collection" */
-.mag-top { position: absolute; z-index: 9; top: 1.7rem; left: 0; right: 0; display: flex; justify-content: flex-end; padding: 0 .15rem; margin: 0; }
-.mag-eyebrow { font-family: var(--mono); font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
-
 .mag-stage {
   position: relative; flex: 1; min-height: 0;
   margin-top: calc(-1 * (clamp(2rem, 5vw, 5rem) + 1.3rem));
