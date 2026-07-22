@@ -281,7 +281,10 @@
     const from = cur, to = k, dist = Math.abs(to - from);
     if (dist < 0.001) return;
     cancelAnimationFrame(animId);
-    const D = PER_PAGE * Math.pow(dist, 0.65);       // per-page pace, sub-linear for jumps
+    // a single adjacent-page turn keeps its slow, deliberate pace; jumping
+    // several spreads at once (GNB nav) should feel like "go there", not a
+    // long flip-through, so cap the total travel time once dist > 1.
+    const D = dist <= 1 ? PER_PAGE : Math.min(PER_PAGE * Math.pow(dist, 0.65), 800);
     const t0 = performance.now();
     animating = true;
     const step = (now) => {
