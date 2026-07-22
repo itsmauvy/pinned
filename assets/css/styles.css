@@ -154,17 +154,17 @@ button { font-family: inherit; cursor: pointer; }
 .page-face.pad > * { max-width: 34rem; }
 .body, .cover-sub, .lede { max-width: 42ch; }
 
-/* collection — look photo, one per page.
-   a small margin all round, with extra inset on the spine side so the
-   photo doesn't crowd the book's centre fold. */
-.page-face.collection-page { padding: clamp(.75rem, 2vw, 1.5rem); justify-content: flex-start; }
+/* collection — full-bleed look photo, one per page.
+   flush to the outer screen edge; a small inset only on the spine side
+   so the photo doesn't crowd the book's centre fold. */
+.page-face.collection-page { padding: 0; justify-content: flex-start; }
 .collection-shot { margin: 0; width: 100%; height: 100%; overflow: hidden; }
 .collection-shot img { width: 100%; height: 100%; object-fit: cover; object-position: center 15%; display: block; }
 
 .page-base.right .collection-page,
-.leaf-face.front .collection-page { padding-left: clamp(1.75rem, 4.5vw, 3rem); }
+.leaf-face.front .collection-page { padding-left: clamp(1rem, 3vw, 2.25rem); }
 .page-base.left .collection-page,
-.leaf-face.back .collection-page { padding-right: clamp(1.75rem, 4.5vw, 3rem); }
+.leaf-face.back .collection-page { padding-right: clamp(1rem, 3vw, 2.25rem); }
 
 /* imprint (inside front) */
 .imprint { justify-content: center; align-items: flex-start; gap: .5rem; }
