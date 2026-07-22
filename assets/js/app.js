@@ -82,6 +82,63 @@
   }
 
   /* =================================================================
+     ROTATE VIEWER — drag left/right to swing the look through 5 angles.
+     mock: same generated silhouette, squeezed + mirrored per angle, with
+     the off-angle frames left as faint ghosts either side of the active
+     one. real per-angle photos can later replace the single shape with
+     one image per frame — the drag/index logic stays the same.
+     ================================================================= */
+  function initRotateViewer(root) {
+    const viewer = $("#rotateViewer", root);
+    if (!viewer) return;
+    const track = $(".rotate-track", viewer);
+    const seed = viewer.dataset.seed || 1;
+    const COUNT = 5, CENTER = 2, STEP_PX = 70;
+
+    const frames = [];
+    for (let i = 0; i < COUNT; i++) {
+      const el = document.createElement("div");
+      el.className = "rotate-frame";
+      el.innerHTML = window.plateSVG("model", { seed });
+      track.appendChild(el);
+      frames.push(el);
+    }
+
+    let index = CENTER;
+    const layout = () => {
+      frames.forEach((el, i) => {
+        const d = i - index;                          // signed steps from the active frame
+        const abs = Math.abs(d);
+        el.classList.toggle("is-active", d === 0);
+        el.style.zIndex = String(10 - abs);
+        el.style.opacity = abs === 0 ? "1" : abs === 1 ? ".35" : abs === 2 ? ".15" : "0";
+        const squeeze = abs === 0 ? 1 : abs === 1 ? .62 : .34;   // fake a side-on angle
+        const flip = d < 0 ? -1 : 1;
+        el.style.transform = `translateX(${d * 30}%) scaleX(${squeeze * flip})`;
+      });
+    };
+    layout();
+
+    let dragging = false, startX = 0, startIndex = index;
+    const pointX = (e) => (e.touches ? e.touches[0].clientX : e.clientX);
+    const onDown = (e) => {
+      dragging = true; startX = pointX(e); startIndex = index;
+      viewer.classList.add("dragging");
+    };
+    const onMove = (e) => {
+      if (!dragging) return;
+      const delta = pointX(e) - startX;
+      const next = clamp(Math.round(startIndex - delta / STEP_PX), 0, COUNT - 1);
+      if (next !== index) { index = next; layout(); }
+    };
+    const onUp = () => { dragging = false; viewer.classList.remove("dragging"); };
+
+    viewer.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+  }
+
+  /* =================================================================
      BUILD or SHOW pages, then populate dynamic content
      ================================================================= */
   if (mode === "flip") {
@@ -90,6 +147,7 @@
     src.hidden = false;                      // reveal as vertical stack
   }
   injectPlates(document);
+  initRotateViewer(document);
 
   /* keywords + issue lines */
   const keywordList = $("#keywordList");
