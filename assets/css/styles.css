@@ -192,7 +192,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 .cover-back-shot img { width: 100%; height: auto; display: block; }
 .cover-back-shot img.cover-back-pin {
-  position: absolute; z-index: 1; top: -.85rem; left: 50%; width: 1.5rem; height: auto;
+  position: absolute; z-index: 1; top: -1.05rem; left: 62%; width: 2rem; height: auto;
   transform: translateX(-50%) rotate(-14deg);
   filter: drop-shadow(0 4px 4px rgba(23,20,15,.45));
 }
