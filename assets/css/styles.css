@@ -17,7 +17,7 @@
   --graphite:   #6f7175;
   --silver:     #c7c9cd;
 
-  --serif: "Bodoni Moda", "Didot", "Times New Roman", Georgia, serif;
+  --serif: "Italiana", "Didot", "Times New Roman", Georgia, serif;
   --sans: "Inter", system-ui, -apple-system, sans-serif;
   --mono: "Space Mono", ui-monospace, monospace;
   --ease: cubic-bezier(.22, .61, .28, 1);
@@ -48,7 +48,7 @@ button { font-family: inherit; cursor: pointer; }
 
 /* ---- shared atoms ------------------------------------------------ */
 .kicker { font-family: var(--mono); font-size: .6rem; letter-spacing: .26em; text-transform: uppercase; color: var(--muted); margin: 0 0 .9rem; }
-.tagline { font-family: var(--serif); font-style: italic; font-weight: 400; }
+.tagline { font-family: var(--serif); font-style: normal; letter-spacing: .01em; }
 .body { font-size: .82rem; line-height: 1.65; color: var(--ink-soft); margin: 0 0 1rem; }
 .folio { position: absolute; bottom: 20px; right: 26px; font-family: var(--mono); font-size: .62rem; letter-spacing: .2em; color: var(--muted); }
 .folio-note { font-family: var(--mono); font-size: .6rem; letter-spacing: .1em; color: var(--blush-deep); margin-top: 1.2rem; }
@@ -182,7 +182,7 @@ button { font-family: inherit; cursor: pointer; }
 .mag-name { font-family: var(--sans); font-size: .84rem; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-soft); }
 .mag-color { font-family: var(--sans); font-size: .92rem; font-weight: 600; letter-spacing: .02em; text-transform: uppercase; color: var(--ink); }
 .tagline.big { font-size: clamp(2rem, 4.6vw, 3.4rem); line-height: 1.02; font-style: normal; }
-.tagline.big em { font-style: italic; }
+.tagline.big em { font-style: normal; color: var(--blush-deep); }
 
 /* manifesto */
 .lede { font-family: var(--serif); font-size: clamp(1.3rem, 2.8vw, 2rem); line-height: 1.15; font-weight: 400; margin: 0 0 1.1rem; }
@@ -263,7 +263,7 @@ button { font-family: inherit; cursor: pointer; }
 figure.pinned-photo figcaption.hero-vcaption {
   position: absolute; z-index: 7; right: 1.3rem; top: 3%; bottom: 3%; left: auto;
   writing-mode: vertical-rl; text-orientation: mixed;
-  font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-family: var(--serif); font-style: normal; font-weight: 400;
   font-size: .88rem; line-height: 1.45; letter-spacing: .01em;
   color: rgba(244, 241, 234, .9);
   background: none; backdrop-filter: none; padding: 0; border-radius: 0; max-width: none;
@@ -279,7 +279,7 @@ figure.pinned-photo.photo-real figcaption.hero-vcaption {
 .hero-vcaption.break-frame {
   position: static; z-index: 9; margin: 0 0 0 -3.5rem; align-self: flex-start;
   writing-mode: vertical-rl; text-orientation: mixed;
-  font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-family: var(--serif); font-style: normal; font-weight: 400;
   font-size: .88rem; line-height: 1.45; letter-spacing: .01em;
   color: rgba(23, 20, 15, .82);
   background: none; padding: 0; max-width: none;
@@ -371,7 +371,7 @@ figure.pinned-photo.photo-real figcaption.hero-vcaption {
 .detail-house { font-family: var(--mono); font-size: .64rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin: 0 0 .5rem; }
 .detail-name { font-family: var(--serif); font-weight: 400; font-size: clamp(1.5rem, 3vw, 2.1rem); margin: 0 0 .3rem; line-height: 1.1; }
 .detail-era { font-family: var(--mono); font-size: .72rem; color: var(--ink-soft); margin: 0 0 1.2rem; }
-.detail-note { font-family: var(--serif); font-style: italic; color: var(--ink-soft); line-height: 1.6; margin: 0 0 1.4rem; max-width: 42ch; }
+.detail-note { font-family: var(--serif); font-style: normal; color: var(--ink-soft); line-height: 1.6; margin: 0 0 1.4rem; max-width: 42ch; }
 .detail-specs { display: grid; grid-template-columns: auto 1fr; gap: .4rem 1rem; margin: 0 0 1.6rem; }
 .detail-specs dt { font-family: var(--mono); font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .detail-specs dd { margin: 0; font-size: .84rem; color: var(--ink-soft); }
