@@ -281,15 +281,21 @@
     const from = cur, to = k, dist = Math.abs(to - from);
     if (dist < 0.001) return;
     cancelAnimationFrame(animId);
-    // a single adjacent-page turn keeps its slow, deliberate pace; jumping
-    // several spreads at once (GNB nav) should feel like "go there", not a
-    // long flip-through, so cap the total travel time once dist > 1.
-    const D = dist <= 1 ? PER_PAGE : Math.min(PER_PAGE * Math.pow(dist, 0.65), 800);
+    // jumping several spreads (GNB nav) shouldn't visibly flip through every
+    // page in between — snap instantly to just before the target and only
+    // animate the final single page turn, so it reads as "go there" in one flip.
+    let animFrom = from;
+    if (dist > 1) {
+      animFrom = to > from ? to - 1 : to + 1;
+      cur = animFrom;
+      renderFlip();
+    }
+    const D = PER_PAGE * Math.pow(Math.abs(to - animFrom), 0.65);
     const t0 = performance.now();
     animating = true;
     const step = (now) => {
       const p = clamp((now - t0) / D, 0, 1);
-      cur = from + (to - from) * p;                  // linear in time; the page turn itself is eased
+      cur = animFrom + (to - animFrom) * p;           // linear in time; the page turn itself is eased
       renderFlip();
       if (p < 1) { animId = requestAnimationFrame(step); }
       else { cur = to; currentSpread = to; animating = false; renderFlip(); }
