@@ -191,10 +191,10 @@ button { font-family: inherit; cursor: pointer; }
   box-shadow: 0 24px 50px -26px rgba(23,20,15,.5);
 }
 .cover-back-shot img { width: 100%; height: auto; display: block; }
-.cover-back-pin {
-  position: absolute; z-index: 1; top: -1.1rem; left: 50%; width: 2.4rem; height: auto;
+.cover-back-shot img.cover-back-pin {
+  position: absolute; z-index: 1; top: -.85rem; left: 50%; width: 1.5rem; height: auto;
   transform: translateX(-50%) rotate(-14deg);
-  filter: drop-shadow(0 6px 6px rgba(23,20,15,.45));
+  filter: drop-shadow(0 4px 4px rgba(23,20,15,.45));
 }
 
 /* right-page companion spread — "summer collection" */
