@@ -186,7 +186,7 @@ button { font-family: inherit; cursor: pointer; }
 .cover-big-shot img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
 
 .cover-back-shot {
-  position: absolute; z-index: 6; top: 1%; right: -6%; width: 36%;
+  position: absolute; z-index: 6; top: 26%; right: -6%; width: 36%;
   background: #fff; padding: 10px 10px 14px; border-radius: 1px;
   box-shadow: 0 24px 50px -26px rgba(23,20,15,.5);
 }
