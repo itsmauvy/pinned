@@ -92,7 +92,8 @@
   injectPlates(document);
 
   /* keywords + issue lines */
-  $("#keywordList").innerHTML = DATA.keywords.map((k) => `<li>${k}</li>`).join("");
+  const keywordList = $("#keywordList");
+  if (keywordList) keywordList.innerHTML = DATA.keywords.map((k) => `<li>${k}</li>`).join("");
   const issueStr = `${DATA.issue.no} · ${DATA.issue.season} ${DATA.issue.year}`;
   ["#issueLine", "#issueFoot", "#imprintIssue", "#mastIssue"].forEach((s) => { const e = $(s); if (e) e.textContent = issueStr; });
 
