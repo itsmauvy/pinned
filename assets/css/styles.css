@@ -171,11 +171,14 @@ button { font-family: inherit; cursor: pointer; }
 .cover-turn { font-family: var(--mono); font-size: .64rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink); }
 
 /* right-page companion spread — "summer collection" */
-.mag-top { display: flex; justify-content: flex-end; margin: 0 0 1.6rem; }
+.mag-top { position: absolute; z-index: 9; top: 1.7rem; left: 0; right: 0; display: flex; justify-content: flex-end; padding: 0 .15rem; margin: 0; }
 .mag-eyebrow { font-family: var(--mono); font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
 
-.mag-stage { position: relative; flex: 1; min-height: 0; }
-.mag-stage .mag-detail { height: 100%; width: auto; aspect-ratio: 720 / 841; margin: 0 auto; }
+.mag-stage {
+  position: relative; flex: 1; min-height: 0;
+  margin-top: calc(-1 * (clamp(2rem, 5vw, 5rem) + 1.3rem));
+}
+.pinned-photo.full.mag-detail { height: 100%; width: auto; aspect-ratio: 720 / 841; margin: 0 auto; }
 
 .mag-labels { display: flex; gap: 2.4rem; margin-top: 1.4rem; }
 .mag-label { display: flex; flex-direction: column; gap: .3rem; }
@@ -273,6 +276,17 @@ figure.pinned-photo figcaption.hero-vcaption {
 figure.pinned-photo.photo-real figcaption.hero-vcaption {
   color: rgba(23, 20, 15, .82);
   text-shadow: 0 0 18px rgba(244, 241, 234, .55);
+}
+
+/* caption deliberately breaks past the photo frame's edge, overlapping the boundary */
+.hero-vcaption.break-frame {
+  position: static; z-index: 9; margin: 0 0 0 -3.5rem; align-self: flex-start;
+  writing-mode: vertical-rl; text-orientation: mixed;
+  font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: .88rem; line-height: 1.45; letter-spacing: .01em;
+  color: rgba(23, 20, 15, .82);
+  background: none; padding: 0; max-width: none;
+  pointer-events: none;
 }
 
 /* safety pin ornament */
