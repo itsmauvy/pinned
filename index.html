@@ -126,19 +126,35 @@
       </div>
     </div>
 
-    <!-- P6 · archive intro + filters -->
-    <div class="page-face pad">
-      <p class="kicker">the archive</p>
-      <h2 class="page-head">Everything currently pinned down.</h2>
-      <p class="body">Korean labels, European tailoring, a few things with no label at all —
-        each one of one. When it's gone, it's gone.</p>
-      <div class="filters" id="filters" role="tablist" aria-label="filter archive"></div>
-      <p class="folio-note">turn to browse the shelf →</p>
+    <!-- P6 · shop — intro, filters, featured piece -->
+    <div class="page-face shop-page">
+      <h1 class="shop-title">shop</h1>
+      <p class="shop-subtitle">curated pieces for spring—summer 2026</p>
+      <div class="shop-filters" id="shopFilters" role="tablist" aria-label="filter shop"></div>
+      <div class="shop-filter-groups">
+        <div class="shop-filter-group"><span>color</span><span>+</span></div>
+        <div class="shop-filter-group"><span>size</span><span>+</span></div>
+        <div class="shop-filter-group"><span>price</span><span>+</span></div>
+      </div>
+      <p class="shop-tagline">vintage moods,<br />modern silhouettes.</p>
+      <p class="shop-season">spring—summer 2026</p>
+      <div class="shop-featured">
+        <figure class="shop-featured-main" id="shopFeaturedMain"></figure>
+        <figure class="shop-featured-thumb" id="shopFeaturedThumb"></figure>
+      </div>
+      <div class="shop-featured-info">
+        <p class="shop-featured-name" id="shopFeaturedName"></p>
+        <p class="shop-featured-price" id="shopFeaturedPrice"></p>
+      </div>
     </div>
 
-    <!-- P7 · archive grid -->
-    <div class="page-face grid-page">
-      <div class="archive-wall" id="archiveWall"></div>
+    <!-- P7 · shop grid -->
+    <div class="page-face shop-grid-page">
+      <div class="shop-grid-head">
+        <span class="shop-sort-label">sort by</span>
+        <span class="shop-sort-value">new arrival</span>
+      </div>
+      <div class="shop-grid" id="shopGrid"></div>
     </div>
 
     <!-- P8 · material lace plate -->

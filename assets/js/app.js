@@ -246,28 +246,63 @@
   const issueStr = `${DATA.issue.no} · ${DATA.issue.season} ${DATA.issue.year}`;
   ["#issueLine", "#issueFoot", "#imprintIssue", "#mastIssue"].forEach((s) => { const e = $(s); if (e) e.textContent = issueStr; });
 
-  /* archive filters + wall */
-  const categories = ["all", ...new Set(pieces.map((p) => p.category))];
-  $("#filters").innerHTML = categories.map((c, i) =>
-    `<button class="filter${i === 0 ? " active" : ""}" data-cat="${c}" role="tab">${c}</button>`).join("");
-  const wall = $("#archiveWall");
-  function renderWall(cat = "all") {
-    const list = cat === "all" ? pieces : pieces.filter((p) => p.category === cat);
-    wall.innerHTML = list.map((p) => `
-      <button class="arch-item" data-id="${p.id}" aria-label="${p.name}">
+  /* =================================================================
+     SHOP — left page (category filters + featured piece) and right
+     page (sortable grid). Categories are grouped for display (skirts
+     read as "bottoms"; bags/shoes/accessories collapse into one
+     "accessories" filter) since the catalog is small.
+     ================================================================= */
+  const SHOP_GROUP = { outerwear: "outerwear", tops: "tops", skirts: "bottoms", dresses: "dresses", bags: "accessories", shoes: "accessories", accessories: "accessories" };
+  const shopGroups = ["all", ...new Set(pieces.map((p) => SHOP_GROUP[p.category] || p.category))];
+  const shopFiltersEl = $("#shopFilters");
+  const shopGridEl = $("#shopGrid");
+  let shopCat = "all";
+
+  const shopMatches = (p, cat) => cat === "all" || (SHOP_GROUP[p.category] || p.category) === cat;
+
+  function renderShopFilters() {
+    if (!shopFiltersEl) return;
+    shopFiltersEl.innerHTML = shopGroups.map((c) => {
+      const count = pieces.filter((p) => shopMatches(p, c)).length;
+      return `<button class="shop-filter${c === shopCat ? " active" : ""}" data-cat="${c}" role="tab">${c}<span class="count">${count}</span></button>`;
+    }).join("");
+    $$(".shop-filter", shopFiltersEl).forEach((btn) => btn.addEventListener("click", () => {
+      shopCat = btn.dataset.cat;
+      renderShopFilters();
+      renderShopGrid();
+    }));
+  }
+
+  function renderShopGrid() {
+    if (!shopGridEl) return;
+    const list = pieces.filter((p) => shopMatches(p, shopCat));
+    shopGridEl.innerHTML = list.map((p) => `
+      <button class="shop-item" data-id="${p.id}" aria-label="${p.name}">
         <figure class="pinned-photo ${p.image ? "photo-real" : `tone-${p.tone}`}">
           ${plate(p)}
-          <span class="arch-pin${isPinned(p.id) ? " pinned" : ""}" data-pin="${p.id}" title="pin this piece">${isPinned(p.id) ? "✓" : "+"}</span>
-          <figcaption>${p.caption}</figcaption>
+          <span class="shop-item-heart${isPinned(p.id) ? " pinned" : ""}" data-pin="${p.id}" title="pin this piece">${isPinned(p.id) ? "♥" : "♡"}</span>
         </figure>
-        <div class="arch-meta">
-          <p class="arch-house">${p.house}</p>
-          <p class="arch-name">${p.name}</p>
-          <div class="arch-line"><span class="arch-era">${p.era}</span><span class="arch-price">${money(p)}</span></div>
+        <div class="shop-item-meta">
+          <p class="shop-item-name">${p.name}</p>
+          <p class="shop-item-price">${money(p)}</p>
         </div>
       </button>`).join("");
   }
-  renderWall();
+
+  function renderShopFeatured() {
+    const mainEl = $("#shopFeaturedMain"), thumbEl = $("#shopFeaturedThumb");
+    const nameEl = $("#shopFeaturedName"), priceEl = $("#shopFeaturedPrice");
+    if (!mainEl) return;
+    const featured = pieces[0];
+    mainEl.innerHTML = plate(featured);
+    if (thumbEl) thumbEl.innerHTML = plate(pieces[1] || featured);
+    if (nameEl) nameEl.textContent = featured.name;
+    if (priceEl) priceEl.textContent = money(featured);
+  }
+
+  renderShopFilters();
+  renderShopGrid();
+  renderShopFeatured();
 
   /* =================================================================
      PRODUCT DETAIL overlay
@@ -340,9 +375,9 @@
   /* board preview + count + pin badges */
   function syncPinUI() {
     $("#boardCount").textContent = pins.length;
-    $$(".arch-pin").forEach((el) => {
+    $$(".shop-item-heart").forEach((el) => {
       const on = isPinned(el.dataset.pin);
-      el.classList.toggle("pinned", on); el.textContent = on ? "✓" : "+";
+      el.classList.toggle("pinned", on); el.textContent = on ? "♥" : "♡";
     });
     const prev = $("#boardPreview");
     if (prev) {
@@ -359,10 +394,8 @@
   document.addEventListener("click", (e) => {
     const pinEl = e.target.closest("[data-pin]");
     if (pinEl) { e.stopPropagation(); toast(togglePin(pinEl.dataset.pin) ? "pinned to your board" : "removed from board"); return; }
-    const item = e.target.closest(".arch-item"); if (item) return openDetail(item.dataset.id);
+    const item = e.target.closest(".shop-item"); if (item) return openDetail(item.dataset.id);
     const rm = e.target.closest("[data-remove]"); if (rm) { togglePin(rm.dataset.remove); toast("removed from board"); return; }
-    const f = e.target.closest(".filter");
-    if (f) { $$(".filter").forEach((x) => x.classList.remove("active")); f.classList.add("active"); renderWall(f.dataset.cat); return; }
     if (e.target.closest("[data-close]")) return closeDetail();
     if (e.target.closest("[data-board-close]")) return closeBoard();
   });

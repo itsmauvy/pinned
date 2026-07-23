@@ -359,41 +359,62 @@ button { font-family: inherit; cursor: pointer; }
 .pvc-tab { position: absolute; top: -9px; left: 16px; width: 32px; height: 12px; border-radius: 3px 3px 0 0; background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.8); border-bottom: none; }
 
 /* =====================================================================
-   ARCHIVE grid (fills one page)
+   SHOP — left page (intro, filters, featured piece)
    ===================================================================== */
-.grid-page { padding: clamp(1.2rem, 2.6vw, 2rem); }
-.filters { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: 1.2rem; }
-.filter { font-family: var(--mono); font-size: .56rem; letter-spacing: .1em; text-transform: uppercase; background: transparent; color: var(--ink-soft); border: 1px solid var(--hair); border-radius: 100px; padding: .32rem .65rem; transition: all .25s; }
-.filter:hover { border-color: var(--ink); }
-.filter.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.shop-page { display: flex; flex-direction: column; padding: clamp(1.2rem, 2.6vw, 2rem); }
+.shop-title { font-family: var(--sans); font-weight: 600; font-size: clamp(1.8rem, 3.4vw, 2.4rem); letter-spacing: .02em; text-transform: uppercase; margin: 1.4rem 0 .3rem; }
+.shop-subtitle { font-family: var(--serif); font-style: italic; font-size: .9rem; color: var(--ink-soft); margin: 0 0 1.4rem; }
 
-.archive-wall { height: 100%; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; align-content: start; padding-right: 4px; }
-.archive-wall::-webkit-scrollbar { width: 5px; }
-.archive-wall::-webkit-scrollbar-thumb { background: var(--hair); border-radius: 4px; }
-.arch-item { cursor: pointer; background: none; border: none; padding: 0; text-align: left; transition: transform .4s var(--ease); }
-.arch-item:nth-child(4n+1) { margin-top: 0; }
-.arch-item:nth-child(4n+2) { margin-top: 1.4rem; }
-.arch-item:nth-child(4n+3) { margin-top: -.4rem; }
-.arch-item:hover { transform: translateY(-4px); }
-.arch-item .pinned-photo { aspect-ratio: 3/4; }
-.arch-meta { margin-top: .5rem; }
-.arch-house { font-family: var(--mono); font-size: .52rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-.arch-name { font-family: var(--serif); font-size: .82rem; margin: .1rem 0 .05rem; line-height: 1.1; }
-.arch-line { display: flex; justify-content: space-between; align-items: baseline; gap: .4rem; }
-.arch-price { font-family: var(--mono); font-size: .68rem; }
-.arch-era { font-size: .6rem; color: var(--muted); }
-.arch-pin { position: absolute; top: 6px; right: 6px; z-index: 7; width: 26px; height: 26px; border-radius: 50%; background: rgba(244,241,234,.85); border: none; display: grid; place-items: center; font-size: .82rem; line-height: 1; color: var(--ink); opacity: 0; transform: scale(.8); transition: all .25s var(--ease); }
-.arch-item:hover .arch-pin { opacity: 1; transform: scale(1); }
-.arch-pin.pinned { opacity: 1; background: var(--ink); color: var(--blush); transform: scale(1); }
+.shop-filters { display: flex; flex-direction: column; gap: .55rem; }
+.shop-filter {
+  display: flex; justify-content: space-between; align-items: center; width: 100%;
+  background: none; border: none; padding: .15rem 0; cursor: pointer; text-align: left;
+  font-family: var(--sans); font-size: .72rem; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-soft);
+}
+.shop-filter .count { font-family: var(--mono); color: var(--muted); }
+.shop-filter.active { color: var(--ink); font-weight: 600; }
+.shop-filter:hover { color: var(--ink); }
 
-/* board preview */
-.board-preview { display: flex; gap: .5rem; flex-wrap: wrap; margin: 1rem 0 1.4rem; min-height: 78px; }
-.bp-thumb { width: 54px; aspect-ratio: 3/4; border-radius: 2px; overflow: hidden; position: relative; box-shadow: 0 8px 20px -14px rgba(0,0,0,.5); }
-.bp-empty { font-family: var(--mono); font-size: .62rem; color: var(--muted); align-self: center; max-width: 24ch; line-height: 1.6; }
+.shop-filter-groups { display: flex; flex-direction: column; margin-top: 1.3rem; border-top: 1px solid var(--hair); }
+.shop-filter-group { display: flex; justify-content: space-between; padding: .6rem 0; border-bottom: 1px solid var(--hair); font-family: var(--mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
 
-/* colophon */
-.colophon { justify-content: space-between; }
-.colo-block { margin-top: auto; }
+.shop-tagline { font-family: var(--serif); font-style: italic; font-size: .8rem; line-height: 1.5; color: var(--ink-soft); margin: 1.4rem 0 0; }
+.shop-season { font-family: var(--mono); font-size: .58rem; letter-spacing: .1em; color: var(--muted); margin: .4rem 0 0; }
+
+.shop-featured { position: relative; flex: 1; display: flex; align-items: center; justify-content: center; min-height: 0; margin-top: .8rem; }
+.shop-featured-main { position: relative; height: 100%; width: auto; aspect-ratio: 3/4; max-width: 78%; margin: 0; background: var(--paper-edge); }
+.shop-featured-main .plate-fill, .shop-featured-main svg { height: 100%; width: 100%; }
+.shop-featured-thumb {
+  position: absolute; right: 4%; bottom: 6%; width: 34%; aspect-ratio: 3/4;
+  background: var(--paper); box-shadow: 0 20px 40px -22px rgba(23,20,15,.5); margin: 0; overflow: hidden;
+}
+.shop-featured-info { display: flex; justify-content: space-between; align-items: baseline; margin-top: .9rem; padding-top: .8rem; border-top: 1px solid var(--hair); }
+.shop-featured-name { font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); margin: 0; }
+.shop-featured-price { font-family: var(--mono); font-size: .74rem; color: var(--ink-soft); margin: 0; }
+
+/* =====================================================================
+   SHOP — right page (sort + grid)
+   ===================================================================== */
+.shop-grid-page { display: flex; flex-direction: column; padding: clamp(1.2rem, 2.6vw, 2rem); }
+.shop-grid-head { display: flex; justify-content: flex-end; align-items: baseline; gap: .5rem; margin: 1.4rem 0 1rem; }
+.shop-sort-label { font-family: var(--mono); font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.shop-sort-value { font-family: var(--mono); font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
+
+.shop-grid { flex: 1; overflow-y: auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem 1rem; align-content: start; padding-right: 4px; }
+.shop-grid::-webkit-scrollbar { width: 5px; }
+.shop-grid::-webkit-scrollbar-thumb { background: var(--hair); border-radius: 4px; }
+.shop-item { position: relative; cursor: pointer; background: none; border: none; padding: 0; text-align: left; transition: transform .35s var(--ease); }
+.shop-item:hover { transform: translateY(-3px); }
+.shop-item .pinned-photo { aspect-ratio: 3/4; }
+.shop-item-meta { margin-top: .5rem; }
+.shop-item-name { font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); margin: 0 0 .2rem; }
+.shop-item-price { font-family: var(--mono); font-size: .68rem; color: var(--ink-soft); margin: 0; }
+.shop-item-heart {
+  position: absolute; top: 8px; right: 8px; z-index: 7; width: 24px; height: 24px; border-radius: 50%;
+  background: rgba(244,241,234,.9); border: none; display: grid; place-items: center;
+  font-size: .8rem; line-height: 1; color: var(--ink-soft); transition: all .25s var(--ease);
+}
+.shop-item-heart:hover, .shop-item-heart.pinned { color: var(--blush-deep); }
 
 /* =====================================================================
    CTA buttons
@@ -402,7 +423,6 @@ button { font-family: inherit; cursor: pointer; }
 .cta:hover { background: var(--ink); color: var(--paper); }
 .cta.solid { background: var(--ink); color: var(--paper); }
 .cta.solid:hover { background: var(--ink-soft); }
-.cta.ghost { border-color: var(--hair); }
 .cta.feature-cta { margin-top: .4rem; }
 .cta.pin-btn.pinned { background: var(--blush); border-color: var(--blush-deep); color: var(--ink); }
 
