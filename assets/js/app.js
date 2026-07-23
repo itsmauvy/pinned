@@ -109,7 +109,7 @@
       ],
     },
     {
-      id: "look2", name: "off-shoulder sweater + denim shorts",
+      id: "look2", name: "off-shoulder sweater",
       desc: "한쪽 어깨를 드러낸 스웨트 셔츠와 컷오프 데님 반바지, 안에 셔링 타이츠를 매치한 룩",
       color: "NAVY", fabric: "COTTON 80%  POLYESTER 20%", size: "S  M  L",
       hero: "assets/img/look2%20front%201.png",
@@ -128,7 +128,7 @@
       ],
     },
     {
-      id: "look3", name: "khaki overall dress + platform boots",
+      id: "look3", name: "khaki overall dress",
       desc: "밑단을 비대칭으로 컷팅한 데님 오버올 원피스, 안에 오프숄더 톱을 레이어드",
       color: "KHAKI", fabric: "COTTON 100%", size: "S  M",
       hero: "assets/img/look3%20front.png",
@@ -140,10 +140,10 @@
         "assets/img/look3%20back.png",        // full back
       ],
       details: [
-        { label: "오버올 스트랩 디테일", src: "assets/img/look3%20front.png", pos: "50% 10%", scale: 2.2 },
-        { label: "오프숄더 톱 디테일", src: "assets/img/look3%20front.png", pos: "25% 18%", scale: 2 },
-        { label: "비대칭 밑단 디테일", src: "assets/img/look3%20front.png", pos: "50% 55%", scale: 1.8 },
-        { label: "플랫폼 부츠 디테일", src: "assets/img/look3%20front.png", pos: "50% 90%", scale: 2.4 },
+        { label: "오버올 스트랩 버클 디테일", src: "assets/img/look3%20details_1.png", pos: "center", scale: 1 },
+        { label: "프론트 포켓 디테일", src: "assets/img/look3%20details_2.png", pos: "center", scale: 1 },
+        { label: "비대칭 밑단 디테일", src: "assets/img/look3%20details_3.png", pos: "center", scale: 1 },
+        { label: "뒷면 스트랩 디자인", src: "assets/img/look3%20details_4.png", pos: "center", scale: 1 },
       ],
     },
   ];
@@ -197,10 +197,6 @@
     const colorEl = $("#lookbookColor", root);
     const fabricEl = $("#lookbookFabric", root);
     const sizeEl = $("#lookbookSize", root);
-    const pageNumEl = $("#lookbookPageNum", root);
-    const pageTotalEl = $("#lookbookPageTotal", root);
-    const prevBtn = $("#lookbookPrev", root);
-    const nextBtn = $("#lookbookNext", root);
 
     const N = LOOKS.length;
     filmstrip.innerHTML = LOOKS.map((look, i) => `
@@ -210,8 +206,6 @@
       </button>`).join("");
     const thumbs = $$(".lookbook-filmstrip-item", filmstrip);
     thumbs.forEach((btn) => btn.addEventListener("click", () => select(+btn.dataset.look)));
-    if (prevBtn) prevBtn.addEventListener("click", () => select(currentLook - 1));
-    if (nextBtn) nextBtn.addEventListener("click", () => select(currentLook + 1));
 
     function select(i) {
       currentLook = clamp(i, 0, N - 1);
@@ -227,8 +221,6 @@
       if (colorEl) colorEl.textContent = look.color || "";
       if (fabricEl) fabricEl.textContent = look.fabric || "";
       if (sizeEl) sizeEl.textContent = look.size || "";
-      if (pageNumEl) pageNumEl.textContent = String(currentLook + 1).padStart(2, "0");
-      if (pageTotalEl) pageTotalEl.textContent = String(N).padStart(2, "0");
       thumbs.forEach((btn, i) => btn.classList.toggle("is-active", i === currentLook));
       renderAngles(look);
       renderDetails(look);
