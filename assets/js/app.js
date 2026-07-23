@@ -82,33 +82,41 @@
   }
 
   /* =================================================================
-     ROTATE VIEWER — drag left/right to swing the look through 5 angles.
-     five real photos of the same look, ordered full-left-profile through
-     full-right-profile; off-angle frames sit as faint ghosts either side
-     of the active one.
+     LOOKS — one entry per look: a hero shot for the picker (left page)
+     and, once shot, a 5-angle set for the rotate viewer (right page).
+     angles stays empty until that look's angle photos are dropped in;
+     the rotate viewer then just shows the hero as a single still frame.
      ================================================================= */
-  const ROTATE_FRAMES = [
-    "assets/img/left%201.png",         // full left profile
-    "assets/img/side%20left_%202.png", // 3/4 left
-    "assets/img/front%201.png",        // front
-    "assets/img/side%20right_%201.png",// 3/4 right
-    "assets/img/right%201.png",        // full right profile
+  const LOOKS = [
+    {
+      id: "stripe", name: "striped popover + cargo",
+      hero: "assets/img/front%201.png",
+      angles: [
+        "assets/img/left%201.png",          // full left profile
+        "assets/img/side%20left_%202.png",  // 3/4 left
+        "assets/img/front%201.png",         // front
+        "assets/img/side%20right_%201.png", // 3/4 right
+        "assets/img/right%201.png",         // full right profile
+      ],
+    },
+    { id: "white", name: "cream ruffle blouse", hero: "assets/img/collection%20white.jpg", angles: [] },
+    { id: "red", name: "red cutout + cargo skirt", hero: "assets/img/collection%20red.png", angles: [] },
   ];
+  let currentLook = 0;
+
+  /* =================================================================
+     ROTATE VIEWER — drag left/right to swing the current look through
+     its angle photos; off-angle frames sit as faint ghosts either side
+     of the active one. setFrames() swaps in a different look's angles.
+     ================================================================= */
+  let setRotateFrames = () => {};
   function initRotateViewer(root) {
     const viewer = $("#rotateViewer", root);
     if (!viewer) return;
     const track = $(".rotate-track", viewer);
-    const COUNT = ROTATE_FRAMES.length, CENTER = 2, STEP_PX = 70;
+    const STEP_PX = 70;
+    let frames = [], count = 0, center = 0, index = 0;
 
-    const frames = ROTATE_FRAMES.map((src) => {
-      const el = document.createElement("div");
-      el.className = "rotate-frame";
-      el.innerHTML = `<img src="${src}" alt="" draggable="false" />`;
-      track.appendChild(el);
-      return el;
-    });
-
-    let index = CENTER;
     const layout = () => {
       frames.forEach((el, i) => {
         const d = i - index;                          // signed steps from the active frame
@@ -120,18 +128,33 @@
         el.style.transform = `translateX(${d * 26}%) scale(${scale})`;
       });
     };
-    layout();
+
+    setRotateFrames = (images) => {
+      track.innerHTML = "";
+      frames = images.map((src) => {
+        const el = document.createElement("div");
+        el.className = "rotate-frame";
+        el.innerHTML = `<img src="${src}" alt="" draggable="false" />`;
+        track.appendChild(el);
+        return el;
+      });
+      count = frames.length;
+      center = Math.floor((count - 1) / 2);
+      index = center;
+      layout();
+    };
 
     let dragging = false, startX = 0, startIndex = index;
     const pointX = (e) => (e.touches ? e.touches[0].clientX : e.clientX);
     const onDown = (e) => {
+      if (count < 2) return;
       dragging = true; startX = pointX(e); startIndex = index;
       viewer.classList.add("dragging");
     };
     const onMove = (e) => {
       if (!dragging) return;
       const delta = pointX(e) - startX;
-      const next = clamp(Math.round(startIndex - delta / STEP_PX), 0, COUNT - 1);
+      const next = clamp(Math.round(startIndex - delta / STEP_PX), 0, count - 1);
       if (next !== index) { index = next; layout(); }
     };
     const onUp = () => { dragging = false; viewer.classList.remove("dragging"); };
@@ -139,6 +162,36 @@
     viewer.addEventListener("pointerdown", onDown);
     window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerup", onUp);
+  }
+
+  /* =================================================================
+     LOOK PICKER — big hero + thumbnail row (left page). Picking a
+     thumbnail swaps the hero and reloads the rotate viewer opposite.
+     ================================================================= */
+  function initLookbook(root) {
+    const main = $("#lookbookMainImg", root);
+    const thumbsEl = $("#lookbookThumbs", root);
+    if (!main || !thumbsEl) return;
+
+    const render = () => {
+      const look = LOOKS[currentLook];
+      main.src = look.hero;
+      main.alt = look.name;
+      thumbsEl.innerHTML = LOOKS.map((l, i) => `
+        <button class="lookbook-thumb${i === currentLook ? " is-active" : ""}" data-look="${i}" aria-label="${l.name}">
+          <img src="${l.hero}" alt="" />
+        </button>`).join("");
+      $$(".lookbook-thumb", thumbsEl).forEach((btn) => {
+        btn.addEventListener("click", () => {
+          currentLook = +btn.dataset.look;
+          render();
+          const look = LOOKS[currentLook];
+          setRotateFrames(look.angles.length ? look.angles : [look.hero]);
+        });
+      });
+    };
+    render();
+    setRotateFrames(LOOKS[currentLook].angles.length ? LOOKS[currentLook].angles : [LOOKS[currentLook].hero]);
   }
 
   /* =================================================================
@@ -151,6 +204,7 @@
   }
   injectPlates(document);
   initRotateViewer(document);
+  initLookbook(document);
 
   /* keywords + issue lines */
   const keywordList = $("#keywordList");
