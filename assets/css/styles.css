@@ -236,7 +236,7 @@ button { font-family: inherit; cursor: pointer; }
 /* =====================================================================
    PLATES (silhouette "photos")
    ===================================================================== */
-.pinned-photo { position: relative; border-radius: 2px; overflow: hidden; aspect-ratio: 3/4; background: var(--fog); box-shadow: 0 18px 44px -26px rgba(23,20,15,.5); }
+.pinned-photo { position: relative; margin: 0; border-radius: 2px; overflow: hidden; aspect-ratio: 3/4; background: var(--fog); box-shadow: 0 18px 44px -26px rgba(23,20,15,.5); }
 .pinned-photo.full { aspect-ratio: auto; height: 100%; }
 .plate-fill { position: absolute; inset: 0; display: grid; place-items: center; }
 .plate-svg { width: 76%; height: 84%; }
@@ -375,42 +375,54 @@ button { font-family: inherit; cursor: pointer; }
 .shop-filter:hover { color: var(--ink); }
 
 .shop-filter-groups { display: flex; flex-direction: column; margin-top: 1.3rem; border-top: 1px solid var(--hair); }
-.shop-filter-group { display: flex; justify-content: space-between; padding: .6rem 0; border-bottom: 1px solid var(--hair); font-family: var(--mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
-
-.shop-featured { position: relative; flex: 1; display: flex; align-items: center; justify-content: center; min-height: 0; margin-top: .8rem; }
-.shop-featured-main { position: relative; height: 100%; width: auto; aspect-ratio: 3/4; max-width: 78%; margin: 0; background: var(--paper-edge); }
-.shop-featured-main .plate-fill, .shop-featured-main svg { height: 100%; width: 100%; }
-.shop-featured-thumb {
-  position: absolute; right: 4%; bottom: 6%; width: 34%; aspect-ratio: 3/4;
-  background: var(--paper); box-shadow: 0 20px 40px -22px rgba(23,20,15,.5); margin: 0; overflow: hidden;
+.shop-filter-group { border-bottom: 1px solid var(--hair); }
+.shop-filter-group-head {
+  display: flex; justify-content: space-between; align-items: center; width: 100%;
+  background: none; border: none; padding: .6rem 0; cursor: pointer;
+  font-family: var(--mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft);
 }
-.shop-featured-info { display: flex; justify-content: space-between; align-items: baseline; margin-top: .9rem; padding-top: .8rem; border-top: 1px solid var(--hair); }
-.shop-featured-name { font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); margin: 0; }
-.shop-featured-price { font-family: var(--mono); font-size: .74rem; color: var(--ink-soft); margin: 0; }
+.shop-filter-group-head:hover { color: var(--ink); }
+.shop-filter-group.open .shop-filter-group-head { color: var(--ink); }
+.shop-filter-options { display: none; flex-direction: column; gap: .5rem; padding: 0 0 .8rem; }
+.shop-filter-group.open .shop-filter-options { display: flex; }
+.shop-filter-option {
+  display: flex; align-items: center; gap: .5rem; cursor: pointer;
+  font-family: var(--sans); font-size: .7rem; letter-spacing: .02em; color: var(--ink-soft);
+}
+.shop-filter-option:hover { color: var(--ink); }
+.shop-filter-option input { accent-color: var(--ink); width: .8rem; height: .8rem; cursor: pointer; }
 
 /* =====================================================================
-   SHOP — right page (sort + grid)
+   SHOP — right page (grid)
    ===================================================================== */
 .shop-grid-page { display: flex; flex-direction: column; padding: clamp(1.2rem, 2.6vw, 2rem); }
-.shop-grid-head { display: flex; justify-content: flex-end; align-items: baseline; gap: .5rem; margin: 1.4rem 0 1rem; }
-.shop-sort-label { font-family: var(--mono); font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-.shop-sort-value { font-family: var(--mono); font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
 
-.shop-grid { flex: 1; overflow-y: auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem 1rem; align-content: start; padding-right: 4px; }
-.shop-grid::-webkit-scrollbar { width: 5px; }
-.shop-grid::-webkit-scrollbar-thumb { background: var(--hair); border-radius: 4px; }
-.shop-item { position: relative; cursor: pointer; background: none; border: none; padding: 0; text-align: left; transition: transform .35s var(--ease); }
+.shop-grid { flex: 1; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 1rem 1rem; min-height: 0; margin-top: 1.4rem; }
+.shop-pagination { display: flex; justify-content: center; align-items: center; gap: .9rem; margin-top: 1rem; }
+.shop-page-btn {
+  font-family: var(--mono); font-size: .68rem; letter-spacing: .04em; background: none; border: none;
+  color: var(--muted); cursor: pointer; padding: .2rem .1rem;
+}
+.shop-page-btn.active { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.shop-page-btn:hover { color: var(--ink); }
+.shop-page-btn[disabled] { opacity: .3; cursor: default; }
+.shop-item {
+  position: relative; height: 100%; min-height: 0; display: flex; flex-direction: column;
+  cursor: pointer; background: none; border: none; padding: 0; text-align: left; transition: transform .35s var(--ease);
+}
 .shop-item:hover { transform: translateY(-3px); }
-.shop-item .pinned-photo { aspect-ratio: 3/4; }
-.shop-item-meta { margin-top: .5rem; }
+.shop-item .pinned-photo { flex: 1; min-height: 0; aspect-ratio: auto; background: none; box-shadow: none; border-radius: 0; }
+.shop-item-meta { flex: none; margin-top: .5rem; }
 .shop-item-name { font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); margin: 0 0 .2rem; }
 .shop-item-price { font-family: var(--mono); font-size: .68rem; color: var(--ink-soft); margin: 0; }
-.shop-item-heart {
+.shop-item-pin {
   position: absolute; top: 8px; right: 8px; z-index: 7; width: 24px; height: 24px; border-radius: 50%;
   background: rgba(244,241,234,.9); border: none; display: grid; place-items: center;
-  font-size: .8rem; line-height: 1; color: var(--ink-soft); transition: all .25s var(--ease);
+  color: var(--ink-soft); transition: all .25s var(--ease);
 }
-.shop-item-heart:hover, .shop-item-heart.pinned { color: var(--blush-deep); }
+.shop-item-pin svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.7; }
+.shop-item-pin:hover, .shop-item-pin.pinned { color: var(--blush-deep); }
+.shop-item-pin.pinned svg { fill: currentColor; stroke: none; }
 
 /* =====================================================================
    CTA buttons

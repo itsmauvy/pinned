@@ -130,28 +130,26 @@
     <div class="page-face shop-page">
       <h1 class="shop-title">shop</h1>
       <div class="shop-filters" id="shopFilters" role="tablist" aria-label="filter shop"></div>
-      <div class="shop-filter-groups">
-        <div class="shop-filter-group"><span>color</span><span>+</span></div>
-        <div class="shop-filter-group"><span>size</span><span>+</span></div>
-        <div class="shop-filter-group"><span>price</span><span>+</span></div>
-      </div>
-      <div class="shop-featured">
-        <figure class="shop-featured-main" id="shopFeaturedMain"></figure>
-        <figure class="shop-featured-thumb" id="shopFeaturedThumb"></figure>
-      </div>
-      <div class="shop-featured-info">
-        <p class="shop-featured-name" id="shopFeaturedName"></p>
-        <p class="shop-featured-price" id="shopFeaturedPrice"></p>
+      <div class="shop-filter-groups" id="shopFilterGroups">
+        <div class="shop-filter-group" data-filter="color">
+          <button class="shop-filter-group-head" type="button"><span>color</span><span class="shop-filter-toggle">+</span></button>
+          <div class="shop-filter-options" id="shopColorOptions"></div>
+        </div>
+        <div class="shop-filter-group" data-filter="size">
+          <button class="shop-filter-group-head" type="button"><span>size</span><span class="shop-filter-toggle">+</span></button>
+          <div class="shop-filter-options" id="shopSizeOptions"></div>
+        </div>
+        <div class="shop-filter-group" data-filter="price">
+          <button class="shop-filter-group-head" type="button"><span>price</span><span class="shop-filter-toggle">+</span></button>
+          <div class="shop-filter-options" id="shopPriceOptions"></div>
+        </div>
       </div>
     </div>
 
     <!-- P7 · shop grid -->
     <div class="page-face shop-grid-page">
-      <div class="shop-grid-head">
-        <span class="shop-sort-label">sort by</span>
-        <span class="shop-sort-value">new arrival</span>
-      </div>
       <div class="shop-grid" id="shopGrid"></div>
+      <div class="shop-pagination" id="shopPagination"></div>
     </div>
 
     <!-- P8 · material lace plate -->

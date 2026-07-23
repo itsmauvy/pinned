@@ -256,10 +256,34 @@
   const SHOP_ORDER = ["all", "tops", "bottoms", "dresses", "accessories", "shoes"];
   const shopGroups = SHOP_ORDER.filter((c) => c === "all" || pieces.some((p) => (SHOP_GROUP[p.category] || p.category) === c));
   const shopFiltersEl = $("#shopFilters");
+  const shopFilterGroupsEl = $("#shopFilterGroups");
+  const shopColorOptionsEl = $("#shopColorOptions");
+  const shopSizeOptionsEl = $("#shopSizeOptions");
+  const shopPriceOptionsEl = $("#shopPriceOptions");
   const shopGridEl = $("#shopGrid");
+  const shopPaginationEl = $("#shopPagination");
+  const SHOP_PAGE_SIZE = 4;
+  const SHOP_PIN_ICON = '<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>';
+  const SHOP_PRICE_RANGES = [
+    { id: "u2", label: "20,000원 미만", test: (p) => p.price < 20000 },
+    { id: "20-30", label: "20,000 – 30,000원", test: (p) => p.price >= 20000 && p.price < 30000 },
+    { id: "30-40", label: "30,000 – 40,000원", test: (p) => p.price >= 30000 && p.price < 40000 },
+    { id: "o4", label: "40,000원 이상", test: (p) => p.price >= 40000 },
+  ];
   let shopCat = "all";
+  let shopPage = 0;
+  const shopFacets = { color: new Set(), size: new Set(), price: new Set() };
 
-  const shopMatches = (p, cat) => cat === "all" || (SHOP_GROUP[p.category] || p.category) === cat;
+  const shopFacetOk = (p) => {
+    if (shopFacets.color.size && !shopFacets.color.has(p.color)) return false;
+    if (shopFacets.size.size && !shopFacets.size.has(p.size)) return false;
+    if (shopFacets.price.size) {
+      const ok = Array.from(shopFacets.price).some((id) => SHOP_PRICE_RANGES.find((r) => r.id === id)?.test(p));
+      if (!ok) return false;
+    }
+    return true;
+  };
+  const shopMatches = (p, cat) => (cat === "all" || (SHOP_GROUP[p.category] || p.category) === cat) && shopFacetOk(p);
 
   function renderShopFilters() {
     if (!shopFiltersEl) return;
@@ -269,41 +293,83 @@
     }).join("");
     $$(".shop-filter", shopFiltersEl).forEach((btn) => btn.addEventListener("click", () => {
       shopCat = btn.dataset.cat;
+      shopPage = 0;
       renderShopFilters();
       renderShopGrid();
     }));
   }
 
+  function renderShopFilterOptions() {
+    if (!shopFilterGroupsEl) return;
+    const colors = Array.from(new Set(pieces.map((p) => p.color))).sort();
+    const sizes = Array.from(new Set(pieces.map((p) => p.size))).sort();
+    const option = (group, value, label) => `
+      <label class="shop-filter-option">
+        <input type="checkbox" data-group="${group}" value="${value}" ${shopFacets[group].has(value) ? "checked" : ""} />
+        <span>${label}</span>
+      </label>`;
+    if (shopColorOptionsEl) shopColorOptionsEl.innerHTML = colors.map((c) => option("color", c, c)).join("");
+    if (shopSizeOptionsEl) shopSizeOptionsEl.innerHTML = sizes.map((s) => option("size", s, s)).join("");
+    if (shopPriceOptionsEl) shopPriceOptionsEl.innerHTML = SHOP_PRICE_RANGES.map((r) => option("price", r.id, r.label)).join("");
+
+    $$(".shop-filter-group-head", shopFilterGroupsEl).forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const group = btn.closest(".shop-filter-group");
+        group.classList.toggle("open");
+        const toggle = btn.querySelector(".shop-filter-toggle");
+        if (toggle) toggle.textContent = group.classList.contains("open") ? "–" : "+";
+      });
+    });
+    $$(".shop-filter-option input", shopFilterGroupsEl).forEach((input) => {
+      input.addEventListener("change", () => {
+        const set = shopFacets[input.dataset.group];
+        if (input.checked) set.add(input.value); else set.delete(input.value);
+        shopPage = 0;
+        renderShopFilters();
+        renderShopGrid();
+      });
+    });
+  }
+
   function renderShopGrid() {
     if (!shopGridEl) return;
     const list = pieces.filter((p) => shopMatches(p, shopCat));
-    shopGridEl.innerHTML = list.map((p) => `
+    const pageCount = Math.max(1, Math.ceil(list.length / SHOP_PAGE_SIZE));
+    shopPage = clamp(shopPage, 0, pageCount - 1);
+    const pageItems = list.slice(shopPage * SHOP_PAGE_SIZE, shopPage * SHOP_PAGE_SIZE + SHOP_PAGE_SIZE);
+
+    shopGridEl.innerHTML = pageItems.map((p) => `
       <button class="shop-item" data-id="${p.id}" aria-label="${p.name}">
         <figure class="pinned-photo ${p.image ? "photo-real" : `tone-${p.tone}`}">
           ${plate(p)}
-          <span class="shop-item-heart${isPinned(p.id) ? " pinned" : ""}" data-pin="${p.id}" title="pin this piece">${isPinned(p.id) ? "♥" : "♡"}</span>
+          <span class="shop-item-pin${isPinned(p.id) ? " pinned" : ""}" data-pin="${p.id}" title="pin this piece">${SHOP_PIN_ICON}</span>
         </figure>
         <div class="shop-item-meta">
           <p class="shop-item-name">${p.name}</p>
           <p class="shop-item-price">${money(p)}</p>
         </div>
       </button>`).join("");
-  }
 
-  function renderShopFeatured() {
-    const mainEl = $("#shopFeaturedMain"), thumbEl = $("#shopFeaturedThumb");
-    const nameEl = $("#shopFeaturedName"), priceEl = $("#shopFeaturedPrice");
-    if (!mainEl) return;
-    const featured = pieces[0];
-    mainEl.innerHTML = plate(featured);
-    if (thumbEl) thumbEl.innerHTML = plate(pieces[1] || featured);
-    if (nameEl) nameEl.textContent = featured.name;
-    if (priceEl) priceEl.textContent = money(featured);
+    if (shopPaginationEl) {
+      if (pageCount <= 1) {
+        shopPaginationEl.innerHTML = "";
+      } else {
+        const nums = Array.from({ length: pageCount }, (_, i) => `<button class="shop-page-btn${i === shopPage ? " active" : ""}" data-page="${i}">${i + 1}</button>`).join("");
+        shopPaginationEl.innerHTML = `
+          <button class="shop-page-btn" data-page="${shopPage - 1}"${shopPage === 0 ? " disabled" : ""}>←</button>
+          ${nums}
+          <button class="shop-page-btn" data-page="${shopPage + 1}"${shopPage === pageCount - 1 ? " disabled" : ""}>→</button>`;
+        $$(".shop-page-btn", shopPaginationEl).forEach((btn) => {
+          if (btn.disabled) return;
+          btn.addEventListener("click", () => { shopPage = +btn.dataset.page; renderShopGrid(); });
+        });
+      }
+    }
   }
 
   renderShopFilters();
+  renderShopFilterOptions();
   renderShopGrid();
-  renderShopFeatured();
 
   /* =================================================================
      PRODUCT DETAIL overlay
@@ -376,9 +442,8 @@
   /* board preview + count + pin badges */
   function syncPinUI() {
     $("#boardCount").textContent = pins.length;
-    $$(".shop-item-heart").forEach((el) => {
-      const on = isPinned(el.dataset.pin);
-      el.classList.toggle("pinned", on); el.textContent = on ? "♥" : "♡";
+    $$(".shop-item-pin").forEach((el) => {
+      el.classList.toggle("pinned", isPinned(el.dataset.pin));
     });
     const prev = $("#boardPreview");
     if (prev) {
