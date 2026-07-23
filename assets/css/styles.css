@@ -290,7 +290,7 @@ button { font-family: inherit; cursor: pointer; }
 .lookbook-issue { font-family: var(--mono); font-size: .6rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
 /* other looks flank the active one, ghosted in grayscale, like the
    rotate-viewer's angle trail — click one to bring it to the centre */
-.lookbook-stage { position: relative; flex: 1; display: flex; align-items: center; justify-content: center; min-height: 0; max-height: clamp(320px, 55vh, 480px); }
+.lookbook-stage { position: relative; flex: 1; display: flex; align-items: center; justify-content: center; min-height: 0; }
 .lookbook-track { position: relative; width: 100%; height: 100%; }
 .look-frame {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
@@ -306,12 +306,9 @@ button { font-family: inherit; cursor: pointer; }
 .hero-stage { position: relative; flex: 1; display: flex; }
 .hero-stage > .pinned-photo.full { flex: none; height: 100%; width: auto; aspect-ratio: 573 / 764; margin-left: 26%; }
 
-/* rotate-viewer — drag left/right to swing the look through 5 photographed angles.
-   the angle photos are low-res source shots, so the viewer is capped near their
-   native size rather than stretched to fill the page (which was upscaling and
-   blurring them). */
+/* rotate-viewer — drag left/right to swing the look through 5 photographed angles */
 .hero-stage > .rotate-viewer {
-  position: relative; flex: none; height: clamp(320px, 55vh, 480px); width: auto;
+  position: relative; flex: none; height: 100%; width: auto;
   aspect-ratio: 573 / 764; margin: auto;
   cursor: grab; touch-action: pan-y; user-select: none;
 }
