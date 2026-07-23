@@ -215,7 +215,7 @@
     const frames = LOOKS.map((look, i) => {
       const btn = document.createElement("button");
       btn.className = "look-frame";
-      btn.innerHTML = `<img src="${look.hero}" alt="${look.name}" /><span class="look-frame-label">look ${String(i + 1).padStart(2, "0")}</span>`;
+      btn.innerHTML = `<img src="${look.hero}" alt="${look.name}" />`;
       btn.addEventListener("click", () => {
         currentLook = i;
         layout();
