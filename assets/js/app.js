@@ -129,7 +129,7 @@
     },
     {
       id: "look3", name: "khaki overall dress",
-      desc: "밑단을 비대칭으로 컷팅한 데님 오버올 원피스, 안에 오프숄더 톱을 레이어드",
+      desc: "밑단을 비대칭으로 컷팅한 데님 오버올 원피스에 블랙 오프숄더 이너로 포인트를 더했습니다.",
       color: "KHAKI", fabric: "COTTON 100%", size: "S  M",
       hero: "assets/img/look3%20front.png",
       angles: [
@@ -367,7 +367,8 @@
     if (e.target.closest("[data-board-close]")) return closeBoard();
   });
   $("#openBoard").addEventListener("click", openBoard);
-  $("#openBoard2").addEventListener("click", openBoard);
+  const openBoard2 = $("#openBoard2");
+  if (openBoard2) openBoard2.addEventListener("click", openBoard);
   $("#featureCta").addEventListener("click", () => openDetail("p05"));
   $("#navSearch").addEventListener("click", () => { goToSpread(3); toast("browse the shelf — live search coming soon"); });
   $("#navAccount").addEventListener("click", () => toast("account — demo, no sign-in yet"));

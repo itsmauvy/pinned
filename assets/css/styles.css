@@ -76,10 +76,10 @@ button { font-family: inherit; cursor: pointer; }
 }
 .gnb button:hover { color: var(--ink); }
 .gnb button.active { color: var(--ink); border-color: var(--ink); }
-.mast-right { display: flex; align-items: center; gap: clamp(.7rem, 1.6vw, 1.4rem); }
+.mast-right { display: flex; align-items: center; gap: clamp(1rem, 2vw, 1.8rem); }
 .mast-tool {
-  font-family: var(--mono); font-size: .62rem; letter-spacing: .16em; text-transform: uppercase;
-  background: none; border: none; padding: 4px 0; color: var(--ink-soft);
+  font-family: var(--mono); font-size: .8rem; letter-spacing: .14em; text-transform: uppercase;
+  background: none; border: none; padding: 8px 2px; color: var(--ink-soft); cursor: pointer;
   border-bottom: 1px solid transparent; transition: color .3s, border-color .3s;
 }
 .mast-tool:hover { color: var(--ink); }
