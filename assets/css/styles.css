@@ -68,10 +68,10 @@ button { font-family: inherit; cursor: pointer; }
 .wordmark { display: inline-flex; align-items: center; }
 .wordmark img { height: clamp(28px, 3.4vw, 38px); width: auto; display: block; }
 /* GNB — one item per spread; active follows the page you're on */
-.gnb { display: flex; align-items: center; gap: clamp(.7rem, 1.8vw, 1.6rem); }
+.gnb { display: flex; align-items: center; gap: clamp(1rem, 2.2vw, 2rem); }
 .gnb button {
-  font-family: var(--mono); font-size: .62rem; letter-spacing: .16em; text-transform: uppercase;
-  background: none; border: none; padding: 4px 0; color: var(--muted);
+  font-family: var(--mono); font-size: .8rem; letter-spacing: .14em; text-transform: uppercase;
+  background: none; border: none; padding: 8px 2px; color: var(--muted); cursor: pointer;
   border-bottom: 1px solid transparent; transition: color .3s, border-color .3s;
 }
 .gnb button:hover { color: var(--ink); }
