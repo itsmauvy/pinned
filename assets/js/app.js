@@ -90,6 +90,7 @@
   const LOOKS = [
     {
       id: "look1", name: "black ribbon-tie dress",
+      desc: "A dress the shape of a held breath — bow tied at the throat like a secret, hem cut short enough to argue back.",
       hero: "assets/img/look1%20side%20left.png",
       angles: [
         "assets/img/look1%20left.png",       // full left profile
@@ -99,8 +100,16 @@
         "assets/img/look1%20right.png",       // full right profile
       ],
     },
-    { id: "white", name: "cream ruffle blouse", hero: "assets/img/collection%20white.jpg", angles: [] },
-    { id: "red", name: "red cutout + cargo skirt", hero: "assets/img/collection%20red.png", angles: [] },
+    {
+      id: "white", name: "cream ruffle blouse",
+      desc: "Cream ruffle blouse, black shorts, heart-pattern socks — soft collar, quiet rebellion underneath.",
+      hero: "assets/img/collection%20white.jpg", angles: [],
+    },
+    {
+      id: "red", name: "red cutout + cargo skirt",
+      desc: "Red cutout top, khaki cargo mini skirt, heart charm — new arrival, first piece not pulled from the archive.",
+      hero: "assets/img/collection%20red.png", angles: [],
+    },
   ];
   let currentLook = 0;
 
@@ -199,11 +208,14 @@
     const stage = $("#lookbookStage", root);
     if (!stage) return;
     const track = $(".lookbook-track", stage);
+    const kickerEl = $("#lookbookKicker", root);
+    const nameEl = $("#lookbookName", root);
+    const vdescEl = $("#lookbookVdesc", root);
 
     const frames = LOOKS.map((look, i) => {
       const btn = document.createElement("button");
       btn.className = "look-frame";
-      btn.innerHTML = `<img src="${look.hero}" alt="${look.name}" />`;
+      btn.innerHTML = `<img src="${look.hero}" alt="${look.name}" /><span class="look-frame-label">look ${String(i + 1).padStart(2, "0")}</span>`;
       btn.addEventListener("click", () => {
         currentLook = i;
         layout();
@@ -226,6 +238,9 @@
         const scale = abs === 0 ? 1 : abs === 1 ? .56 : .42;
         el.style.transform = `translateX(${d * 34}%) scale(${scale})`;
       });
+      if (kickerEl) kickerEl.textContent = `look ${String(currentLook + 1).padStart(2, "0")}`;
+      if (nameEl) nameEl.textContent = LOOKS[currentLook].name;
+      if (vdescEl) vdescEl.textContent = LOOKS[currentLook].desc || "";
     };
     layout();
     setRotateFrames(LOOKS[currentLook].angles.length ? LOOKS[currentLook].angles : [LOOKS[currentLook].hero]);
