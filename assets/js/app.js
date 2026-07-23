@@ -83,26 +83,30 @@
 
   /* =================================================================
      ROTATE VIEWER — drag left/right to swing the look through 5 angles.
-     mock: same generated silhouette, squeezed + mirrored per angle, with
-     the off-angle frames left as faint ghosts either side of the active
-     one. real per-angle photos can later replace the single shape with
-     one image per frame — the drag/index logic stays the same.
+     five real photos of the same look, ordered full-left-profile through
+     full-right-profile; off-angle frames sit as faint ghosts either side
+     of the active one.
      ================================================================= */
+  const ROTATE_FRAMES = [
+    "assets/img/left%201.png",         // full left profile
+    "assets/img/side%20left_%202.png", // 3/4 left
+    "assets/img/front%201.png",        // front
+    "assets/img/side%20right_%201.png",// 3/4 right
+    "assets/img/right%201.png",        // full right profile
+  ];
   function initRotateViewer(root) {
     const viewer = $("#rotateViewer", root);
     if (!viewer) return;
     const track = $(".rotate-track", viewer);
-    const seed = viewer.dataset.seed || 1;
-    const COUNT = 5, CENTER = 2, STEP_PX = 70;
+    const COUNT = ROTATE_FRAMES.length, CENTER = 2, STEP_PX = 70;
 
-    const frames = [];
-    for (let i = 0; i < COUNT; i++) {
+    const frames = ROTATE_FRAMES.map((src) => {
       const el = document.createElement("div");
       el.className = "rotate-frame";
-      el.innerHTML = window.plateSVG("model", { seed });
+      el.innerHTML = `<img src="${src}" alt="" draggable="false" />`;
       track.appendChild(el);
-      frames.push(el);
-    }
+      return el;
+    });
 
     let index = CENTER;
     const layout = () => {
@@ -111,10 +115,9 @@
         const abs = Math.abs(d);
         el.classList.toggle("is-active", d === 0);
         el.style.zIndex = String(10 - abs);
-        el.style.opacity = abs === 0 ? "1" : abs === 1 ? ".35" : abs === 2 ? ".15" : "0";
-        const squeeze = abs === 0 ? 1 : abs === 1 ? .62 : .34;   // fake a side-on angle
-        const flip = d < 0 ? -1 : 1;
-        el.style.transform = `translateX(${d * 30}%) scaleX(${squeeze * flip})`;
+        el.style.opacity = abs === 0 ? "1" : abs === 1 ? ".4" : abs === 2 ? ".18" : "0";
+        const scale = abs === 0 ? 1 : abs === 1 ? .84 : .7;
+        el.style.transform = `translateX(${d * 26}%) scale(${scale})`;
       });
     };
     layout();
@@ -154,14 +157,6 @@
   if (keywordList) keywordList.innerHTML = DATA.keywords.map((k) => `<li>${k}</li>`).join("");
   const issueStr = `${DATA.issue.no} · ${DATA.issue.season} ${DATA.issue.year}`;
   ["#issueLine", "#issueFoot", "#imprintIssue", "#mastIssue"].forEach((s) => { const e = $(s); if (e) e.textContent = issueStr; });
-
-  /* lookbook hotspots */
-  const lookPieces = [byId("p01"), byId("p03"), byId("p04")].filter(Boolean);
-  const pos = [{ x: 52, y: 30 }, { x: 46, y: 55 }, { x: 55, y: 82 }];
-  $("#lookHotspots").innerHTML = lookPieces.map((p, i) => `
-    <button class="hotspot" data-id="${p.id}" style="left:${pos[i].x}%;top:${pos[i].y}%" aria-label="${p.name}">
-      <span class="hotspot-label">${p.house} — ${p.name}</span>
-    </button>`).join("");
 
   /* archive filters + wall */
   const categories = ["all", ...new Set(pieces.map((p) => p.category))];
@@ -277,7 +272,6 @@
     const pinEl = e.target.closest("[data-pin]");
     if (pinEl) { e.stopPropagation(); toast(togglePin(pinEl.dataset.pin) ? "pinned to your board" : "removed from board"); return; }
     const item = e.target.closest(".arch-item"); if (item) return openDetail(item.dataset.id);
-    const hot = e.target.closest(".hotspot"); if (hot) return openDetail(hot.dataset.id);
     const rm = e.target.closest("[data-remove]"); if (rm) { togglePin(rm.dataset.remove); toast("removed from board"); return; }
     const f = e.target.closest(".filter");
     if (f) { $$(".filter").forEach((x) => x.classList.remove("active")); f.classList.add("active"); renderWall(f.dataset.cat); return; }
