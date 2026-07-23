@@ -10,7 +10,7 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
-  const money = (p) => `${p.currency}${p.price}`;
+  const money = (p) => `${p.price.toLocaleString()}${p.currency}`;
   const plate = (piece, seed) => piece.image
     ? `<div class="plate-fill photo"><img src="${piece.image}" alt="${piece.name}" loading="lazy" /></div>`
     : `<div class="plate-fill">${window.plateSVG(piece.shape, { seed: seed || piece.id.charCodeAt(2) })}</div>`;

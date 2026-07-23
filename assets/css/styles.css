@@ -362,8 +362,7 @@ button { font-family: inherit; cursor: pointer; }
    SHOP — left page (intro, filters, featured piece)
    ===================================================================== */
 .shop-page { display: flex; flex-direction: column; padding: clamp(1.2rem, 2.6vw, 2rem); }
-.shop-title { font-family: var(--sans); font-weight: 600; font-size: clamp(1.8rem, 3.4vw, 2.4rem); letter-spacing: .02em; text-transform: uppercase; margin: 1.4rem 0 .3rem; }
-.shop-subtitle { font-family: var(--serif); font-style: italic; font-size: .9rem; color: var(--ink-soft); margin: 0 0 1.4rem; }
+.shop-title { font-family: var(--sans); font-weight: 600; font-size: clamp(1.8rem, 3.4vw, 2.4rem); letter-spacing: .02em; text-transform: uppercase; margin: 1.4rem 0 1.2rem; }
 
 .shop-filters { display: flex; flex-direction: column; gap: .55rem; }
 .shop-filter {
@@ -377,9 +376,6 @@ button { font-family: inherit; cursor: pointer; }
 
 .shop-filter-groups { display: flex; flex-direction: column; margin-top: 1.3rem; border-top: 1px solid var(--hair); }
 .shop-filter-group { display: flex; justify-content: space-between; padding: .6rem 0; border-bottom: 1px solid var(--hair); font-family: var(--mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
-
-.shop-tagline { font-family: var(--serif); font-style: italic; font-size: .8rem; line-height: 1.5; color: var(--ink-soft); margin: 1.4rem 0 0; }
-.shop-season { font-family: var(--mono); font-size: .58rem; letter-spacing: .1em; color: var(--muted); margin: .4rem 0 0; }
 
 .shop-featured { position: relative; flex: 1; display: flex; align-items: center; justify-content: center; min-height: 0; margin-top: .8rem; }
 .shop-featured-main { position: relative; height: 100%; width: auto; aspect-ratio: 3/4; max-width: 78%; margin: 0; background: var(--paper-edge); }
