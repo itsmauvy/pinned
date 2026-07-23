@@ -101,6 +101,18 @@
       ],
     },
     {
+      id: "look2", name: "off-shoulder sweater + denim shorts",
+      desc: "Navy sweater slipping off one shoulder, cutoff denim over sheer tights — boots that mean it.",
+      hero: "assets/img/look2%20front%201.png",
+      angles: [
+        "assets/img/look2%20left.png",       // full left profile
+        "assets/img/look2%20side%20left.png",// 3/4 left
+        "assets/img/look2%20front%201.png",   // front
+        "assets/img/look2%20side%20right.png",// 3/4 right
+        "assets/img/look2%20back.png",        // full back
+      ],
+    },
+    {
       id: "white", name: "cream ruffle blouse",
       desc: "Cream ruffle blouse, black shorts, heart-pattern socks — soft collar, quiet rebellion underneath.",
       hero: "assets/img/collection%20white.jpg", angles: [],
