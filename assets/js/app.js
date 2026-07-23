@@ -124,16 +124,6 @@
         "assets/img/look3%20back.png",        // full back
       ],
     },
-    {
-      id: "white", name: "cream ruffle blouse",
-      desc: "Cream ruffle blouse, black shorts, heart-pattern socks — soft collar, quiet rebellion underneath.",
-      hero: "assets/img/collection%20white.jpg", angles: [],
-    },
-    {
-      id: "red", name: "red cutout + cargo skirt",
-      desc: "Red cutout top, khaki cargo mini skirt, heart charm — new arrival, first piece not pulled from the archive.",
-      hero: "assets/img/collection%20red.png", angles: [],
-    },
   ];
   let currentLook = 0;
 
