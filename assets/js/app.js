@@ -91,59 +91,59 @@
       id: "look1", name: "black ribbon-tie dress",
       desc: "허리 라인을 강조하고 목에 레이스 리본 포인트를 더한 미니 원피스",
       color: "BLACK", fabric: "POLYESTER 95%  SPAN 5%", size: "S  M",
-      hero: "assets/img/look1%20front.png",
+      hero: "assets/img/look1%20front.webp",
       angleLabels: ["side", "3/4", "front", "3/4", "back"],
       angles: [
-        "assets/img/look1%20left.png",       // full left profile
-        "assets/img/look1%20side%20left.png",// 3/4 left
-        "assets/img/look1%20front.png",       // front
-        "assets/img/look1%20side%20right.png",// 3/4 right
-        "assets/img/look1%20right.png",       // full right profile
+        "assets/img/look1%20left.webp",       // full left profile
+        "assets/img/look1%20side%20left.webp",// 3/4 left
+        "assets/img/look1%20front.webp",       // front
+        "assets/img/look1%20side%20right.webp",// 3/4 right
+        "assets/img/look1%20right.webp",       // full right profile
       ],
       // no separate macro shoot yet — reframe existing shots as stand-in crops
       details: [
-        { label: "레이스 리본 타이", src: "assets/img/look1%20details_1.png", pos: "center", scale: 1 },
-        { label: "허리 셔링 디자인", src: "assets/img/look1%20details_2.png", pos: "center", scale: 1 },
-        { label: "플레어 밑단 디테일", src: "assets/img/look1%20details_3.png", pos: "center", scale: 1 },
-        { label: "뒷면 버튼 클로징", src: "assets/img/look1%20details_4.png", pos: "center", scale: 1 },
+        { label: "레이스 리본 타이", src: "assets/img/look1%20details_1.webp", pos: "center", scale: 1 },
+        { label: "허리 셔링 디자인", src: "assets/img/look1%20details_2.webp", pos: "center", scale: 1 },
+        { label: "플레어 밑단 디테일", src: "assets/img/look1%20details_3.webp", pos: "center", scale: 1 },
+        { label: "뒷면 버튼 클로징", src: "assets/img/look1%20details_4.webp", pos: "center", scale: 1 },
       ],
     },
     {
       id: "look2", name: "off-shoulder sweater",
       desc: "한쪽 어깨를 드러낸 셔츠와 컷오프 데님 반바지를 매치한 캐주얼룩.",
       color: "NAVY", fabric: "COTTON 80%  POLYESTER 20%", size: "S  M  L",
-      hero: "assets/img/look2%20front%201.png",
+      hero: "assets/img/look2%20front%201.webp",
       angles: [
-        "assets/img/look2%20left.png",       // full left profile
-        "assets/img/look2%20side%20left.png",// 3/4 left
-        "assets/img/look2%20front%201.png",   // front
-        "assets/img/look2%20side%20right.png",// 3/4 right
-        "assets/img/look2%20back.png",        // full back
+        "assets/img/look2%20left.webp",       // full left profile
+        "assets/img/look2%20side%20left.webp",// 3/4 left
+        "assets/img/look2%20front%201.webp",   // front
+        "assets/img/look2%20side%20right.webp",// 3/4 right
+        "assets/img/look2%20back.webp",        // full back
       ],
       details: [
-        { label: "레이어드 숄더 디자인", src: "assets/img/look2%20details_1.png", pos: "center", scale: 1 },
-        { label: "레이어드 밑단 디테일", src: "assets/img/look2%20details_2.png", pos: "center", scale: 1 },
-        { label: "셔츠 커프스 포인트", src: "assets/img/look2%20details_3.png", pos: "center", scale: 1 },
-        { label: "언밸런스 백 라인", src: "assets/img/look2%20details_4.png", pos: "center", scale: 1 },
+        { label: "레이어드 숄더 디자인", src: "assets/img/look2%20details_1.webp", pos: "center", scale: 1 },
+        { label: "레이어드 밑단 디테일", src: "assets/img/look2%20details_2.webp", pos: "center", scale: 1 },
+        { label: "셔츠 커프스 포인트", src: "assets/img/look2%20details_3.webp", pos: "center", scale: 1 },
+        { label: "언밸런스 백 라인", src: "assets/img/look2%20details_4.webp", pos: "center", scale: 1 },
       ],
     },
     {
       id: "look3", name: "khaki overall dress",
       desc: "밑단을 비대칭으로 컷팅한 데님 오버올 원피스에 블랙 오프숄더 이너로 포인트를 더했습니다.",
       color: "KHAKI", fabric: "COTTON 100%", size: "S  M",
-      hero: "assets/img/look3%20front.png",
+      hero: "assets/img/look3%20front.webp",
       angles: [
-        "assets/img/look3%20left.png",       // full left profile
-        "assets/img/look3%20side%20left.png",// 3/4 left
-        "assets/img/look3%20front.png",       // front
-        "assets/img/look3%20side%20right.png",// 3/4 right
-        "assets/img/look3%20back.png",        // full back
+        "assets/img/look3%20left.webp",       // full left profile
+        "assets/img/look3%20side%20left.webp",// 3/4 left
+        "assets/img/look3%20front.webp",       // front
+        "assets/img/look3%20side%20right.webp",// 3/4 right
+        "assets/img/look3%20back.webp",        // full back
       ],
       details: [
-        { label: "오버올 스트랩 버클 디테일", src: "assets/img/look3%20details_1.png", pos: "center", scale: 1 },
-        { label: "프론트 포켓 디테일", src: "assets/img/look3%20details_2.png", pos: "center", scale: 1 },
-        { label: "비대칭 밑단 디테일", src: "assets/img/look3%20details_3.png", pos: "center", scale: 1 },
-        { label: "뒷면 스트랩 디자인", src: "assets/img/look3%20details_4.png", pos: "center", scale: 1 },
+        { label: "오버올 스트랩 버클 디테일", src: "assets/img/look3%20details_1.webp", pos: "center", scale: 1 },
+        { label: "프론트 포켓 디테일", src: "assets/img/look3%20details_2.webp", pos: "center", scale: 1 },
+        { label: "비대칭 밑단 디테일", src: "assets/img/look3%20details_3.webp", pos: "center", scale: 1 },
+        { label: "뒷면 스트랩 디자인", src: "assets/img/look3%20details_4.webp", pos: "center", scale: 1 },
       ],
     },
   ];
