@@ -308,16 +308,19 @@
         <input type="checkbox" data-group="${group}" value="${value}" ${shopFacets[group].has(value) ? "checked" : ""} />
         <span>${label}</span>
       </label>`;
-    if (shopColorOptionsEl) shopColorOptionsEl.innerHTML = colors.map((c) => option("color", c, c)).join("");
-    if (shopSizeOptionsEl) shopSizeOptionsEl.innerHTML = sizes.map((s) => option("size", s, s)).join("");
-    if (shopPriceOptionsEl) shopPriceOptionsEl.innerHTML = SHOP_PRICE_RANGES.map((r) => option("price", r.id, r.label)).join("");
+    const wrap = (html) => `<div class="shop-filter-options-inner">${html}</div>`;
+    if (shopColorOptionsEl) shopColorOptionsEl.innerHTML = wrap(colors.map((c) => option("color", c, c)).join(""));
+    if (shopSizeOptionsEl) shopSizeOptionsEl.innerHTML = wrap(sizes.map((s) => option("size", s, s)).join(""));
+    if (shopPriceOptionsEl) shopPriceOptionsEl.innerHTML = wrap(SHOP_PRICE_RANGES.map((r) => option("price", r.id, r.label)).join(""));
 
     $$(".shop-filter-group-head", shopFilterGroupsEl).forEach((btn) => {
       btn.addEventListener("click", () => {
         const group = btn.closest(".shop-filter-group");
-        group.classList.toggle("open");
+        const panel = group.querySelector(".shop-filter-options");
+        const isOpen = group.classList.toggle("open");
         const toggle = btn.querySelector(".shop-filter-toggle");
-        if (toggle) toggle.textContent = group.classList.contains("open") ? "–" : "+";
+        if (toggle) toggle.textContent = isOpen ? "–" : "+";
+        panel.style.maxHeight = isOpen ? `${panel.scrollHeight}px` : "0px";
       });
     });
     $$(".shop-filter-option input", shopFilterGroupsEl).forEach((input) => {

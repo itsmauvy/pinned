@@ -367,8 +367,8 @@ button { font-family: inherit; cursor: pointer; }
 .shop-filters { display: flex; flex-direction: column; gap: .55rem; }
 .shop-filter {
   display: flex; justify-content: space-between; align-items: center; width: 100%;
-  background: none; border: none; padding: .15rem 0; cursor: pointer; text-align: left;
-  font-family: var(--sans); font-size: .72rem; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-soft);
+  background: none; border: none; padding: .3rem 0; cursor: pointer; text-align: left;
+  font-family: var(--sans); font-size: .9rem; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-soft);
 }
 .shop-filter .count { font-family: var(--mono); color: var(--muted); }
 .shop-filter.active { color: var(--ink); font-weight: 600; }
@@ -378,26 +378,26 @@ button { font-family: inherit; cursor: pointer; }
 .shop-filter-group { border-bottom: 1px solid var(--hair); }
 .shop-filter-group-head {
   display: flex; justify-content: space-between; align-items: center; width: 100%;
-  background: none; border: none; padding: .6rem 0; cursor: pointer;
-  font-family: var(--mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft);
+  background: none; border: none; padding: .75rem 0; cursor: pointer;
+  font-family: var(--mono); font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft);
 }
 .shop-filter-group-head:hover { color: var(--ink); }
 .shop-filter-group.open .shop-filter-group-head { color: var(--ink); }
-.shop-filter-options { display: none; flex-direction: column; gap: .5rem; padding: 0 0 .8rem; }
-.shop-filter-group.open .shop-filter-options { display: flex; }
+.shop-filter-options { max-height: 0; overflow: hidden; transition: max-height .45s var(--ease); }
+.shop-filter-options-inner { display: flex; flex-direction: column; gap: .5rem; padding-bottom: .8rem; }
 .shop-filter-option {
-  display: flex; align-items: center; gap: .5rem; cursor: pointer;
-  font-family: var(--sans); font-size: .7rem; letter-spacing: .02em; color: var(--ink-soft);
+  display: flex; align-items: center; gap: .6rem; cursor: pointer;
+  font-family: var(--sans); font-size: .82rem; letter-spacing: .02em; color: var(--ink-soft);
 }
 .shop-filter-option:hover { color: var(--ink); }
-.shop-filter-option input { accent-color: var(--ink); width: .8rem; height: .8rem; cursor: pointer; }
+.shop-filter-option input { accent-color: var(--ink); width: .9rem; height: .9rem; cursor: pointer; }
 
 /* =====================================================================
    SHOP — right page (grid)
    ===================================================================== */
 .shop-grid-page { display: flex; flex-direction: column; padding: clamp(1.2rem, 2.6vw, 2rem); }
 
-.shop-grid { flex: 1; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 1rem 1rem; min-height: 0; margin-top: 1.4rem; }
+.shop-grid { flex: 1; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 2.2rem 1.8rem; min-height: 0; margin-top: 1.4rem; }
 .shop-pagination { display: flex; justify-content: center; align-items: center; gap: .9rem; margin-top: 1rem; }
 .shop-page-btn {
   font-family: var(--mono); font-size: .68rem; letter-spacing: .04em; background: none; border: none;
