@@ -83,15 +83,16 @@
 
   /* =================================================================
      LOOKS — one entry per look: a hero shot for the picker (left page)
-     and, once shot, a 5-angle set for the rotate viewer (right page).
-     angles stays empty until that look's angle photos are dropped in;
-     the rotate viewer then just shows the hero as a single still frame.
+     and a 5-angle set laid out flat opposite (no angles = single still).
      ================================================================= */
+  const ANGLE_LABELS = ["side", "3/4", "front", "3/4", "back"];
   const LOOKS = [
     {
       id: "look1", name: "black ribbon-tie dress",
-      desc: "A dress the shape of a held breath — bow tied at the throat like a secret, hem cut short enough to argue back.",
+      desc: "허리 라인을 강조하고 목에 레이스 리본 포인트를 더한 미니 원피스",
+      color: "BLACK", fabric: "POLYESTER 95%  SPAN 5%", size: "S  M",
       hero: "assets/img/look1%20side%20left.png",
+      angleLabels: ["side", "3/4", "front", "3/4", "side"],
       angles: [
         "assets/img/look1%20left.png",       // full left profile
         "assets/img/look1%20side%20left.png",// 3/4 left
@@ -102,7 +103,8 @@
     },
     {
       id: "look2", name: "off-shoulder sweater + denim shorts",
-      desc: "Navy sweater slipping off one shoulder, cutoff denim over sheer tights — boots that mean it.",
+      desc: "한쪽 어깨를 드러낸 스웨트 셔츠와 컷오프 데님 반바지, 안에 셔링 타이츠를 매치한 룩",
+      color: "NAVY", fabric: "COTTON 80%  POLYESTER 20%", size: "S  M  L",
       hero: "assets/img/look2%20front%201.png",
       angles: [
         "assets/img/look2%20left.png",       // full left profile
@@ -114,7 +116,8 @@
     },
     {
       id: "look3", name: "khaki overall dress + platform boots",
-      desc: "Denim overall dress cut asymmetric at the hem, worn over a black off-shoulder top — grounded by chunky platform boots.",
+      desc: "밑단을 비대칭으로 컷팅한 데님 오버올 원피스, 안에 오프숄더 톱을 레이어드",
+      color: "KHAKI", fabric: "COTTON 100%", size: "S  M",
       hero: "assets/img/look3%20front.png",
       angles: [
         "assets/img/look3%20left.png",       // full left profile
@@ -128,136 +131,76 @@
   let currentLook = 0;
 
   /* =================================================================
-     ROTATE VIEWER — drag left/right to swing the current look through
-     its angle photos; off-angle frames sit as faint ghosts either side
-     of the active one. setFrames() swaps in a different look's angles.
+     ANGLE ROW (right page) — every photographed angle laid out flat,
+     side by side, labelled underneath. No drag: just swaps to match
+     whichever look is active in the picker opposite.
      ================================================================= */
-  let setRotateFrames = () => {};
-  function initRotateViewer(root) {
-    const viewer = $("#rotateViewer", root);
-    if (!viewer) return;
-    const track = $(".rotate-track", viewer);
-    const STEP_PX = 90;
-    let frames = [], count = 0, center = 0, pos = 0, settleAnim = null;
-
-    // pos is continuous (not snapped) while dragging, so the trail actually
-    // tracks the pointer 1:1 instead of jumping between discrete photos —
-    // that continuous blend is what reads as "rotating" rather than swapping.
-    const layout = (p) => {
-      frames.forEach((el, i) => {
-        const d = i - p;
-        const abs = Math.abs(d);
-        el.classList.toggle("is-active", Math.round(p) === i);
-        el.style.zIndex = String(Math.round((1 - abs) * 100));
-        el.style.opacity = String(clamp(1 - abs * 0.55, 0, 1));
-        const scale = clamp(1 - abs * 0.18, 0.55, 1);
-        // arrange frames on a curved arc (depth + rotation + slight vertical
-        // dip) instead of a flat horizontal slide, so it reads as swinging
-        // around the figure rather than panning left/right.
-        const rotY = clamp(d * 24, -60, 60);
-        const z = -abs * 110;
-        const y = abs * 14;
-        el.style.transform = `translateX(${d * 24}%) translateY(${y}px) translateZ(${z}px) rotateY(${rotY}deg) scale(${scale})`;
-      });
+  let renderAngles = () => {};
+  function initAnglesRow(root) {
+    const row = $("#lookbookAnglesRow", root);
+    if (!row) return;
+    renderAngles = (look) => {
+      const images = look.angles.length ? look.angles : [look.hero];
+      const labels = look.angleLabels || ANGLE_LABELS;
+      row.innerHTML = images.map((src, i) => `
+        <div class="lookbook-angle-item">
+          <img src="${src}" alt="" />
+          <span class="lookbook-angle-label">${labels[i] || ""}</span>
+        </div>`).join("");
     };
-
-    setRotateFrames = (images) => {
-      cancelAnimationFrame(settleAnim);
-      track.innerHTML = "";
-      frames = images.map((src) => {
-        const el = document.createElement("div");
-        el.className = "rotate-frame";
-        el.innerHTML = `<img src="${src}" alt="" draggable="false" />`;
-        track.appendChild(el);
-        return el;
-      });
-      count = frames.length;
-      center = Math.floor((count - 1) / 2);
-      pos = center;
-      layout(pos);
-    };
-
-    let dragging = false, startX = 0, startPos = pos;
-    const pointX = (e) => (e.touches ? e.touches[0].clientX : e.clientX);
-    const onDown = (e) => {
-      if (count < 2) return;
-      cancelAnimationFrame(settleAnim);
-      dragging = true; startX = pointX(e); startPos = pos;
-      viewer.classList.add("dragging");
-    };
-    const onMove = (e) => {
-      if (!dragging) return;
-      const delta = pointX(e) - startX;
-      pos = clamp(startPos - delta / STEP_PX, 0, count - 1);
-      layout(pos);
-    };
-    const onUp = () => {
-      if (!dragging) return;
-      dragging = false; viewer.classList.remove("dragging");
-      const target = clamp(Math.round(pos), 0, count - 1);
-      const from = pos, dist = Math.abs(target - from), D = 200 + dist * 80;
-      const t0 = performance.now();
-      const step = (now) => {
-        const t = clamp((now - t0) / D, 0, 1);
-        const eased = 1 - Math.pow(1 - t, 3);
-        pos = from + (target - from) * eased;
-        layout(pos);
-        if (t < 1) settleAnim = requestAnimationFrame(step);
-      };
-      settleAnim = requestAnimationFrame(step);
-    };
-
-    viewer.addEventListener("pointerdown", onDown);
-    window.addEventListener("pointermove", onMove);
-    window.addEventListener("pointerup", onUp);
   }
 
   /* =================================================================
-     LOOK PICKER (left page) — the active look sits big and centred;
-     the other looks flank it, ghosted in grayscale, same visual
-     language as the rotate-viewer's angle trail opposite. Click a
-     flanking look to bring it to the centre and reload the viewer.
+     LOOK PICKER (left page) — hero shot + spec panel + filmstrip.
+     Selecting a filmstrip thumbnail (or prev/next) swaps the hero,
+     specs, and the angle row opposite.
      ================================================================= */
   function initLookbook(root) {
-    const stage = $("#lookbookStage", root);
-    if (!stage) return;
-    const track = $(".lookbook-track", stage);
+    const heroImg = $("#lookbookHeroImg", root);
+    const filmstrip = $("#lookbookFilmstrip", root);
+    if (!heroImg || !filmstrip) return;
     const kickerEl = $("#lookbookKicker", root);
     const nameEl = $("#lookbookName", root);
-    const vdescEl = $("#lookbookVdesc", root);
+    const descEl = $("#lookbookDesc", root);
+    const colorEl = $("#lookbookColor", root);
+    const fabricEl = $("#lookbookFabric", root);
+    const sizeEl = $("#lookbookSize", root);
+    const pageNumEl = $("#lookbookPageNum", root);
+    const pageTotalEl = $("#lookbookPageTotal", root);
+    const prevBtn = $("#lookbookPrev", root);
+    const nextBtn = $("#lookbookNext", root);
 
-    const frames = LOOKS.map((look, i) => {
-      const btn = document.createElement("button");
-      btn.className = "look-frame";
-      btn.innerHTML = `<img src="${look.hero}" alt="${look.name}" />`;
-      btn.addEventListener("click", () => {
-        currentLook = i;
-        layout();
-        setRotateFrames(look.angles.length ? look.angles : [look.hero]);
-      });
-      track.appendChild(btn);
-      return btn;
-    });
+    const N = LOOKS.length;
+    filmstrip.innerHTML = LOOKS.map((look, i) => `
+      <button class="lookbook-filmstrip-item" data-look="${i}" aria-label="${look.name}">
+        <span class="lookbook-filmstrip-num">${String(i + 1).padStart(2, "0")}</span>
+        <img src="${look.hero}" alt="" />
+      </button>`).join("");
+    const thumbs = $$(".lookbook-filmstrip-item", filmstrip);
+    thumbs.forEach((btn) => btn.addEventListener("click", () => select(+btn.dataset.look)));
+    if (prevBtn) prevBtn.addEventListener("click", () => select(currentLook - 1));
+    if (nextBtn) nextBtn.addEventListener("click", () => select(currentLook + 1));
 
-    const N = frames.length;
-    const layout = () => {
-      frames.forEach((el, i) => {
-        let d = i - currentLook;                       // signed steps from the active look
-        if (d > N / 2) d -= N;                          // wrap around so looks split
-        if (d < -N / 2) d += N;                          // evenly to both sides, not just one
-        const abs = Math.abs(d);
-        el.classList.toggle("is-active", d === 0);
-        el.style.zIndex = String(10 - abs);
-        el.style.opacity = abs === 0 ? "1" : abs === 1 ? ".6" : ".35";
-        const scale = abs === 0 ? 1 : abs === 1 ? .56 : .42;
-        el.style.transform = `translateX(${d * 34}%) scale(${scale})`;
-      });
+    function select(i) {
+      currentLook = clamp(i, 0, N - 1);
+      render();
+    }
+    function render() {
+      const look = LOOKS[currentLook];
+      heroImg.src = look.hero;
+      heroImg.alt = look.name;
       if (kickerEl) kickerEl.textContent = `look ${String(currentLook + 1).padStart(2, "0")}`;
-      if (nameEl) nameEl.textContent = LOOKS[currentLook].name;
-      if (vdescEl) vdescEl.textContent = LOOKS[currentLook].desc || "";
-    };
-    layout();
-    setRotateFrames(LOOKS[currentLook].angles.length ? LOOKS[currentLook].angles : [LOOKS[currentLook].hero]);
+      if (nameEl) nameEl.textContent = look.name;
+      if (descEl) descEl.textContent = look.desc || "";
+      if (colorEl) colorEl.textContent = look.color || "";
+      if (fabricEl) fabricEl.textContent = look.fabric || "";
+      if (sizeEl) sizeEl.textContent = look.size || "";
+      if (pageNumEl) pageNumEl.textContent = String(currentLook + 1).padStart(2, "0");
+      if (pageTotalEl) pageTotalEl.textContent = String(N).padStart(2, "0");
+      thumbs.forEach((btn, i) => btn.classList.toggle("is-active", i === currentLook));
+      renderAngles(look);
+    }
+    render();
   }
 
   /* =================================================================
@@ -269,7 +212,7 @@
     src.hidden = false;                      // reveal as vertical stack
   }
   injectPlates(document);
-  initRotateViewer(document);
+  initAnglesRow(document);
   initLookbook(document);
 
   /* keywords + issue lines */

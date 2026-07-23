@@ -21,8 +21,8 @@
     <nav class="gnb" id="gnb" aria-label="primary">
       <button data-spread="1">collection</button>
       <button data-spread="3">shop</button>
-      <button data-spread="4">archive</button>
-      <button data-spread="2">editorial</button>
+      <button data-spread="4">brand story</button>
+      <button data-spread="2">lookbook</button>
     </nav>
     <div class="mast-right">
       <button class="mast-tool" id="navSearch">search</button>
@@ -106,30 +106,35 @@
       </figure>
     </div>
 
-    <!-- P4 · look picker — pick a look, see it rotate opposite -->
+    <!-- P4 · look picker — hero shot + spec panel + filmstrip -->
     <div class="page-face lookbook-page">
-      <div class="lookbook-top">
-        <span class="lookbook-eyebrow">new arrival</span>
-        <span class="lookbook-issue">2026</span>
+      <div class="lookbook-hero">
+        <img id="lookbookHeroImg" src="" alt="" />
+        <span class="safety-pin lookbook-pin"></span>
       </div>
-      <p class="lookbook-vdesc" id="lookbookVdesc"></p>
-      <div class="lookbook-stage" id="lookbookStage">
-        <div class="lookbook-track" id="lookbookTrack"></div>
-      </div>
-      <div class="lookbook-caption">
+      <div class="lookbook-info">
         <p class="kicker" id="lookbookKicker">look 01</p>
-        <p class="lookbook-name" id="lookbookName"></p>
-      </div>
-    </div>
-
-    <!-- P5 · drag-to-rotate look viewer, follows the look picked opposite -->
-    <div class="page-face hero-page">
-      <div class="hero-stage">
-        <div class="rotate-viewer" id="rotateViewer">
-          <div class="rotate-track" id="rotateTrack"></div>
-          <p class="rotate-hint">drag to rotate</p>
+        <h2 class="lookbook-name" id="lookbookName"></h2>
+        <hr class="lookbook-rule" />
+        <p class="lookbook-desc" id="lookbookDesc"></p>
+        <dl class="lookbook-specs">
+          <div><dt>color</dt><dd id="lookbookColor"></dd></div>
+          <div><dt>fabric</dt><dd id="lookbookFabric"></dd></div>
+          <div><dt>size</dt><dd id="lookbookSize"></dd></div>
+        </dl>
+        <div class="lookbook-pagination">
+          <span class="lookbook-page-count"><span id="lookbookPageNum">01</span> / <span id="lookbookPageTotal">03</span></span>
+          <button class="lookbook-nav-btn" id="lookbookPrev" aria-label="previous look">prev</button>
+          <button class="lookbook-nav-btn" id="lookbookNext" aria-label="next look">next</button>
         </div>
       </div>
+      <div class="lookbook-filmstrip" id="lookbookFilmstrip"></div>
+    </div>
+
+    <!-- P5 · every photographed angle, laid out flat, plus the detail crops -->
+    <div class="page-face lookbook-angles-page">
+      <div class="lookbook-angles-row" id="lookbookAnglesRow"></div>
+      <p class="lookbook-tagline">pieces collected across time, styled for now.</p>
     </div>
 
     <!-- P6 · archive intro + filters -->

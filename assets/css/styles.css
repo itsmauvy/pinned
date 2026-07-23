@@ -280,61 +280,60 @@ button { font-family: inherit; cursor: pointer; }
 .plates-page .pinned-photo { position: absolute; }
 .plates-page .pinned-photo:first-of-type { width: 58%; top: 12%; left: 10%; }
 .plates-page .pinned-photo.offset { width: 50%; right: 8%; bottom: 10%; z-index: 4; }
-.hero-page, .plate-solo { padding: clamp(1.2rem, 2.6vw, 2rem); }
+.plate-solo { padding: clamp(1.2rem, 2.6vw, 2rem); }
 .plate-solo .pinned-photo { flex: 1; }
 
-/* lookbook-page: pick a look here, it rotates on the page opposite */
-.lookbook-page { position: relative; display: flex; flex-direction: column; gap: .8rem; padding: clamp(1.2rem, 2.6vw, 2rem); }
-.lookbook-top { display: flex; justify-content: space-between; align-items: baseline; padding: 0 .15rem; margin-top: 1.4rem; }
-.lookbook-eyebrow { font-family: var(--mono); font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
-.lookbook-issue { font-family: var(--mono); font-size: .6rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-.lookbook-caption { padding: 0 .15rem; }
-.lookbook-caption .kicker { margin: 0 0 .3rem; }
-.lookbook-name { font-family: var(--serif); font-size: 1.05rem; color: var(--ink); margin: 0; }
-/* fills the empty margin beside the photo with a short vertical line of copy */
-.lookbook-vdesc {
-  position: absolute; z-index: 5; right: clamp(.8rem, 2.4vw, 1.6rem); top: 4.6rem; bottom: 3.4rem;
-  writing-mode: vertical-rl; text-orientation: mixed;
-  font-family: var(--serif); font-style: normal; font-weight: 400;
-  font-size: .8rem; line-height: 1.6; letter-spacing: .01em;
-  color: var(--ink-soft); margin: 0; max-width: none; pointer-events: none;
+/* lookbook-page: hero shot + spec panel + filmstrip picker */
+.lookbook-page {
+  position: relative; padding: clamp(1.2rem, 2.6vw, 2rem);
+  display: grid; grid-template-columns: 1.15fr 1fr; grid-template-rows: 1fr auto;
+  column-gap: clamp(1rem, 3vw, 2rem); row-gap: 1rem;
 }
-/* other looks flank the active one, ghosted in grayscale, like the
-   rotate-viewer's angle trail — click one to bring it to the centre */
-.lookbook-stage { position: relative; flex: 1; display: flex; align-items: center; justify-content: center; min-height: 0; }
-.lookbook-track { position: relative; width: 100%; height: 100%; }
-.look-frame {
-  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  background: none; border: none; padding: 0; cursor: pointer; pointer-events: none;
-  transition: transform .32s var(--ease), opacity .32s var(--ease), filter .32s var(--ease);
-}
-.look-frame img { height: 92%; width: auto; object-fit: contain; filter: grayscale(1); pointer-events: auto; cursor: pointer; }
-.look-frame.is-active { cursor: default; }
-.look-frame.is-active img { filter: none; cursor: default; }
+.lookbook-hero { grid-column: 1; grid-row: 1; position: relative; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.lookbook-hero img { height: 100%; width: auto; max-width: 100%; object-fit: contain; }
+.lookbook-pin.safety-pin { top: 8%; left: 62%; }
 
-/* hero-page: drag-to-rotate look viewer */
-.hero-page { display: flex; flex-direction: column; gap: .8rem; }
-.hero-stage { position: relative; flex: 1; display: flex; }
-.hero-stage > .pinned-photo.full { flex: none; height: 100%; width: auto; aspect-ratio: 573 / 764; margin-left: 26%; }
+.lookbook-info { grid-column: 2; grid-row: 1; display: flex; flex-direction: column; justify-content: center; gap: .9rem; padding: 0 .4rem 0 0; }
+.lookbook-info .kicker { margin: 0; }
+.lookbook-name { font-family: var(--serif); font-style: normal; font-weight: 400; font-size: clamp(1.6rem, 3vw, 2.1rem); line-height: 1.15; color: var(--ink); margin: 0; }
+.lookbook-rule { border: none; border-top: 1px solid var(--hair); margin: 0; width: 3rem; }
+.lookbook-desc { font-size: .85rem; line-height: 1.65; color: var(--ink-soft); max-width: 34ch; margin: 0; }
+.lookbook-specs { display: flex; flex-direction: column; gap: .5rem; margin: 0; }
+.lookbook-specs > div { display: flex; gap: .8rem; align-items: baseline; }
+.lookbook-specs dt { font-family: var(--mono); font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); width: 4.2rem; flex: none; margin: 0; }
+.lookbook-specs dd { font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); margin: 0; }
+.lookbook-pagination { display: flex; align-items: center; gap: 1.2rem; margin-top: .6rem; }
+.lookbook-page-count { font-family: var(--serif); font-size: 1rem; color: var(--ink); }
+.lookbook-nav-btn {
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .14em; text-transform: uppercase;
+  background: none; border: none; padding: 0; color: var(--ink-soft); cursor: pointer;
+  border-bottom: 1px solid transparent; transition: color .25s, border-color .25s;
+}
+.lookbook-nav-btn:hover { color: var(--ink); border-color: var(--ink); }
 
-/* rotate-viewer — drag left/right to swing the look through 5 photographed angles */
-.hero-stage > .rotate-viewer {
-  position: relative; flex: none; height: 100%; width: auto;
-  aspect-ratio: 573 / 764; margin: auto;
-  cursor: grab; touch-action: pan-y; user-select: none;
+.lookbook-filmstrip { grid-column: 1 / -1; grid-row: 2; display: flex; gap: .6rem; }
+.lookbook-filmstrip-item {
+  flex: 1; position: relative; aspect-ratio: 3/4; padding: 0; overflow: hidden; cursor: pointer;
+  background: var(--paper-edge); border: 1px solid transparent; transition: border-color .25s;
 }
-.hero-stage > .rotate-viewer.dragging { cursor: grabbing; }
-.rotate-track { position: relative; width: 100%; height: 100%; perspective: 1000px; }
-.rotate-frame {
-  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  pointer-events: none; transform-style: preserve-3d;
+.lookbook-filmstrip-item img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.lookbook-filmstrip-item.is-active { border-color: var(--ink); }
+.lookbook-filmstrip-num {
+  position: absolute; top: 4px; left: 6px; z-index: 2;
+  font-family: var(--mono); font-size: .55rem; color: #fff; text-shadow: 0 0 5px rgba(0,0,0,.7);
 }
-.rotate-frame img { height: 94%; width: auto; object-fit: contain; }
-.rotate-hint {
-  position: absolute; z-index: 9; bottom: .9rem; left: 50%; transform: translateX(-50%);
-  font-family: var(--mono); font-size: .58rem; letter-spacing: .16em; text-transform: uppercase;
-  color: var(--muted); margin: 0; pointer-events: none;
+
+/* lookbook-angles-page: every photographed angle laid out flat, no drag */
+.lookbook-angles-page { display: flex; flex-direction: column; padding: clamp(1.2rem, 2.6vw, 2rem); gap: 1rem; }
+.lookbook-angles-row { flex: 1; display: flex; min-height: 0; }
+.lookbook-angle-item {
+  flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  padding: 0 .3rem; border-right: 1px solid var(--hair);
 }
+.lookbook-angle-item:last-child { border-right: none; }
+.lookbook-angle-item img { max-height: 92%; width: auto; max-width: 100%; object-fit: contain; margin-bottom: .6rem; }
+.lookbook-angle-label { font-family: var(--mono); font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.lookbook-tagline { text-align: center; font-family: var(--serif); font-style: italic; font-size: .85rem; color: var(--ink-soft); margin: 0; }
 
 /* caption deliberately breaks past the photo frame's edge, overlapping the boundary */
 .hero-vcaption.break-frame {
@@ -474,7 +473,7 @@ body.mode-scroll .page-face {
 body.mode-scroll .plates-page { min-height: 90vh; }
 body.mode-scroll .plates-page .pinned-photo:first-of-type { width: 72%; }
 body.mode-scroll .plates-page .pinned-photo.offset { width: 60%; }
-body.mode-scroll .hero-page, body.mode-scroll .plate-solo { min-height: 80vh; }
+body.mode-scroll .plate-solo { min-height: 80vh; }
 body.mode-scroll .archive-wall { height: auto; max-height: none; overflow: visible; }
 
 @media (max-width: 640px) {
