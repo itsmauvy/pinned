@@ -113,6 +113,18 @@
       ],
     },
     {
+      id: "look3", name: "khaki overall dress + platform boots",
+      desc: "Denim overall dress cut asymmetric at the hem, worn over a black off-shoulder top — grounded by chunky platform boots.",
+      hero: "assets/img/look3%20front.png",
+      angles: [
+        "assets/img/look3%20left.png",       // full left profile
+        "assets/img/look3%20side%20left.png",// 3/4 left
+        "assets/img/look3%20front.png",       // front
+        "assets/img/look3%20side%20right.png",// 3/4 right
+        "assets/img/look3%20back.png",        // full back
+      ],
+    },
+    {
       id: "white", name: "cream ruffle blouse",
       desc: "Cream ruffle blouse, black shorts, heart-pattern socks — soft collar, quiet rebellion underneath.",
       hero: "assets/img/collection%20white.jpg", angles: [],
