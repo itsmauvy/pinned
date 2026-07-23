@@ -198,8 +198,8 @@
         el.classList.toggle("is-active", d === 0);
         el.style.zIndex = String(10 - abs);
         el.style.opacity = abs === 0 ? "1" : abs === 1 ? ".6" : ".35";
-        const scale = abs === 0 ? 1 : abs === 1 ? .58 : .46;
-        el.style.transform = `translateX(${d * 46}%) scale(${scale})`;
+        const scale = abs === 0 ? 1 : abs === 1 ? .56 : .42;
+        el.style.transform = `translateX(${d * 34}%) scale(${scale})`;
       });
     };
     layout();
