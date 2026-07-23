@@ -89,14 +89,14 @@
      ================================================================= */
   const LOOKS = [
     {
-      id: "stripe", name: "striped popover + cargo",
-      hero: "assets/img/front%201.png",
+      id: "look1", name: "black ribbon-tie dress",
+      hero: "assets/img/look1%20side%20left.png",
       angles: [
-        "assets/img/left%201.png",          // full left profile
-        "assets/img/side%20left_%202.png",  // 3/4 left
-        "assets/img/front%201.png",         // front
-        "assets/img/side%20right_%201.png", // 3/4 right
-        "assets/img/right%201.png",         // full right profile
+        "assets/img/look1%20left.png",       // full left profile
+        "assets/img/look1%20side%20left.png",// 3/4 left
+        "assets/img/look1%20front.png",       // front
+        "assets/img/look1%20side%20right.png",// 3/4 right
+        "assets/img/look1%20right.png",       // full right profile
       ],
     },
     { id: "white", name: "cream ruffle blouse", hero: "assets/img/collection%20white.jpg", angles: [] },
@@ -114,22 +114,32 @@
     const viewer = $("#rotateViewer", root);
     if (!viewer) return;
     const track = $(".rotate-track", viewer);
-    const STEP_PX = 70;
-    let frames = [], count = 0, center = 0, index = 0;
+    const STEP_PX = 90;
+    let frames = [], count = 0, center = 0, pos = 0, settleAnim = null;
 
-    const layout = () => {
+    // pos is continuous (not snapped) while dragging, so the trail actually
+    // tracks the pointer 1:1 instead of jumping between discrete photos —
+    // that continuous blend is what reads as "rotating" rather than swapping.
+    const layout = (p) => {
       frames.forEach((el, i) => {
-        const d = i - index;                          // signed steps from the active frame
+        const d = i - p;
         const abs = Math.abs(d);
-        el.classList.toggle("is-active", d === 0);
-        el.style.zIndex = String(10 - abs);
-        el.style.opacity = abs === 0 ? "1" : abs === 1 ? ".4" : abs === 2 ? ".18" : "0";
-        const scale = abs === 0 ? 1 : abs === 1 ? .84 : .7;
-        el.style.transform = `translateX(${d * 26}%) scale(${scale})`;
+        el.classList.toggle("is-active", Math.round(p) === i);
+        el.style.zIndex = String(Math.round((1 - abs) * 100));
+        el.style.opacity = String(clamp(1 - abs * 0.55, 0, 1));
+        const scale = clamp(1 - abs * 0.18, 0.55, 1);
+        // arrange frames on a curved arc (depth + rotation + slight vertical
+        // dip) instead of a flat horizontal slide, so it reads as swinging
+        // around the figure rather than panning left/right.
+        const rotY = clamp(d * 24, -60, 60);
+        const z = -abs * 110;
+        const y = abs * 14;
+        el.style.transform = `translateX(${d * 24}%) translateY(${y}px) translateZ(${z}px) rotateY(${rotY}deg) scale(${scale})`;
       });
     };
 
     setRotateFrames = (images) => {
+      cancelAnimationFrame(settleAnim);
       track.innerHTML = "";
       frames = images.map((src) => {
         const el = document.createElement("div");
@@ -140,24 +150,39 @@
       });
       count = frames.length;
       center = Math.floor((count - 1) / 2);
-      index = center;
-      layout();
+      pos = center;
+      layout(pos);
     };
 
-    let dragging = false, startX = 0, startIndex = index;
+    let dragging = false, startX = 0, startPos = pos;
     const pointX = (e) => (e.touches ? e.touches[0].clientX : e.clientX);
     const onDown = (e) => {
       if (count < 2) return;
-      dragging = true; startX = pointX(e); startIndex = index;
+      cancelAnimationFrame(settleAnim);
+      dragging = true; startX = pointX(e); startPos = pos;
       viewer.classList.add("dragging");
     };
     const onMove = (e) => {
       if (!dragging) return;
       const delta = pointX(e) - startX;
-      const next = clamp(Math.round(startIndex - delta / STEP_PX), 0, count - 1);
-      if (next !== index) { index = next; layout(); }
+      pos = clamp(startPos - delta / STEP_PX, 0, count - 1);
+      layout(pos);
     };
-    const onUp = () => { dragging = false; viewer.classList.remove("dragging"); };
+    const onUp = () => {
+      if (!dragging) return;
+      dragging = false; viewer.classList.remove("dragging");
+      const target = clamp(Math.round(pos), 0, count - 1);
+      const from = pos, dist = Math.abs(target - from), D = 200 + dist * 80;
+      const t0 = performance.now();
+      const step = (now) => {
+        const t = clamp((now - t0) / D, 0, 1);
+        const eased = 1 - Math.pow(1 - t, 3);
+        pos = from + (target - from) * eased;
+        layout(pos);
+        if (t < 1) settleAnim = requestAnimationFrame(step);
+      };
+      settleAnim = requestAnimationFrame(step);
+    };
 
     viewer.addEventListener("pointerdown", onDown);
     window.addEventListener("pointermove", onMove);

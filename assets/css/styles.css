@@ -313,11 +313,10 @@ button { font-family: inherit; cursor: pointer; }
   cursor: grab; touch-action: pan-y; user-select: none;
 }
 .hero-stage > .rotate-viewer.dragging { cursor: grabbing; }
-.rotate-track { position: relative; width: 100%; height: 100%; }
+.rotate-track { position: relative; width: 100%; height: 100%; perspective: 1000px; }
 .rotate-frame {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  transition: transform .32s var(--ease), opacity .32s var(--ease);
-  pointer-events: none;
+  pointer-events: none; transform-style: preserve-3d;
 }
 .rotate-frame img { height: 94%; width: auto; object-fit: contain; }
 .rotate-hint {
