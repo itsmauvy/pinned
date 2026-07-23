@@ -110,7 +110,7 @@
     },
     {
       id: "look2", name: "off-shoulder sweater",
-      desc: "한쪽 어깨를 드러낸 스웨트 셔츠와 컷오프 데님 반바지, 안에 셔링 타이츠를 매치한 룩",
+      desc: "한쪽 어깨를 드러낸 셔츠와 컷오프 데님 반바지를 매치한 캐주얼룩.",
       color: "NAVY", fabric: "COTTON 80%  POLYESTER 20%", size: "S  M  L",
       hero: "assets/img/look2%20front%201.png",
       angles: [
