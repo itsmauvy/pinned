@@ -165,32 +165,44 @@
   }
 
   /* =================================================================
-     LOOK PICKER — big hero + thumbnail row (left page). Picking a
-     thumbnail swaps the hero and reloads the rotate viewer opposite.
+     LOOK PICKER (left page) — the active look sits big and centred;
+     the other looks flank it, ghosted in grayscale, same visual
+     language as the rotate-viewer's angle trail opposite. Click a
+     flanking look to bring it to the centre and reload the viewer.
      ================================================================= */
   function initLookbook(root) {
-    const main = $("#lookbookMainImg", root);
-    const thumbsEl = $("#lookbookThumbs", root);
-    if (!main || !thumbsEl) return;
+    const stage = $("#lookbookStage", root);
+    if (!stage) return;
+    const track = $(".lookbook-track", stage);
 
-    const render = () => {
-      const look = LOOKS[currentLook];
-      main.src = look.hero;
-      main.alt = look.name;
-      thumbsEl.innerHTML = LOOKS.map((l, i) => `
-        <button class="lookbook-thumb${i === currentLook ? " is-active" : ""}" data-look="${i}" aria-label="${l.name}">
-          <img src="${l.hero}" alt="" />
-        </button>`).join("");
-      $$(".lookbook-thumb", thumbsEl).forEach((btn) => {
-        btn.addEventListener("click", () => {
-          currentLook = +btn.dataset.look;
-          render();
-          const look = LOOKS[currentLook];
-          setRotateFrames(look.angles.length ? look.angles : [look.hero]);
-        });
+    const frames = LOOKS.map((look, i) => {
+      const btn = document.createElement("button");
+      btn.className = "look-frame";
+      btn.innerHTML = `<img src="${look.hero}" alt="${look.name}" />`;
+      btn.addEventListener("click", () => {
+        currentLook = i;
+        layout();
+        setRotateFrames(look.angles.length ? look.angles : [look.hero]);
+      });
+      track.appendChild(btn);
+      return btn;
+    });
+
+    const N = frames.length;
+    const layout = () => {
+      frames.forEach((el, i) => {
+        let d = i - currentLook;                       // signed steps from the active look
+        if (d > N / 2) d -= N;                          // wrap around so looks split
+        if (d < -N / 2) d += N;                          // evenly to both sides, not just one
+        const abs = Math.abs(d);
+        el.classList.toggle("is-active", d === 0);
+        el.style.zIndex = String(10 - abs);
+        el.style.opacity = abs === 0 ? "1" : abs === 1 ? ".6" : ".35";
+        const scale = abs === 0 ? 1 : abs === 1 ? .58 : .46;
+        el.style.transform = `translateX(${d * 46}%) scale(${scale})`;
       });
     };
-    render();
+    layout();
     setRotateFrames(LOOKS[currentLook].angles.length ? LOOKS[currentLook].angles : [LOOKS[currentLook].hero]);
   }
 
