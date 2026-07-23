@@ -91,14 +91,21 @@
       id: "look1", name: "black ribbon-tie dress",
       desc: "허리 라인을 강조하고 목에 레이스 리본 포인트를 더한 미니 원피스",
       color: "BLACK", fabric: "POLYESTER 95%  SPAN 5%", size: "S  M",
-      hero: "assets/img/look1%20side%20left.png",
-      angleLabels: ["side", "3/4", "front", "3/4", "side"],
+      hero: "assets/img/look1%20front.png",
+      angleLabels: ["side", "3/4", "front", "3/4", "back"],
       angles: [
         "assets/img/look1%20left.png",       // full left profile
         "assets/img/look1%20side%20left.png",// 3/4 left
         "assets/img/look1%20front.png",       // front
         "assets/img/look1%20side%20right.png",// 3/4 right
         "assets/img/look1%20right.png",       // full right profile
+      ],
+      // no separate macro shoot yet — reframe existing shots as stand-in crops
+      details: [
+        { label: "레이스 리본 타이", src: "assets/img/look1%20details_1.png", pos: "center", scale: 1 },
+        { label: "허리 셔링 디자인", src: "assets/img/look1%20details_2.png", pos: "center", scale: 1 },
+        { label: "플레어 밑단 디테일", src: "assets/img/look1%20details_3.png", pos: "center", scale: 1 },
+        { label: "뒷면 버튼 클로징", src: "assets/img/look1%20details_4.png", pos: "center", scale: 1 },
       ],
     },
     {
@@ -113,6 +120,12 @@
         "assets/img/look2%20side%20right.png",// 3/4 right
         "assets/img/look2%20back.png",        // full back
       ],
+      details: [
+        { label: "오프숄더 스웨트 디테일", src: "assets/img/look2%20front%201.png", pos: "32% 16%", scale: 2 },
+        { label: "벨트 디테일", src: "assets/img/look2%20front%201.png", pos: "50% 36%", scale: 2.4 },
+        { label: "컷오프 데님 디테일", src: "assets/img/look2%20front%201.png", pos: "50% 46%", scale: 2.2 },
+        { label: "부츠 디테일", src: "assets/img/look2%20front%201.png", pos: "50% 88%", scale: 2.4 },
+      ],
     },
     {
       id: "look3", name: "khaki overall dress + platform boots",
@@ -126,6 +139,12 @@
         "assets/img/look3%20side%20right.png",// 3/4 right
         "assets/img/look3%20back.png",        // full back
       ],
+      details: [
+        { label: "오버올 스트랩 디테일", src: "assets/img/look3%20front.png", pos: "50% 10%", scale: 2.2 },
+        { label: "오프숄더 톱 디테일", src: "assets/img/look3%20front.png", pos: "25% 18%", scale: 2 },
+        { label: "비대칭 밑단 디테일", src: "assets/img/look3%20front.png", pos: "50% 55%", scale: 1.8 },
+        { label: "플랫폼 부츠 디테일", src: "assets/img/look3%20front.png", pos: "50% 90%", scale: 2.4 },
+      ],
     },
   ];
   let currentLook = 0;
@@ -136,8 +155,10 @@
      whichever look is active in the picker opposite.
      ================================================================= */
   let renderAngles = () => {};
+  let renderDetails = () => {};
   function initAnglesRow(root) {
     const row = $("#lookbookAnglesRow", root);
+    const detailsRow = $("#lookbookDetailsRow", root);
     if (!row) return;
     renderAngles = (look) => {
       const images = look.angles.length ? look.angles : [look.hero];
@@ -146,6 +167,17 @@
         <div class="lookbook-angle-item">
           <img src="${src}" alt="" />
           <span class="lookbook-angle-label">${labels[i] || ""}</span>
+        </div>`).join("");
+    };
+    renderDetails = (look) => {
+      if (!detailsRow) return;
+      const details = look.details || [];
+      detailsRow.innerHTML = details.map((d) => `
+        <div class="lookbook-detail-item">
+          <div class="lookbook-detail-crop">
+            <img src="${d.src}" alt="" style="object-position:${d.pos}; transform:scale(${d.scale});" />
+          </div>
+          <span class="lookbook-detail-label">${d.label}</span>
         </div>`).join("");
     };
   }
@@ -174,7 +206,7 @@
     filmstrip.innerHTML = LOOKS.map((look, i) => `
       <button class="lookbook-filmstrip-item" data-look="${i}" aria-label="${look.name}">
         <span class="lookbook-filmstrip-num">${String(i + 1).padStart(2, "0")}</span>
-        <img src="${look.hero}" alt="" />
+        <img src="${look.angles[2] || look.hero}" alt="" />
       </button>`).join("");
     const thumbs = $$(".lookbook-filmstrip-item", filmstrip);
     thumbs.forEach((btn) => btn.addEventListener("click", () => select(+btn.dataset.look)));
@@ -199,6 +231,7 @@
       if (pageTotalEl) pageTotalEl.textContent = String(N).padStart(2, "0");
       thumbs.forEach((btn, i) => btn.classList.toggle("is-active", i === currentLook));
       renderAngles(look);
+      renderDetails(look);
     }
     render();
   }
