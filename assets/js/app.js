@@ -252,8 +252,9 @@
      read as "bottoms"; bags/shoes/accessories collapse into one
      "accessories" filter) since the catalog is small.
      ================================================================= */
-  const SHOP_GROUP = { outerwear: "outerwear", tops: "tops", skirts: "bottoms", dresses: "dresses", bags: "accessories", shoes: "accessories", accessories: "accessories" };
-  const shopGroups = ["all", ...new Set(pieces.map((p) => SHOP_GROUP[p.category] || p.category))];
+  const SHOP_GROUP = { tops: "tops", skirts: "bottoms", dresses: "dresses", bags: "accessories", accessories: "accessories", shoes: "shoes" };
+  const SHOP_ORDER = ["all", "tops", "bottoms", "dresses", "accessories", "shoes"];
+  const shopGroups = SHOP_ORDER.filter((c) => c === "all" || pieces.some((p) => (SHOP_GROUP[p.category] || p.category) === c));
   const shopFiltersEl = $("#shopFilters");
   const shopGridEl = $("#shopGrid");
   let shopCat = "all";
