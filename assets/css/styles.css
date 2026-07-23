@@ -291,10 +291,11 @@ button { font-family: inherit; cursor: pointer; }
 }
 .lookbook-hero { grid-column: 1; grid-row: 1; position: relative; min-height: 0; display: flex; align-items: center; justify-content: center; }
 .lookbook-hero img { height: 100%; width: auto; max-width: 100%; object-fit: contain; }
-.lookbook-page > img.lookbook-pin { position: absolute; z-index: 4; top: 11%; left: 51%; width: 2.4rem; height: auto; max-width: none; transform: rotate(-12deg); filter: drop-shadow(0 4px 4px rgba(23,20,15,.3)); pointer-events: none; }
 
 .lookbook-info { grid-column: 2; grid-row: 1; display: flex; flex-direction: column; justify-content: center; gap: 1.1rem; padding: 0 .4rem 0 0; }
-.lookbook-info .kicker { margin: 0; }
+.lookbook-kicker-row { display: flex; align-items: center; gap: .5rem; }
+.lookbook-info .kicker { margin: 0; font-size: .72rem; }
+.lookbook-kicker-row img.lookbook-pin { width: 1.4rem; height: auto; max-width: none; transform: rotate(-12deg); filter: drop-shadow(0 2px 3px rgba(23,20,15,.3)); pointer-events: none; }
 .lookbook-name { font-family: var(--serif); font-style: normal; font-weight: 400; font-size: clamp(2.1rem, 4vw, 2.8rem); line-height: 1.12; color: var(--ink); margin: 0; }
 .lookbook-rule { border: none; border-top: 1px solid var(--hair); margin: 0; width: 3rem; }
 .lookbook-desc { font-size: 1rem; line-height: 1.7; color: var(--ink-soft); max-width: 36ch; margin: 0; }
@@ -319,10 +320,10 @@ button { font-family: inherit; cursor: pointer; }
 }
 .lookbook-filmstrip-item:hover { opacity: .8; }
 .lookbook-filmstrip-item.is-active { opacity: 1; }
-.lookbook-filmstrip-item img { width: 100%; height: 100%; object-fit: contain; object-position: top; display: block; }
+.lookbook-filmstrip-item img { width: 100%; height: 100%; object-fit: contain; object-position: center 6%; display: block; }
 .lookbook-filmstrip-num {
-  position: absolute; top: 4px; left: 6px; z-index: 2;
-  font-family: var(--mono); font-size: .55rem; letter-spacing: .06em; color: var(--muted);
+  position: absolute; top: 28%; left: 6px; z-index: 2;
+  font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; color: var(--ink-soft);
 }
 
 /* lookbook-angles-page: every photographed angle laid out flat, no drag */
@@ -334,7 +335,6 @@ button { font-family: inherit; cursor: pointer; }
 }
 .lookbook-angle-item img { max-height: 92%; width: auto; max-width: 100%; object-fit: contain; margin-bottom: .6rem; }
 .lookbook-angle-label { font-family: var(--mono); font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-.lookbook-tagline { text-align: center; font-family: var(--serif); font-style: italic; font-size: .85rem; color: var(--ink-soft); margin: 0; }
 
 /* detail crops — zoomed-in reframes of the same photos (no separate
    macro shoot yet), one small square per garment detail */
@@ -347,7 +347,7 @@ button { font-family: inherit; cursor: pointer; }
 .lookbook-detail-item { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .4rem; }
 .lookbook-detail-crop { position: relative; aspect-ratio: 1/1; overflow: hidden; background: var(--paper-edge); }
 .lookbook-detail-crop img { position: absolute; width: 100%; height: 100%; object-fit: cover; }
-.lookbook-detail-label { font-family: var(--sans); font-size: .64rem; letter-spacing: .01em; color: var(--ink-soft); text-align: center; }
+.lookbook-detail-label { font-family: var(--sans); font-size: .74rem; letter-spacing: .01em; color: var(--ink); text-align: center; }
 
 /* caption deliberately breaks past the photo frame's edge, overlapping the boundary */
 .hero-vcaption.break-frame {

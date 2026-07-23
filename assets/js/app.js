@@ -121,10 +121,10 @@
         "assets/img/look2%20back.png",        // full back
       ],
       details: [
-        { label: "오프숄더 스웨트 디테일", src: "assets/img/look2%20front%201.png", pos: "32% 16%", scale: 2 },
-        { label: "벨트 디테일", src: "assets/img/look2%20front%201.png", pos: "50% 36%", scale: 2.4 },
-        { label: "컷오프 데님 디테일", src: "assets/img/look2%20front%201.png", pos: "50% 46%", scale: 2.2 },
-        { label: "부츠 디테일", src: "assets/img/look2%20front%201.png", pos: "50% 88%", scale: 2.4 },
+        { label: "레이어드 숄더 디자인", src: "assets/img/look2%20details_1.png", pos: "center", scale: 1 },
+        { label: "레이어드 밑단 디테일", src: "assets/img/look2%20details_2.png", pos: "center", scale: 1 },
+        { label: "셔츠 커프스 포인트", src: "assets/img/look2%20details_3.png", pos: "center", scale: 1 },
+        { label: "언밸런스 백 라인", src: "assets/img/look2%20details_4.png", pos: "center", scale: 1 },
       ],
     },
     {
