@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sign in — pinned</title>
-  <meta name="description" content="sign in to pinned — a vintage fashion archive, edited for now." />
+  <title>로그인 — pinned</title>
+  <meta name="description" content="pinned 로그인 — 시즌마다 새로 소개하는 패션 아카이브." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
@@ -33,6 +33,17 @@
       const saveAccount = (a) => localStorage.setItem(ACCOUNT_STORE, JSON.stringify(a));
       const clearAccount = () => localStorage.removeItem(ACCOUNT_STORE);
 
+      let toastTimer;
+      function toast(msg) {
+        const t = $("#toast");
+        t.textContent = msg; t.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
+      }
+
+      const EYE_OPEN = `<svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>`;
+      const EYE_OFF = `<svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a21.8 21.8 0 0 1 5.06-5.94M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 7 11 7a21.8 21.8 0 0 1-2.94 3.94M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+
       const card = $("#loginCard");
 
       function render() {
@@ -40,23 +51,31 @@
         if (account) {
           card.innerHTML = `
             <div class="login-signed-in">
-              <p class="kicker">account</p>
-              <h1 class="page-head">Welcome back.</h1>
-              <p class="body">Signed in as <strong>${account.email}</strong>.</p>
-              <button class="cta solid" style="width:100%" id="signOutBtn">sign out</button>
-              <a class="board-continue" href="index.html">continue to the archive →</a>
+              <h1 class="page-head">다시 오셨네요.</h1>
+              <p class="body"><strong>${account.email}</strong>(으)로 로그인되어 있어요.</p>
+              <button class="cta solid" style="width:100%" id="signOutBtn">로그아웃</button>
+              <a class="board-continue" href="index.html">사이트로 돌아가기 →</a>
             </div>`;
           $("#signOutBtn").addEventListener("click", () => { clearAccount(); render(); });
         } else {
           card.innerHTML = `
-            <p class="kicker">account</p>
-            <h1 class="page-head">Sign in.</h1>
+            <h1 class="page-head">로그인</h1>
             <form id="loginForm" class="login-form">
-              <label>email<input type="email" id="loginEmail" required autocomplete="email" /></label>
-              <label>password<input type="password" id="loginPassword" required autocomplete="current-password" /></label>
-              <button type="submit" class="cta solid" style="width:100%">sign in</button>
+              <label>이메일<input type="email" id="loginEmail" required autocomplete="email" /></label>
+              <label>비밀번호
+                <div class="password-field">
+                  <input type="password" id="loginPassword" required autocomplete="current-password" />
+                  <button type="button" class="password-toggle" id="pwToggle" aria-label="비밀번호 표시">${EYE_OPEN}</button>
+                </div>
+              </label>
+              <button type="submit" class="cta solid" style="width:100%">로그인</button>
             </form>
-            <div class="login-divider"><span>or</span></div>
+            <div class="login-links">
+              <button type="button" id="signupLink">회원가입</button>
+              <span class="login-links-sep">|</span>
+              <button type="button" id="forgotLink">비밀번호를 잊으셨나요</button>
+            </div>
+            <div class="login-divider"><span>또는</span></div>
             <div class="social-login">
               <button type="button" class="social-btn social-google" data-social="google">
                 <svg viewBox="0 0 18 18" aria-hidden="true">
@@ -78,7 +97,7 @@
                 네이버로 로그인
               </button>
             </div>
-            <a class="board-continue" href="index.html">back to the archive →</a>`;
+            <a class="board-continue" href="index.html">사이트로 돌아가기 →</a>`;
           $("#loginForm").addEventListener("submit", (e) => {
             e.preventDefault();
             const email = $("#loginEmail").value.trim();
@@ -90,6 +109,14 @@
             saveAccount({ email: `you@${btn.dataset.social}.com`, provider: btn.dataset.social });
             window.location.href = "index.html";
           }));
+          $("#pwToggle").addEventListener("click", () => {
+            const input = $("#loginPassword");
+            const showing = input.type === "text";
+            input.type = showing ? "password" : "text";
+            $("#pwToggle").innerHTML = showing ? EYE_OPEN : EYE_OFF;
+          });
+          $("#signupLink").addEventListener("click", () => toast("이메일만 입력하면 자동으로 계정이 만들어져요"));
+          $("#forgotLink").addEventListener("click", () => toast("데모라 비밀번호는 아무거나 입력해도 로그인돼요"));
         }
       }
       render();
