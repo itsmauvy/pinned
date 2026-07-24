@@ -417,11 +417,11 @@ button { font-family: inherit; cursor: pointer; }
 .shop-item-name { font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); margin: 0 0 .2rem; }
 .shop-item-price { font-family: var(--mono); font-size: .68rem; color: var(--ink-soft); margin: 0; }
 .shop-item-pin {
-  position: absolute; top: 8px; right: 8px; z-index: 7; width: 30px; height: 30px; border-radius: 50%;
+  position: absolute; top: 8px; right: 8px; z-index: 7; width: 40px; height: 40px; border-radius: 50%;
   background: rgba(244,241,234,.9); border: none; display: grid; place-items: center;
   color: var(--ink-soft); transition: all .25s var(--ease);
 }
-.shop-item-pin img { width: 18px; height: 18px; display: block; object-fit: contain; }
+.shop-item-pin img { width: 26px; height: 26px; display: block; object-fit: contain; }
 .shop-item-pin:hover { transform: scale(1.1); }
 
 /* =====================================================================
