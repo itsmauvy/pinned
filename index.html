@@ -225,22 +225,19 @@
     </aside>
   </div>
 
-  <!-- SEARCH SLIDE-OVER -->
-  <div class="search-panel" id="searchPanel" role="dialog" aria-modal="true" aria-labelledby="searchTitle" hidden>
+  <!-- SEARCH DROPDOWN -->
+  <div class="search-panel" id="searchPanel" role="dialog" aria-modal="true" aria-label="search" hidden>
     <div class="search-scrim" data-search-close></div>
-    <aside class="search-sheet">
-      <header class="search-header">
-        <div>
-          <p class="kicker">search</p>
-          <h2 id="searchTitle" class="board-h">Find a piece.</h2>
+    <div class="search-sheet">
+      <div class="search-inner">
+        <div class="search-bar-row">
+          <span class="search-icon" aria-hidden="true">⚲</span>
+          <input type="text" id="searchInput" class="search-input" placeholder="search by name, color, category…" autocomplete="off" />
+          <button class="overlay-close" data-search-close aria-label="close search">×</button>
         </div>
-        <button class="overlay-close" data-search-close aria-label="close search">×</button>
-      </header>
-      <div class="search-input-row">
-        <input type="text" id="searchInput" class="search-input" placeholder="search by name, color, category…" autocomplete="off" />
+        <div class="search-body" id="searchBody"></div>
       </div>
-      <div class="search-body" id="searchBody"></div>
-    </aside>
+    </div>
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>

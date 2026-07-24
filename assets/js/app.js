@@ -432,13 +432,13 @@
     const list = pins.map(byId).filter(Boolean);
     body.innerHTML = list.map((p) => `
       <div class="board-row">
-        <div class="board-thumb ${p.image ? "photo-real" : `tone-${p.tone}`}">${plate(p)}<span class="safety-pin" aria-hidden="true"></span></div>
-        <div class="board-info"><h4>${p.name}</h4><p>${p.house} · ${p.era}</p><div class="bprice">${money(p)}</div></div>
+        <div class="board-thumb ${p.image ? "photo-real" : `tone-${p.tone}`}">${plate(p)}</div>
+        <div class="board-info"><h4>${p.name}</h4><p>${p.category} · ${p.color}</p><div class="bprice">${money(p)}</div></div>
         <button class="board-remove" data-remove="${p.id}">unpin</button>
       </div>`).join("");
     const total = list.reduce((s, p) => s + p.price, 0);
     foot.innerHTML = `
-      <div class="board-total"><span class="lbl">${list.length} piece${list.length > 1 ? "s" : ""} pinned</span><span class="val">${pieces[0].currency}${total}</span></div>
+      <div class="board-total"><span class="lbl">${list.length} piece${list.length > 1 ? "s" : ""} pinned</span><span class="val">${total.toLocaleString()}${list[0].currency}</span></div>
       <button class="cta solid" style="width:100%" id="boardCheckout">reserve the board</button>`;
     $("#boardCheckout").addEventListener("click", () => toast("reservation is a demo — but the taste is real"));
   }
@@ -462,7 +462,7 @@
   }
 
   /* =================================================================
-     SEARCH slide-over
+     SEARCH dropdown
      ================================================================= */
   const searchPanel = $("#searchPanel");
   const searchInput = $("#searchInput");
@@ -481,12 +481,15 @@
       searchBody.innerHTML = `<div class="board-empty">no pieces match “${query}”.<br />try a different word.</div>`;
       return;
     }
-    searchBody.innerHTML = `<p class="search-count">${list.length} piece${list.length === 1 ? "" : "s"} found</p>` +
+    searchBody.innerHTML = `<p class="search-count">${list.length} piece${list.length === 1 ? "" : "s"} found</p>
+      <div class="search-results-grid">` +
       list.map((p) => `
-        <button class="board-row search-result" data-id="${p.id}">
-          <div class="board-thumb ${p.image ? "photo-real" : `tone-${p.tone}`}">${plate(p)}</div>
-          <div class="board-info"><h4>${p.name}</h4><p>${p.category} · ${p.color}</p><div class="bprice">${money(p)}</div></div>
-        </button>`).join("");
+        <button class="search-result" data-id="${p.id}">
+          <figure class="pinned-photo search-result-photo ${p.image ? "photo-real" : `tone-${p.tone}`}">${plate(p)}</figure>
+          <p class="search-result-name">${p.name}</p>
+          <p class="search-result-price">${money(p)}</p>
+        </button>`).join("") +
+      `</div>`;
   }
 
   const openSearch = () => {
