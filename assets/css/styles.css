@@ -411,7 +411,7 @@ button { font-family: inherit; cursor: pointer; }
   cursor: pointer; background: none; border: none; padding: 0; text-align: left; transition: transform .35s var(--ease);
 }
 .shop-item:hover { transform: translateY(-3px); }
-.shop-item .pinned-photo { flex: 1; min-height: 0; aspect-ratio: auto; background: none; box-shadow: none; border-radius: 0; }
+.shop-item .pinned-photo { flex: 1; min-height: 0; aspect-ratio: auto; background: var(--paper-edge); box-shadow: none; border-radius: 0; }
 .shop-item .pinned-photo .plate-fill { inset: 6%; }
 .shop-item-meta { flex: none; margin-top: .5rem; }
 .shop-item-name { font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); margin: 0 0 .2rem; }
@@ -448,15 +448,15 @@ button { font-family: inherit; cursor: pointer; }
 .detail-plate { padding: 1.2rem; }
 .detail-plate .pinned-photo { aspect-ratio: 3/4; height: 100%; }
 .detail-body { padding: clamp(1.4rem, 3vw, 2.4rem); display: flex; flex-direction: column; }
-.detail-house { font-family: var(--mono); font-size: .64rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin: 0 0 .5rem; }
+.detail-house { font-family: var(--mono); font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 .5rem; }
 .detail-name { font-family: var(--serif); font-weight: 400; font-size: clamp(1.5rem, 3vw, 2.1rem); margin: 0 0 .3rem; line-height: 1.1; }
-.detail-era { font-family: var(--mono); font-size: .72rem; color: var(--ink-soft); margin: 0 0 1.2rem; }
-.detail-note { font-family: var(--serif); font-style: normal; color: var(--ink-soft); line-height: 1.6; margin: 0 0 1.4rem; max-width: 42ch; }
+.detail-era { font-family: var(--mono); font-size: .76rem; color: var(--ink-soft); margin: 0 0 1.2rem; }
+.detail-note { font-family: var(--serif); font-style: normal; font-size: 1rem; color: var(--ink-soft); line-height: 1.6; margin: 0 0 1.4rem; max-width: 42ch; }
 .detail-specs { display: grid; grid-template-columns: auto 1fr; gap: .4rem 1rem; margin: 0 0 1.6rem; }
-.detail-specs dt { font-family: var(--mono); font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-.detail-specs dd { margin: 0; font-size: .84rem; color: var(--ink-soft); }
+.detail-specs dt { font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
+.detail-specs dd { margin: 0; font-size: .92rem; color: var(--ink); }
 .detail-foot { margin-top: auto; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; padding-top: 1rem; border-top: 1px solid var(--hair); }
-.detail-price { font-family: var(--serif); font-size: 1.5rem; }
+.detail-price { font-family: var(--serif); font-weight: 600; font-size: 1.8rem; color: var(--ink); }
 .detail-actions { display: flex; gap: .6rem; }
 
 .board-panel { position: fixed; inset: 0; z-index: 1200; }
