@@ -456,7 +456,7 @@ button { font-family: inherit; cursor: pointer; }
 .detail-specs dt { font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
 .detail-specs dd { margin: 0; font-size: .92rem; color: var(--ink); }
 .detail-foot { margin-top: auto; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; padding-top: 1rem; border-top: 1px solid var(--hair); }
-.detail-price { font-family: var(--serif); font-weight: 600; font-size: 1.8rem; color: var(--ink); }
+.detail-price { font-family: var(--mono); font-weight: 700; font-size: 1.5rem; letter-spacing: -.01em; color: var(--ink); }
 .detail-actions { display: flex; gap: .6rem; }
 
 .board-panel { position: fixed; inset: 0; z-index: 1200; }
