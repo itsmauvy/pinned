@@ -412,7 +412,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 .shop-item:hover { transform: translateY(-3px); }
 .shop-item .pinned-photo { flex: 1; min-height: 0; aspect-ratio: auto; background: var(--paper-edge); box-shadow: none; border-radius: 0; }
-.shop-item .pinned-photo .plate-fill { inset: 13%; }
+.shop-item .pinned-photo .plate-fill { inset: 9%; }
 .shop-item-meta { flex: none; margin-top: .5rem; }
 .shop-item-name { font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); margin: 0 0 .2rem; }
 .shop-item-price { font-family: var(--mono); font-size: .68rem; color: var(--ink-soft); margin: 0; }
