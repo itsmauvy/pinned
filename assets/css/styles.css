@@ -460,7 +460,6 @@ button { font-family: inherit; cursor: pointer; }
 @keyframes slideIn { from { transform: translateX(100%); } to { transform: none; } }
 .board-header { display: flex; justify-content: space-between; align-items: flex-start; padding: 1.6rem 1.6rem 1.2rem; border-bottom: 1px solid var(--hair); }
 .board-header .overlay-close { position: static; }
-.board-h { font-family: var(--serif); font-weight: 400; font-size: 1.4rem; margin: 0; }
 .board-body { flex: 1; overflow-y: auto; padding: 1.2rem 1.6rem; }
 .board-footer { padding: 1.2rem 1.6rem; border-top: 1px solid var(--hair); }
 .board-empty { text-align: center; color: var(--muted); font-family: var(--mono); font-size: .74rem; padding: 3rem 1rem; line-height: 1.8; }
