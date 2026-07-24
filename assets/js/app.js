@@ -424,7 +424,7 @@
   function renderBoard() {
     const body = $("#boardBody"), foot = $("#boardFooter");
     if (!pins.length) {
-      body.innerHTML = `<div class="board-empty">nothing pinned yet.<br />find a piece and tap <em>pin this piece</em>.<br />one of one — when it's gone, it's gone.</div>`;
+      body.innerHTML = `<div class="board-empty">nothing pinned yet.<br />find a piece and tap <em>pin this piece</em>.<br />new picks, pinned every season.</div>`;
       foot.innerHTML = ""; return;
     }
     const list = pins.map(byId).filter(Boolean);
