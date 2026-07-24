@@ -421,9 +421,8 @@ button { font-family: inherit; cursor: pointer; }
   background: rgba(244,241,234,.9); border: none; display: grid; place-items: center;
   color: var(--ink-soft); transition: all .25s var(--ease);
 }
-.shop-item-pin svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.7; }
-.shop-item-pin:hover, .shop-item-pin.pinned { color: var(--blush-deep); }
-.shop-item-pin.pinned svg { fill: currentColor; stroke: none; }
+.shop-item-pin img { width: 13px; height: 13px; display: block; object-fit: contain; }
+.shop-item-pin:hover { transform: scale(1.1); }
 
 /* =====================================================================
    CTA buttons

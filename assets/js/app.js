@@ -263,7 +263,8 @@
   const shopGridEl = $("#shopGrid");
   const shopPaginationEl = $("#shopPagination");
   const SHOP_PAGE_SIZE = 4;
-  const SHOP_PIN_ICON = '<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>';
+  const SHOP_PIN_OUTLINE_SRC = "assets/img/PushPin.png";
+  const SHOP_PIN_FILL_SRC = "assets/img/PushPin_fill.png";
   const SHOP_PRICE_RANGES = [
     { id: "u2", label: "20,000원 미만", test: (p) => p.price < 20000 },
     { id: "20-30", label: "20,000 – 30,000원", test: (p) => p.price >= 20000 && p.price < 30000 },
@@ -345,7 +346,7 @@
       <button class="shop-item" data-id="${p.id}" aria-label="${p.name}">
         <figure class="pinned-photo ${p.image ? "photo-real" : `tone-${p.tone}`}">
           ${plate(p)}
-          <span class="shop-item-pin${isPinned(p.id) ? " pinned" : ""}" data-pin="${p.id}" title="pin this piece">${SHOP_PIN_ICON}</span>
+          <span class="shop-item-pin${isPinned(p.id) ? " pinned" : ""}" data-pin="${p.id}" title="pin this piece"><img src="${isPinned(p.id) ? SHOP_PIN_FILL_SRC : SHOP_PIN_OUTLINE_SRC}" alt="" /></span>
         </figure>
         <div class="shop-item-meta">
           <p class="shop-item-name">${p.name}</p>
@@ -446,7 +447,10 @@
   function syncPinUI() {
     $("#boardCount").textContent = pins.length;
     $$(".shop-item-pin").forEach((el) => {
-      el.classList.toggle("pinned", isPinned(el.dataset.pin));
+      const on = isPinned(el.dataset.pin);
+      el.classList.toggle("pinned", on);
+      const img = el.querySelector("img");
+      if (img) img.src = on ? SHOP_PIN_FILL_SRC : SHOP_PIN_OUTLINE_SRC;
     });
     const prev = $("#boardPreview");
     if (prev) {
