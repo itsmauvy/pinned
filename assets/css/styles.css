@@ -109,6 +109,21 @@ button { font-family: inherit; cursor: pointer; }
   background: linear-gradient(90deg, transparent, rgba(80,72,60,.07) 42%, rgba(80,72,60,.11) 50%, rgba(80,72,60,.07) 58%, transparent);
 }
 
+/* page-turn arrows — the only way to advance was GNB clicks / keyboard /
+   wheel, none of which is visible on the page itself */
+.book-nav {
+  position: fixed; top: 50%; transform: translateY(-50%); z-index: 850;
+  width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--hair);
+  background: rgba(255,255,255,.85); backdrop-filter: blur(4px);
+  display: grid; place-items: center; font-size: 1.4rem; line-height: 1; color: var(--ink-soft);
+  cursor: pointer; transition: all .2s var(--ease);
+}
+.book-nav:hover { color: var(--ink); border-color: var(--ink); }
+.book-nav[disabled] { opacity: .25; cursor: default; pointer-events: none; }
+.book-nav-prev { left: clamp(.6rem, 2vw, 1.6rem); }
+.book-nav-next { right: clamp(.6rem, 2vw, 1.6rem); }
+body.mode-scroll .book-nav { display: none; }
+
 /* base pages sit under the leaves */
 .page-base {
   position: absolute; top: 0; height: 100%; width: 50%;
