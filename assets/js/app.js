@@ -602,13 +602,6 @@
   const gnbBtns = $$(".gnb button");
   const setActiveGNB = (k) => gnbBtns.forEach((b) => b.classList.toggle("active", +b.dataset.spread === k));
 
-  const prevSpreadBtn = $("#prevSpread"), nextSpreadBtn = $("#nextSpread");
-  const setArrowState = (k) => {
-    if (prevSpreadBtn) prevSpreadBtn.disabled = k <= 0;
-    if (nextSpreadBtn) nextSpreadBtn.disabled = k >= spreadCount - 1;
-  };
-  setArrowState(0);
-
   // gentle sine ease — no fast whip through the middle, like a real page turn
   const ease = (t) => -(Math.cos(Math.PI * clamp(t, 0, 1)) - 1) / 2;
   let cur = 0, animating = false, animId = null;   // cur = flip progress (0..numLeaves)
@@ -623,7 +616,6 @@
     currentSpread = Math.round(cur);
     bar.style.width = `${(cur / numLeaves) * 100}%`;
     setActiveGNB(currentSpread);
-    setArrowState(currentSpread);
   };
 
   /* one scroll / key / GNB click = one slow, animated page turn */
@@ -634,7 +626,6 @@
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
       setActiveGNB(k);
       currentSpread = k;
-      setArrowState(k);
       return;
     }
     k = clamp(k, 0, numLeaves);
@@ -664,8 +655,6 @@
   }
   gnb.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) goToSpread(+b.dataset.spread); });
   $("#goCover").addEventListener("click", (e) => { e.preventDefault(); goToSpread(0); });
-  if (prevSpreadBtn) prevSpreadBtn.addEventListener("click", () => goToSpread(currentSpread - 1));
-  if (nextSpreadBtn) nextSpreadBtn.addEventListener("click", () => goToSpread(currentSpread + 1));
 
   if (mode === "flip") {
     // wheel: one gesture turns one page; momentum is absorbed until it settles
