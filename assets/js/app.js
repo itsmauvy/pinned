@@ -434,13 +434,13 @@
       <div class="board-row">
         <div class="board-thumb ${p.image ? "photo-real" : `tone-${p.tone}`}">${plate(p)}</div>
         <div class="board-info"><h4>${p.name}</h4><p>${p.category} · ${p.color}</p><div class="bprice">${money(p)}</div></div>
-        <button class="board-remove" data-remove="${p.id}">unpin</button>
+        <button class="board-remove" data-remove="${p.id}">remove</button>
       </div>`).join("");
     const total = list.reduce((s, p) => s + p.price, 0);
     foot.innerHTML = `
       <div class="board-total"><span class="lbl">${list.length} piece${list.length > 1 ? "s" : ""} pinned</span><span class="val">${total.toLocaleString()}${list[0].currency}</span></div>
-      <button class="cta solid" style="width:100%" id="boardCheckout">reserve the board</button>`;
-    $("#boardCheckout").addEventListener("click", () => toast("reservation is a demo — but the taste is real"));
+      <button class="cta solid" style="width:100%" id="boardCheckout">checkout</button>`;
+    $("#boardCheckout").addEventListener("click", () => toast("checkout is a demo — but the taste is real"));
   }
 
   /* board preview + count + pin badges */
