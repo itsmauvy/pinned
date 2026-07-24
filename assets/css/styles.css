@@ -351,11 +351,11 @@ button { font-family: inherit; cursor: pointer; }
   color: var(--paper); background: rgba(23,20,15,.55); backdrop-filter: blur(3px);
   padding: 1rem 1.2rem; border-radius: 3px;
 }
-.story-lede { font-family: var(--serif); font-size: 1rem; color: var(--ink-soft); line-height: 1.5; margin: 0 0 1.8rem; max-width: 34ch; }
+.story-lede { font-family: var(--serif); font-size: 1.15rem; color: var(--ink-soft); line-height: 1.55; margin: 0 0 1.8rem; max-width: 34ch; }
 .story-manifesto { display: flex; flex-direction: column; margin: 0 0 1.8rem; }
-.story-manifesto-item { border-top: 1px solid var(--hair); padding: .9rem 0; }
-.story-manifesto-big { font-family: var(--serif); font-weight: 400; font-size: 1.4rem; color: var(--ink); margin: 0 0 .3rem; }
-.story-manifesto-small { font-family: var(--mono); font-size: .68rem; letter-spacing: .02em; color: var(--muted); margin: 0; }
+.story-manifesto-item { border-top: 1px solid var(--hair); padding: 1rem 0; }
+.story-manifesto-big { font-family: var(--serif); font-weight: 400; font-size: 1.55rem; color: var(--ink); margin: 0 0 .35rem; }
+.story-manifesto-small { font-family: var(--mono); font-size: .84rem; letter-spacing: .01em; line-height: 1.4; color: var(--ink-soft); margin: 0; }
 
 /* =====================================================================
    SHOP — left page (intro, filters, featured piece)
