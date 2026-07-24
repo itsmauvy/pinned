@@ -20,9 +20,19 @@
   let pins = (() => { try { return JSON.parse(localStorage.getItem(STORE)) || []; } catch { return []; } })();
   const savePins = () => localStorage.setItem(STORE, JSON.stringify(pins));
   const isPinned = (id) => pins.includes(id);
+
+  const QTY_STORE = "pinned.board.qty.v1";
+  let boardQty = (() => { try { return JSON.parse(localStorage.getItem(QTY_STORE)) || {}; } catch { return {}; } })();
+  const saveQty = () => localStorage.setItem(QTY_STORE, JSON.stringify(boardQty));
+  const getQty = (id) => boardQty[id] || 1;
+  const setQty = (id, n) => { boardQty[id] = Math.max(1, n); saveQty(); };
+
   const togglePin = (id) => {
-    pins = isPinned(id) ? pins.filter((x) => x !== id) : [...pins, id];
-    savePins(); syncPinUI(); return isPinned(id);
+    const now = !isPinned(id);
+    pins = now ? [...pins, id] : pins.filter((x) => x !== id);
+    if (now) boardQty[id] = 1; else delete boardQty[id];
+    savePins(); saveQty(); syncPinUI();
+    return now;
   };
 
   let toastTimer;
@@ -421,6 +431,9 @@
   const boardPanel = $("#boardPanel");
   const openBoard = () => { renderBoard(); boardPanel.hidden = false; document.body.style.overflow = "hidden"; };
   const closeBoard = () => { boardPanel.hidden = true; document.body.style.overflow = ""; };
+  const SHIPPING_FEE = 3000;
+  const FREE_SHIPPING_MIN = 50000;
+
   function renderBoard() {
     const body = $("#boardBody"), foot = $("#boardFooter");
     if (!pins.length) {
@@ -428,17 +441,58 @@
       foot.innerHTML = ""; return;
     }
     const list = pins.map(byId).filter(Boolean);
-    body.innerHTML = list.map((p) => `
+    const currency = list[0].currency;
+
+    body.innerHTML = list.map((p) => {
+      const qty = getQty(p.id);
+      return `
       <div class="board-row">
         <div class="board-thumb ${p.image ? "photo-real" : `tone-${p.tone}`}">${plate(p)}</div>
-        <div class="board-info"><h4>${p.name}</h4><p>${p.category} · ${p.color}</p><div class="bprice">${money(p)}</div></div>
-        <button class="board-remove" data-remove="${p.id}">remove</button>
-      </div>`).join("");
-    const total = list.reduce((s, p) => s + p.price, 0);
+        <div class="board-info">
+          <h4>${p.name}</h4>
+          <p class="board-meta">size / ${p.size}</p>
+          <div class="board-qty">
+            <button class="qty-btn" data-qty-dec="${p.id}" aria-label="decrease quantity">−</button>
+            <span class="qty-val">${qty}</span>
+            <button class="qty-btn" data-qty-inc="${p.id}" aria-label="increase quantity">+</button>
+          </div>
+        </div>
+        <div class="board-row-side">
+          <div class="bprice">${(p.price * qty).toLocaleString()}${p.currency}</div>
+          <button class="board-remove" data-remove="${p.id}">remove</button>
+        </div>
+      </div>`;
+    }).join("");
+
+    const upsellPick = pieces.find((p) => !isPinned(p.id));
+    const upsellHtml = upsellPick ? `
+      <div class="board-upsell">
+        <p class="board-upsell-label">complete the look</p>
+        <button class="board-upsell-item" data-upsell="${upsellPick.id}">
+          <div class="board-thumb ${upsellPick.image ? "photo-real" : `tone-${upsellPick.tone}`}">${plate(upsellPick)}</div>
+          <div class="board-info"><h4>${upsellPick.name}</h4><p class="board-meta">${upsellPick.color} / ${upsellPick.size}</p></div>
+          <span class="board-upsell-price">${money(upsellPick)}</span>
+          <span class="board-upsell-arrow">→</span>
+        </button>
+      </div>` : "";
+    body.insertAdjacentHTML("beforeend", upsellHtml);
+
+    const subtotal = list.reduce((s, p) => s + p.price * getQty(p.id), 0);
+    const shipping = subtotal >= FREE_SHIPPING_MIN ? 0 : SHIPPING_FEE;
+    const discount = list.length >= 2 ? Math.round(subtotal * 0.05) : 0;
+    const total = subtotal + shipping - discount;
+
     foot.innerHTML = `
-      <div class="board-total"><span class="lbl">${list.length} piece${list.length > 1 ? "s" : ""} pinned</span><span class="val">${total.toLocaleString()}${list[0].currency}</span></div>
-      <button class="cta solid" style="width:100%" id="boardCheckout">checkout</button>`;
+      <div class="board-summary">
+        <div class="board-summary-row"><span>subtotal</span><span>${subtotal.toLocaleString()}${currency}</span></div>
+        <div class="board-summary-row"><span>shipping</span><span>${shipping === 0 ? "free" : `${shipping.toLocaleString()}${currency}`}</span></div>
+        ${discount > 0 ? `<div class="board-summary-row"><span>discount</span><span>-${discount.toLocaleString()}${currency}</span></div>` : ""}
+      </div>
+      <div class="board-total"><span class="lbl">total</span><span class="val">${total.toLocaleString()}${currency}</span></div>
+      <button class="cta solid" style="width:100%" id="boardCheckout">checkout</button>
+      <button class="board-continue" id="boardContinue">continue shopping</button>`;
     $("#boardCheckout").addEventListener("click", () => toast("checkout is a demo — but the taste is real"));
+    $("#boardContinue").addEventListener("click", closeBoard);
   }
 
   /* board preview + count + pin badges */
@@ -507,7 +561,14 @@
     const searchResult = e.target.closest(".search-result");
     if (searchResult) { closeSearch(); openDetail(searchResult.dataset.id); return; }
     const item = e.target.closest(".shop-item"); if (item) return openDetail(item.dataset.id);
-    const rm = e.target.closest("[data-remove]"); if (rm) { togglePin(rm.dataset.remove); toast("removed from board"); return; }
+    const rm = e.target.closest("[data-remove]");
+    if (rm) { togglePin(rm.dataset.remove); toast("removed from board"); if (!boardPanel.hidden) renderBoard(); return; }
+    const qtyDec = e.target.closest("[data-qty-dec]");
+    if (qtyDec) { const id = qtyDec.dataset.qtyDec; setQty(id, getQty(id) - 1); renderBoard(); return; }
+    const qtyInc = e.target.closest("[data-qty-inc]");
+    if (qtyInc) { const id = qtyInc.dataset.qtyInc; setQty(id, getQty(id) + 1); renderBoard(); return; }
+    const upsell = e.target.closest("[data-upsell]");
+    if (upsell) { togglePin(upsell.dataset.upsell); toast("pinned to your board"); renderBoard(); return; }
     if (e.target.closest("[data-close]")) return closeDetail();
     if (e.target.closest("[data-board-close]")) return closeBoard();
     if (e.target.closest("[data-search-close]")) return closeSearch();
