@@ -464,19 +464,6 @@
       </div>`;
     }).join("");
 
-    const upsellPick = pieces.find((p) => !isPinned(p.id));
-    const upsellHtml = upsellPick ? `
-      <div class="board-upsell">
-        <p class="board-upsell-label">complete the look</p>
-        <button class="board-upsell-item" data-upsell="${upsellPick.id}">
-          <div class="board-thumb ${upsellPick.image ? "photo-real" : `tone-${upsellPick.tone}`}">${plate(upsellPick)}</div>
-          <div class="board-info"><h4>${upsellPick.name}</h4><p class="board-meta">${upsellPick.color} / ${upsellPick.size}</p></div>
-          <span class="board-upsell-price">${money(upsellPick)}</span>
-          <span class="board-upsell-arrow">→</span>
-        </button>
-      </div>` : "";
-    body.insertAdjacentHTML("beforeend", upsellHtml);
-
     const subtotal = list.reduce((s, p) => s + p.price * getQty(p.id), 0);
     const shipping = subtotal >= FREE_SHIPPING_MIN ? 0 : SHIPPING_FEE;
     const discount = list.length >= 2 ? Math.round(subtotal * 0.05) : 0;
@@ -567,8 +554,6 @@
     if (qtyDec) { const id = qtyDec.dataset.qtyDec; setQty(id, getQty(id) - 1); renderBoard(); return; }
     const qtyInc = e.target.closest("[data-qty-inc]");
     if (qtyInc) { const id = qtyInc.dataset.qtyInc; setQty(id, getQty(id) + 1); renderBoard(); return; }
-    const upsell = e.target.closest("[data-upsell]");
-    if (upsell) { togglePin(upsell.dataset.upsell); toast("pinned to your board"); renderBoard(); return; }
     if (e.target.closest("[data-close]")) return closeDetail();
     if (e.target.closest("[data-board-close]")) return closeBoard();
     if (e.target.closest("[data-search-close]")) return closeSearch();
