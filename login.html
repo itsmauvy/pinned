@@ -28,6 +28,7 @@
       "use strict";
       const ACCOUNT_STORE = "pinned.account.v1";
       const $ = (s) => document.querySelector(s);
+      const $$ = (s) => [...document.querySelectorAll(s)];
       const getAccount = () => { try { return JSON.parse(localStorage.getItem(ACCOUNT_STORE)); } catch { return null; } };
       const saveAccount = (a) => localStorage.setItem(ACCOUNT_STORE, JSON.stringify(a));
       const clearAccount = () => localStorage.removeItem(ACCOUNT_STORE);
@@ -55,7 +56,28 @@
               <label>password<input type="password" id="loginPassword" required autocomplete="current-password" /></label>
               <button type="submit" class="cta solid" style="width:100%">sign in</button>
             </form>
-            <p class="login-note">demo only — any email &amp; password signs you in. new here? this creates your account automatically.</p>
+            <div class="login-divider"><span>or</span></div>
+            <div class="social-login">
+              <button type="button" class="social-btn social-google" data-social="google">
+                <svg viewBox="0 0 18 18" aria-hidden="true">
+                  <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+                  <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
+                  <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
+                  <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
+                </svg>
+                Google로 로그인
+              </button>
+              <button type="button" class="social-btn social-kakao" data-social="kakao">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="#191919" d="M12 3C6.477 3 2 6.463 2 10.75c0 2.734 1.815 5.14 4.547 6.51-.2.75-.727 2.717-.833 3.14-.13.523.19.516.4.375.166-.11 2.64-1.795 3.71-2.53.71.104 1.44.157 2.176.157 5.523 0 10-3.463 10-7.652C22 6.463 17.523 3 12 3z"/>
+                </svg>
+                카카오로 로그인
+              </button>
+              <button type="button" class="social-btn social-naver" data-social="naver">
+                <span class="social-icon">N</span>
+                네이버로 로그인
+              </button>
+            </div>
             <a class="board-continue" href="index.html">back to the archive →</a>`;
           $("#loginForm").addEventListener("submit", (e) => {
             e.preventDefault();
@@ -64,6 +86,10 @@
             saveAccount({ email });
             window.location.href = "index.html";
           });
+          $$(".social-btn").forEach((btn) => btn.addEventListener("click", () => {
+            saveAccount({ email: `you@${btn.dataset.social}.com`, provider: btn.dataset.social });
+            window.location.href = "index.html";
+          }));
         }
       }
       render();
