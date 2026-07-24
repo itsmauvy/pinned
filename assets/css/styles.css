@@ -345,12 +345,6 @@ button { font-family: inherit; cursor: pointer; }
 .story-photo-page { padding: clamp(1.2rem, 2.6vw, 2rem); }
 .story-photo { flex: 1; min-height: 0; margin: 0; }
 .story-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 25%; display: block; }
-.story-quote {
-  position: absolute; left: 1.4rem; bottom: 1.4rem; z-index: 4; margin: 0; max-width: min(360px, 70%);
-  font-family: var(--sans); font-style: italic; font-weight: 300; font-size: .92rem; line-height: 1.5;
-  color: var(--paper); background: rgba(23,20,15,.6); backdrop-filter: blur(4px);
-  padding: 1rem 1.2rem; border-radius: 4px;
-}
 .story-lede { font-family: var(--serif); font-size: 1.4rem; color: var(--ink-soft); line-height: 1.5; margin: 0 0 1.8rem; max-width: 34ch; }
 .story-tagline { position: relative; margin: 1rem 0 1.8rem; width: fit-content; }
 .story-tagline p {
