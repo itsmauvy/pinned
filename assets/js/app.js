@@ -410,11 +410,9 @@
     b.classList.toggle("pinned", now); b.textContent = now ? "pinned ✓" : "pin this piece";
     toast(now ? "pinned to your board" : "removed from board");
   });
-  $("#detailBag").addEventListener("click", () => {
+  $("#detailBuy").addEventListener("click", () => {
     if (!currentDetail) return;
-    if (!isPinned(currentDetail)) togglePin(currentDetail);
-    const b = $("#detailPin"); b.classList.add("pinned"); b.textContent = "pinned ✓";
-    toast("added to your bag");
+    toast("checkout is a demo — but the taste is real");
   });
 
   /* =================================================================
