@@ -462,25 +462,69 @@
   }
 
   /* =================================================================
+     SEARCH slide-over
+     ================================================================= */
+  const searchPanel = $("#searchPanel");
+  const searchInput = $("#searchInput");
+  const searchBody = $("#searchBody");
+
+  function renderSearchResults(query) {
+    const q = query.trim().toLowerCase();
+    const list = !q ? [] : pieces.filter((p) =>
+      [p.name, p.color, p.category, p.material].join(" ").toLowerCase().includes(q));
+
+    if (!q) {
+      searchBody.innerHTML = `<div class="board-empty">search by name, color, category, or material.<br />try “skirt”, “black”, or “tops”.</div>`;
+      return;
+    }
+    if (!list.length) {
+      searchBody.innerHTML = `<div class="board-empty">no pieces match “${query}”.<br />try a different word.</div>`;
+      return;
+    }
+    searchBody.innerHTML = `<p class="search-count">${list.length} piece${list.length === 1 ? "" : "s"} found</p>` +
+      list.map((p) => `
+        <button class="board-row search-result" data-id="${p.id}">
+          <div class="board-thumb ${p.image ? "photo-real" : `tone-${p.tone}`}">${plate(p)}</div>
+          <div class="board-info"><h4>${p.name}</h4><p>${p.category} · ${p.color}</p><div class="bprice">${money(p)}</div></div>
+        </button>`).join("");
+  }
+
+  const openSearch = () => {
+    searchPanel.hidden = false; document.body.style.overflow = "hidden";
+    searchInput.value = ""; renderSearchResults("");
+    setTimeout(() => searchInput.focus(), 50);
+  };
+  const closeSearch = () => { searchPanel.hidden = true; document.body.style.overflow = ""; };
+  searchInput.addEventListener("input", () => renderSearchResults(searchInput.value));
+
+  /* =================================================================
      EVENT DELEGATION
      ================================================================= */
   document.addEventListener("click", (e) => {
     const pinEl = e.target.closest("[data-pin]");
     if (pinEl) { e.stopPropagation(); toast(togglePin(pinEl.dataset.pin) ? "pinned to your board" : "removed from board"); return; }
+    const searchResult = e.target.closest(".search-result");
+    if (searchResult) { closeSearch(); openDetail(searchResult.dataset.id); return; }
     const item = e.target.closest(".shop-item"); if (item) return openDetail(item.dataset.id);
     const rm = e.target.closest("[data-remove]"); if (rm) { togglePin(rm.dataset.remove); toast("removed from board"); return; }
     if (e.target.closest("[data-close]")) return closeDetail();
     if (e.target.closest("[data-board-close]")) return closeBoard();
+    if (e.target.closest("[data-search-close]")) return closeSearch();
   });
   $("#openBoard").addEventListener("click", openBoard);
   const openBoard2 = $("#openBoard2");
   if (openBoard2) openBoard2.addEventListener("click", openBoard);
   $("#featureCta").addEventListener("click", () => openDetail("p05"));
-  $("#navSearch").addEventListener("click", () => { goToSpread(3); toast("browse the shelf — live search coming soon"); });
+  $("#navSearch").addEventListener("click", openSearch);
   $("#navAccount").addEventListener("click", () => toast("account — demo, no sign-in yet"));
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") { if (!overlay.hidden) closeDetail(); else if (!boardPanel.hidden) closeBoard(); return; }
-    if (mode === "flip" && overlay.hidden && boardPanel.hidden && !animating) {
+    if (e.key === "Escape") {
+      if (!overlay.hidden) closeDetail();
+      else if (!boardPanel.hidden) closeBoard();
+      else if (!searchPanel.hidden) closeSearch();
+      return;
+    }
+    if (mode === "flip" && overlay.hidden && boardPanel.hidden && searchPanel.hidden && !animating) {
       if (e.key === "ArrowRight" || e.key === "PageDown") { e.preventDefault(); goToSpread(currentSpread + 1); }
       if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); goToSpread(currentSpread - 1); }
     }
@@ -556,7 +600,7 @@
     // wheel: one gesture turns one page; momentum is absorbed until it settles
     let wheelLock = false, settleTimer;
     window.addEventListener("wheel", (e) => {
-      if (!overlay.hidden || !boardPanel.hidden) return;   // let modals scroll
+      if (!overlay.hidden || !boardPanel.hidden || !searchPanel.hidden) return;   // let modals scroll
       e.preventDefault();
       clearTimeout(settleTimer);
       settleTimer = setTimeout(() => { wheelLock = false; }, 160);
