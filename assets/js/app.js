@@ -540,6 +540,20 @@
   searchInput.addEventListener("input", () => renderSearchResults(searchInput.value));
 
   /* =================================================================
+     ACCOUNT — signed-in state lives in localStorage, set by login.html;
+     here we just reflect it in the nav.
+     ================================================================= */
+  const ACCOUNT_STORE = "pinned.account.v1";
+  const getAccount = () => { try { return JSON.parse(localStorage.getItem(ACCOUNT_STORE)); } catch { return null; } };
+  function syncAccountUI() {
+    const btn = $("#navAccount");
+    if (!btn) return;
+    const account = getAccount();
+    btn.textContent = account ? account.email.split("@")[0] : "account";
+  }
+  syncAccountUI();
+
+  /* =================================================================
      EVENT DELEGATION
      ================================================================= */
   document.addEventListener("click", (e) => {
@@ -562,7 +576,6 @@
   const openBoard2 = $("#openBoard2");
   if (openBoard2) openBoard2.addEventListener("click", openBoard);
   $("#navSearch").addEventListener("click", openSearch);
-  $("#navAccount").addEventListener("click", () => toast("account — demo, no sign-in yet"));
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
       if (!overlay.hidden) closeDetail();

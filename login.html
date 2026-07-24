@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sign in — pinned</title>
+  <meta name="description" content="sign in to pinned — a vintage fashion archive, edited for now." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <header class="masthead">
+    <a class="wordmark" href="index.html" aria-label="pinned — home">
+      <img src="assets/img/pinned%20logo%201.svg" alt="pinned" />
+    </a>
+  </header>
+
+  <main class="login-page-main">
+    <article class="login-card" id="loginCard"></article>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      "use strict";
+      const ACCOUNT_STORE = "pinned.account.v1";
+      const $ = (s) => document.querySelector(s);
+      const getAccount = () => { try { return JSON.parse(localStorage.getItem(ACCOUNT_STORE)); } catch { return null; } };
+      const saveAccount = (a) => localStorage.setItem(ACCOUNT_STORE, JSON.stringify(a));
+      const clearAccount = () => localStorage.removeItem(ACCOUNT_STORE);
+
+      const card = $("#loginCard");
+
+      function render() {
+        const account = getAccount();
+        if (account) {
+          card.innerHTML = `
+            <div class="login-signed-in">
+              <p class="kicker">account</p>
+              <h1 class="page-head">Welcome back.</h1>
+              <p class="body">Signed in as <strong>${account.email}</strong>.</p>
+              <button class="cta solid" style="width:100%" id="signOutBtn">sign out</button>
+              <a class="board-continue" href="index.html">continue to the archive →</a>
+            </div>`;
+          $("#signOutBtn").addEventListener("click", () => { clearAccount(); render(); });
+        } else {
+          card.innerHTML = `
+            <p class="kicker">account</p>
+            <h1 class="page-head">Sign in.</h1>
+            <form id="loginForm" class="login-form">
+              <label>email<input type="email" id="loginEmail" required autocomplete="email" /></label>
+              <label>password<input type="password" id="loginPassword" required autocomplete="current-password" /></label>
+              <button type="submit" class="cta solid" style="width:100%">sign in</button>
+            </form>
+            <p class="login-note">demo only — any email &amp; password signs you in. new here? this creates your account automatically.</p>
+            <a class="board-continue" href="index.html">back to the archive →</a>`;
+          $("#loginForm").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const email = $("#loginEmail").value.trim();
+            if (!email) return;
+            saveAccount({ email });
+            window.location.href = "index.html";
+          });
+        }
+      }
+      render();
+    })();
+  </script>
+</body>
+</html>
