@@ -515,7 +515,7 @@
   $("#openBoard").addEventListener("click", openBoard);
   const openBoard2 = $("#openBoard2");
   if (openBoard2) openBoard2.addEventListener("click", openBoard);
-  $("#featureCta").addEventListener("click", () => openDetail("p05"));
+  $("#featureCta").addEventListener("click", () => goToSpread(3));
   $("#navSearch").addEventListener("click", openSearch);
   $("#navAccount").addEventListener("click", () => toast("account — demo, no sign-in yet"));
   document.addEventListener("keydown", (e) => {

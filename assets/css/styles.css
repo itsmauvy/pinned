@@ -258,12 +258,6 @@ button { font-family: inherit; cursor: pointer; }
   background: radial-gradient(120% 90% at 30% 12%, rgba(255,255,255,.28), transparent 55%);
   mix-blend-mode: screen;
 }
-.lace-plate .plate-svg { filter: none; }
-.lace-plate::before {
-  content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none;
-  background-image: radial-gradient(circle at 3px 3px, rgba(0,0,0,.5) 1.4px, transparent 1.8px);
-  background-size: 12px 12px; opacity: .3; mix-blend-mode: overlay;
-}
 .pinned-photo figcaption {
   position: absolute; left: 9px; bottom: 8px; z-index: 5;
   font-family: var(--mono); font-size: .56rem; letter-spacing: .03em; color: var(--paper-2);
@@ -275,8 +269,6 @@ button { font-family: inherit; cursor: pointer; }
 .plates-page .pinned-photo { position: absolute; }
 .plates-page .pinned-photo:first-of-type { width: 58%; top: 12%; left: 10%; }
 .plates-page .pinned-photo.offset { width: 50%; right: 8%; bottom: 10%; z-index: 4; }
-.plate-solo { padding: clamp(1.2rem, 2.6vw, 2rem); }
-.plate-solo .pinned-photo { flex: 1; }
 
 /* lookbook-page: hero shot + spec panel + filmstrip picker */
 .lookbook-page {
@@ -347,11 +339,24 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 
-/* PVC pocket note */
-.pvc-note { position: relative; margin: 1.2rem 0; background: rgba(255,255,255,.4); border: 1px solid rgba(255,255,255,.7); border-radius: 4px; backdrop-filter: blur(3px); padding: .9rem 1rem; box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 10px 26px -20px rgba(23,20,15,.6); max-width: 38ch; }
-.pvc-note p { margin: 0; }
-.pvc-note .care { font-size: .78rem; color: var(--ink-soft); line-height: 1.5; }
-.pvc-tab { position: absolute; top: -9px; left: 16px; width: 32px; height: 12px; border-radius: 3px 3px 0 0; background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.8); border-bottom: none; }
+/* =====================================================================
+   BRAND STORY spread
+   ===================================================================== */
+.story-photo-page { padding: clamp(1.2rem, 2.6vw, 2rem); }
+.story-photo { flex: 1; min-height: 0; margin: 0; }
+.story-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 25%; display: block; }
+.story-quote {
+  position: absolute; left: 1.4rem; right: 1.4rem; bottom: 1.4rem; z-index: 4; margin: 0;
+  font-family: var(--serif); font-style: normal; font-size: clamp(1rem, 1.6vw, 1.25rem); line-height: 1.35;
+  color: var(--paper); background: rgba(23,20,15,.55); backdrop-filter: blur(3px);
+  padding: 1rem 1.2rem; border-radius: 3px;
+}
+.story-values { list-style: none; margin: 0 0 1.4rem; padding: 0; display: flex; flex-direction: column; gap: .4rem; }
+.story-values li {
+  font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-soft); padding-left: 1.1rem; position: relative;
+}
+.story-values li::before { content: "—"; position: absolute; left: 0; color: var(--muted); }
 
 /* =====================================================================
    SHOP — left page (intro, filters, featured piece)
@@ -529,7 +534,7 @@ body.mode-scroll .page-face {
 body.mode-scroll .plates-page { min-height: 90vh; }
 body.mode-scroll .plates-page .pinned-photo:first-of-type { width: 72%; }
 body.mode-scroll .plates-page .pinned-photo.offset { width: 60%; }
-body.mode-scroll .plate-solo { min-height: 80vh; }
+body.mode-scroll .story-photo-page { min-height: 80vh; }
 body.mode-scroll .archive-wall { height: auto; max-height: none; overflow: visible; }
 
 @media (max-width: 640px) {
