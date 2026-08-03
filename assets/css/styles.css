@@ -661,16 +661,14 @@ body.mode-scroll .archive-wall { height: auto; max-height: none; overflow: visib
 
 /* the cover spread's desktop layout leans on negative margins and
    absolutely-positioned overlaps tuned for a wide two-page spread —
-   none of that fits a narrow phone screen, so simplify to a centered stack */
-body.mode-scroll .cover-split { flex-direction: column; gap: 1.6rem; margin-top: .5rem; }
+   none of that fits a narrow phone screen. Keep just the one hero shot
+   so the whole page fits in a single view with no scrolling needed. */
+body.mode-scroll .cover-split { flex-direction: column; margin-top: .5rem; }
 body.mode-scroll .cover-left { width: 100%; }
 body.mode-scroll .cover-left .cover-full-shot {
-  margin: 1rem auto 0; width: 55%; max-width: 220px; aspect-ratio: 315/662; align-self: center;
+  margin: .8rem auto 0; width: 48%; max-width: 190px; aspect-ratio: 315/662; align-self: center;
 }
-body.mode-scroll .cover-right {
-  flex: none; min-height: auto;
-  flex-direction: column; align-items: center; justify-content: center; margin-top: 1rem; gap: 1.6rem;
-}
+body.mode-scroll .cover-right { display: none; }
 body.mode-scroll .cover-big-shot {
   height: auto; width: 68%; max-width: 260px; margin: 0 auto; aspect-ratio: 646/995;
 }
