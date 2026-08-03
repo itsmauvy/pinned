@@ -661,19 +661,23 @@ body.mode-scroll .archive-wall { height: auto; max-height: none; overflow: visib
 
 /* the cover spread's desktop layout leans on negative margins and
    absolutely-positioned overlaps tuned for a wide two-page spread —
-   none of that fits a narrow phone screen. Keep just the one hero shot
-   so the whole page fits in a single view with no scrolling needed. */
-body.mode-scroll .cover-split { flex-direction: column; margin-top: .5rem; }
-body.mode-scroll .cover-left { width: 100%; }
+   none of that fits a narrow phone screen. Keep all three photos but
+   as two side-by-side columns (like the desktop split), sized so the
+   whole page fills one view with no scrolling needed. */
+body.mode-scroll .cover-split { flex-direction: row; gap: .8rem; align-items: flex-start; margin-top: .5rem; }
+body.mode-scroll .cover-left { width: 44%; }
 body.mode-scroll .cover-left .cover-full-shot {
-  margin: .8rem auto 0; width: 48%; max-width: 190px; aspect-ratio: 315/662; align-self: center;
+  margin: 0; width: 100%; max-width: none; aspect-ratio: 315/662; align-self: center;
 }
-body.mode-scroll .cover-right { display: none; }
+body.mode-scroll .cover-right {
+  flex: none; min-height: auto; width: 54%;
+  flex-direction: column; align-items: center; justify-content: flex-start; margin-top: 0; gap: 1.2rem;
+}
 body.mode-scroll .cover-big-shot {
-  height: auto; width: 68%; max-width: 260px; margin: 0 auto; aspect-ratio: 646/995;
+  height: auto; width: 100%; max-width: none; margin: 0; aspect-ratio: 646/995;
 }
 body.mode-scroll .cover-back-shot {
-  position: relative; top: auto; right: auto; width: 52%; max-width: 200px; margin: 0 auto 1rem;
+  position: relative; top: auto; right: auto; width: 88%; max-width: none; margin: 0;
 }
 body.mode-scroll .mag-stage {
   flex-direction: column; align-items: center; margin-top: 1rem; gap: 2rem;
