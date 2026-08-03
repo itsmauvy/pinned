@@ -415,6 +415,16 @@ button { font-family: inherit; cursor: pointer; }
 }
 .shop-filter .count { font-family: var(--mono); color: var(--muted); }
 .shop-filter.active { color: var(--ink); font-weight: 600; }
+
+body.mode-scroll .shop-filters {
+  flex-direction: row; flex-wrap: nowrap; gap: 1.1rem; overflow-x: auto;
+  -webkit-overflow-scrolling: touch; padding-bottom: .3rem;
+}
+body.mode-scroll .shop-filter {
+  width: auto; flex: none; flex-direction: column; align-items: flex-start; gap: .1rem;
+  font-size: .78rem; white-space: nowrap;
+}
+body.mode-scroll .shop-filter .count { font-size: .68rem; }
 .shop-filter:hover { color: var(--ink); }
 
 .shop-filter-groups { display: flex; flex-direction: column; margin-top: 1.3rem; border-top: 1px solid var(--hair); }
@@ -693,14 +703,17 @@ body.mode-scroll .cover-back-shot {
   position: relative; top: auto; right: auto; width: 88%; max-width: none; margin: 0;
 }
 body.mode-scroll .mag-stage {
-  flex-direction: column; align-items: center; margin-top: 1rem; gap: 2rem;
+  flex: none; min-height: auto; min-width: 0;
+  flex-direction: row; align-items: center; justify-content: center;
+  margin-top: 0; gap: 1.3rem;
 }
 body.mode-scroll .mag-model-shot {
-  margin: 0; width: 55%; max-width: 220px; height: auto; aspect-ratio: 250/867;
+  flex: none; margin: 0; width: 52%; max-width: 215px; height: auto; aspect-ratio: 250/867;
 }
 body.mode-scroll .mag-model-shot img { width: 100%; }
 body.mode-scroll .mag-close-shot {
-  position: relative; top: auto; right: auto; width: 68%; max-width: 260px; height: auto; aspect-ratio: 491/867;
+  flex: none; position: relative; top: auto; right: auto;
+  width: 52%; max-width: 215px; height: auto; aspect-ratio: 491/867;
 }
 
 @media (max-width: 640px) {
