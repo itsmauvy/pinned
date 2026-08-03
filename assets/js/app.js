@@ -624,7 +624,7 @@
     if (mode !== "flip") {
       k = clamp(k, 0, spreadCount - 1);
       const el = pageFaces[Math.min(k * 2, pageFaces.length - 1)];
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (el) el.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
       setActiveGNB(k);
       currentSpread = k;
       return;
@@ -661,13 +661,16 @@
      into a full-screen overlay via CSS on narrow viewports */
   const hamburgerBtn = $("#hamburgerBtn");
   const mastheadNav = $("#mastheadNav");
+  const mastheadEl = $(".masthead");
   const closeMobileNav = () => {
     mastheadNav.classList.remove("open");
+    mastheadEl.classList.remove("menu-open");
     hamburgerBtn.setAttribute("aria-expanded", "false");
     document.body.style.overflow = "";
   };
   hamburgerBtn.addEventListener("click", () => {
     const isOpen = mastheadNav.classList.toggle("open");
+    mastheadEl.classList.toggle("menu-open", isOpen);
     hamburgerBtn.setAttribute("aria-expanded", String(isOpen));
     document.body.style.overflow = isOpen ? "hidden" : "";
   });
@@ -693,14 +696,16 @@
     window.addEventListener("resize", renderFlip);
     renderFlip();
   } else {
+    // one page per swipe — native horizontal scroll-snap on #pageSource,
+    // so all we track here is which page that scroll position landed on
     const onScroll = () => {
-      const doc = document.documentElement;
-      bar.style.width = `${clamp(doc.scrollTop / (doc.scrollHeight - doc.clientHeight || 1), 0, 1) * 100}%`;
-      let idx = 0;
-      pageFaces.forEach((el, i) => { if (el.getBoundingClientRect().top < window.innerHeight * 0.5) idx = i; });
-      setActiveGNB(clamp(Math.round(idx / 2), 0, spreadCount - 1));
+      const max = src.scrollWidth - src.clientWidth || 1;
+      bar.style.width = `${clamp(src.scrollLeft / max, 0, 1) * 100}%`;
+      const idx = clamp(Math.round(src.scrollLeft / src.clientWidth), 0, pageFaces.length - 1);
+      currentSpread = clamp(Math.round(idx / 2), 0, spreadCount - 1);
+      setActiveGNB(currentSpread);
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
+    src.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
   }
 

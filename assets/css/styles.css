@@ -102,16 +102,28 @@ button { font-family: inherit; cursor: pointer; }
   .hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
   .hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
+  /* .masthead itself uses mix-blend-mode: multiply so the wordmark reads
+     over any photo beneath it — but that blend applies to this whole
+     subtree, so a solid white menu panel nested inside it still shows
+     the page through as if it were transparent. Reset it on .masthead
+     while the menu is open (harmless — the full-screen panel covers it). */
+  .masthead.menu-open { mix-blend-mode: normal; }
+
   .masthead-nav {
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2.4rem;
     position: fixed; inset: 0; z-index: 900; background: var(--paper);
-    isolation: isolate; mix-blend-mode: normal;
     transform: translateX(100%); transition: transform .4s var(--ease); pointer-events: none;
   }
   .masthead-nav.open { transform: translateX(0); pointer-events: auto; }
   .masthead-nav .gnb { flex-direction: column; gap: 1.7rem; }
-  .masthead-nav .gnb button { font-size: 1rem; color: var(--ink-soft); }
+  .masthead-nav .gnb button {
+    font-size: 1.05rem; color: var(--ink-soft); padding: .6rem 1.4rem; border-radius: 100px; border-bottom: none;
+  }
+  .masthead-nav .gnb button:hover, .masthead-nav .gnb button:active { color: var(--ink); background: var(--paper-edge); }
+  .masthead-nav .gnb button.active { background: var(--paper-edge); }
   .masthead-nav .mast-right { flex-direction: column; align-items: center; gap: 1.3rem; }
+  .masthead-nav .mast-tool { padding: .6rem 1.4rem; border-radius: 100px; border-bottom: none; }
+  .masthead-nav .mast-tool:hover, .masthead-nav .mast-tool:active { background: var(--paper-edge); }
 }
 
 /* =====================================================================
@@ -620,23 +632,31 @@ button { font-family: inherit; cursor: pointer; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 /* =====================================================================
-   SCROLL MODE (mobile / reduced motion) — plain vertical spreads
+   SCROLL MODE (mobile / reduced motion) — one page per swipe, horizontal,
+   same "flip through it" feel as desktop but as a native scroll-snap
+   carousel instead of a 3D transform (lighter, no touch-drag math needed)
    ===================================================================== */
-body.mode-scroll #pageSource { display: block !important; }
+body.mode-scroll { overflow: hidden; height: 100vh; }
+body.mode-scroll #pageSource { display: flex !important; }
 body.mode-scroll .book-scroll, body.mode-scroll .book-ui { display: none; }
 body.mode-scroll #pageSource {
-  max-width: 640px; margin: 0 auto; padding: 4.5rem 1rem 3rem;
+  max-width: none; margin: 0; padding: 0;
+  width: 100vw; height: 100vh;
+  overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
 }
 body.mode-scroll .page-face {
-  position: relative; height: auto; min-height: 78vh;
-  background: var(--paper); border-radius: 3px; margin-bottom: 1.1rem;
-  box-shadow: 0 20px 44px -30px rgba(60,54,45,.5);
-  padding: clamp(1.6rem, 6vw, 2.4rem);
+  position: relative; flex: 0 0 100vw; width: 100vw; height: 100vh;
+  scroll-snap-align: start; scroll-snap-stop: always;
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  background: var(--paper); border-radius: 0; margin: 0; box-shadow: none;
+  padding: clamp(4.6rem, 13vw, 5.6rem) clamp(1.2rem, 5vw, 1.6rem) 2.4rem;
+  box-sizing: border-box;
 }
-body.mode-scroll .plates-page { min-height: 90vh; }
+body.mode-scroll .plates-page,
+body.mode-scroll .story-photo-page { height: 100vh; }
 body.mode-scroll .plates-page .pinned-photo:first-of-type { width: 72%; }
 body.mode-scroll .plates-page .pinned-photo.offset { width: 60%; }
-body.mode-scroll .story-photo-page { min-height: 80vh; }
 body.mode-scroll .archive-wall { height: auto; max-height: none; overflow: visible; }
 
 /* the cover spread's desktop layout leans on negative margins and
