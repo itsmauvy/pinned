@@ -166,10 +166,19 @@
      ================================================================= */
   let renderAngles = () => {};
   let renderDetails = () => {};
+  let selectLook = () => {};
   function initAnglesRow(root) {
     const row = $("#lookbookAnglesRow", root);
     const detailsRow = $("#lookbookDetailsRow", root);
     if (!row) return;
+
+    const jump = $("#lookbookJump", root);
+    if (jump) {
+      jump.innerHTML = LOOKS.map((look, i) => `
+        <button class="lookbook-jump-item" data-look="${i}">look ${String(i + 1).padStart(2, "0")}</button>`).join("");
+      $$(".lookbook-jump-item", jump).forEach((btn) => btn.addEventListener("click", () => selectLook(+btn.dataset.look)));
+    }
+
     renderAngles = (look) => {
       const images = look.angles.length ? look.angles : [look.hero];
       const labels = look.angleLabels || ANGLE_LABELS;
@@ -178,6 +187,7 @@
           <img src="${src}" alt="" />
           <span class="lookbook-angle-label">${labels[i] || ""}</span>
         </div>`).join("");
+      if (jump) $$(".lookbook-jump-item", jump).forEach((btn) => btn.classList.toggle("active", +btn.dataset.look === currentLook));
     };
     renderDetails = (look) => {
       if (!detailsRow) return;
@@ -221,6 +231,7 @@
       currentLook = clamp(i, 0, N - 1);
       render();
     }
+    selectLook = select;
     function render() {
       const look = LOOKS[currentLook];
       heroImg.src = look.hero;
@@ -245,6 +256,22 @@
     buildBook();
   } else {
     src.hidden = false;                      // reveal as vertical stack
+    // mobile: a couple of desktop 2-page spreads split into a nearly-empty
+    // "filters only" / "photo only" page plus its facing content — merge
+    // the donor's content onto the front of the facing page instead of
+    // wasting a whole swipe on it, then collapse the donor to zero width
+    // (kept in the DOM/pageFaces array so spread-index math elsewhere
+    // still lines up; scroll-snap and swiping just skip straight past it).
+    const mergeIntoNext = (donor, recipient) => {
+      if (!donor || !recipient) return;
+      const frag = document.createDocumentFragment();
+      while (donor.firstChild) frag.appendChild(donor.firstChild);
+      recipient.insertBefore(frag, recipient.firstChild);
+      donor.classList.add("page-merged-away");
+    };
+    mergeIntoNext($(".shop-page"), $(".shop-grid-page"));
+    const storyLede = $(".story-lede");
+    mergeIntoNext($(".story-photo-page"), storyLede ? storyLede.closest(".page-face") : null);
   }
   injectPlates(document);
   initAnglesRow(document);
