@@ -18,17 +18,22 @@
     <a class="wordmark" href="#" id="goCover" aria-label="pinned — home">
       <img src="assets/img/pinned%20logo%201.svg" alt="pinned" />
     </a>
-    <nav class="gnb" id="gnb" aria-label="primary">
-      <button data-spread="0">cover</button>
-      <button data-spread="1">collection</button>
-      <button data-spread="2">lookbook</button>
-      <button data-spread="3">shop</button>
-      <button data-spread="4">brand story</button>
-    </nav>
-    <div class="mast-right">
-      <button class="mast-tool" id="navSearch">search</button>
-      <a class="mast-tool" id="navAccount" href="login.html">account</a>
-      <button class="mast-tool bag" id="openBoard" aria-haspopup="dialog">bag (<span id="boardCount">0</span>)</button>
+    <button class="hamburger" id="hamburgerBtn" aria-label="open menu" aria-expanded="false" aria-controls="mastheadNav">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="masthead-nav" id="mastheadNav">
+      <nav class="gnb" id="gnb" aria-label="primary">
+        <button data-spread="0">cover</button>
+        <button data-spread="1">collection</button>
+        <button data-spread="2">lookbook</button>
+        <button data-spread="3">shop</button>
+        <button data-spread="4">brand story</button>
+      </nav>
+      <div class="mast-right">
+        <button class="mast-tool" id="navSearch">search</button>
+        <a class="mast-tool" id="navAccount" href="login.html">account</a>
+        <button class="mast-tool bag" id="openBoard" aria-haspopup="dialog">bag (<span id="boardCount">0</span>)</button>
+      </div>
     </div>
   </header>
 

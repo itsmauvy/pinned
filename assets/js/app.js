@@ -581,6 +581,7 @@
       if (!overlay.hidden) closeDetail();
       else if (!boardPanel.hidden) closeBoard();
       else if (!searchPanel.hidden) closeSearch();
+      else if (mastheadNav.classList.contains("open")) closeMobileNav();
       return;
     }
     if (mode === "flip" && overlay.hidden && boardPanel.hidden && searchPanel.hidden && !animating) {
@@ -655,6 +656,25 @@
   }
   gnb.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) goToSpread(+b.dataset.spread); });
   $("#goCover").addEventListener("click", (e) => { e.preventDefault(); goToSpread(0); });
+
+  /* mobile hamburger menu — same #gnb/.mast-right nodes, just repositioned
+     into a full-screen overlay via CSS on narrow viewports */
+  const hamburgerBtn = $("#hamburgerBtn");
+  const mastheadNav = $("#mastheadNav");
+  const closeMobileNav = () => {
+    mastheadNav.classList.remove("open");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+  };
+  hamburgerBtn.addEventListener("click", () => {
+    const isOpen = mastheadNav.classList.toggle("open");
+    hamburgerBtn.setAttribute("aria-expanded", String(isOpen));
+    document.body.style.overflow = isOpen ? "hidden" : "";
+  });
+  // any GNB item or masthead tool click closes the overlay once its own handler runs
+  mastheadNav.addEventListener("click", (e) => {
+    if (e.target.closest(".gnb button") || e.target.closest(".mast-tool")) closeMobileNav();
+  });
 
   if (mode === "flip") {
     // wheel: one gesture turns one page; momentum is absorbed until it settles
