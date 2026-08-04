@@ -165,10 +165,12 @@
   /* =================================================================
      SHOP-THE-LOOK PINS — small tappable hotspots over a look/collection
      photo that open a mini popup (thumb + name + price + pin/view).
-     Mobile only for now: desktop's flip pages live inside a continuous
-     3D scroll-scrubbed transform, so a pin's on-screen position would
-     need recalculating every animation frame rather than just on
-     resize — a heavier job left for later if desktop pins are wanted.
+     Works on both the mobile scroll carousel and the desktop 3D flip
+     book: layoutPinLayer() positions pins using layout-space values
+     (offsetLeft/clientWidth), not getBoundingClientRect's post-transform
+     screen projection, so a pin — as an ordinary child of the photo's
+     container — rotates along with the page for free during the flip
+     animation instead of needing per-frame recalculation.
      Coordinates are % of the ORIGINAL photo; layoutPinLayer() maps them
      to on-screen px by reading the image's actual rendered box, so the
      same data works whether the photo is cover-cropped (mobile hero,
@@ -189,12 +191,14 @@
   function layoutPinLayer(container, img) {
     const layer = $(".shop-pin-layer", container);
     if (!layer || !img.naturalWidth) return;
-    const containerRect = container.getBoundingClientRect();
-    const imgRect = img.getBoundingClientRect();
+    // offsetLeft/Top + clientWidth/Height are LAYOUT-space (pre-transform)
+    // values, not getBoundingClientRect's post-transform screen projection —
+    // using layout space means the pin layer, as a normal child, rotates
+    // along with the page for free during the desktop 3D flip animation
+    // instead of needing to be recomputed every animation frame.
     const fit = getComputedStyle(img).objectFit;
-    const baseLeft = imgRect.left - containerRect.left;
-    const baseTop = imgRect.top - containerRect.top;
-    const boxW = imgRect.width, boxH = imgRect.height;
+    const baseLeft = img.offsetLeft, baseTop = img.offsetTop;
+    const boxW = img.clientWidth, boxH = img.clientHeight;
 
     let mapX = (x) => baseLeft + (x / 100) * boxW;
     let mapY = (y) => baseTop + (y / 100) * boxH;
@@ -213,9 +217,10 @@
       mapY = (y) => baseTop + (y / 100) * dispH - offY;
     }
 
+    const cw = container.clientWidth, ch = container.clientHeight;
     $$(".shop-pin", layer).forEach((btn) => {
       const left = mapX(+btn.dataset.x), top = mapY(+btn.dataset.y);
-      const within = left >= 4 && left <= containerRect.width - 4 && top >= 4 && top <= containerRect.height - 4;
+      const within = left >= 4 && left <= cw - 4 && top >= 4 && top <= ch - 4;
       btn.style.display = within ? "" : "none";
       btn.style.left = `${left}px`;
       btn.style.top = `${top}px`;
@@ -223,7 +228,7 @@
   }
 
   function setupPinLayer(container, img) {
-    if (mode !== "scroll" || !container || !img) return null;
+    if (!container || !img) return null;
     let layer = $(".shop-pin-layer", container);
     if (!layer) {
       layer = document.createElement("div");
@@ -295,7 +300,6 @@
   }
 
   function initCollectionPins(root) {
-    if (mode !== "scroll") return;
     $$(".collection-shot", root).forEach((shot, i) => {
       const img = $("img", shot);
       const pinsData = COLLECTION_PINS[i];
