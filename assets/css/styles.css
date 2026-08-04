@@ -386,16 +386,24 @@ button { font-family: inherit; cursor: pointer; }
    ===================================================================== */
 .shop-set-pin {
   /* bottom-left, not bottom-right — the lookbook hero already keeps a
-     full-body inset thumbnail pinned to the bottom-right on mobile */
+     full-body inset thumbnail pinned to the bottom-right on mobile.
+     Solid ink fill (not a light/translucent pill) so it reads clearly
+     against any photo — light dress, dark dress, busy background. */
   position: absolute; left: .8rem; bottom: .8rem; z-index: 5;
-  display: flex; align-items: center; gap: .4rem;
-  padding: .5rem .8rem .5rem .6rem; border-radius: 100px;
-  background: rgba(244, 241, 234, .95); border: 1px solid var(--ink);
-  cursor: pointer; box-shadow: 0 4px 16px rgba(23, 20, 15, .28);
-  font-family: var(--mono); font-size: .62rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink);
+  display: flex; align-items: center; gap: .45rem;
+  padding: .6rem 1rem .6rem .7rem; border-radius: 100px;
+  background: var(--ink); border: 1px solid var(--ink);
+  cursor: pointer; box-shadow: 0 6px 20px rgba(0, 0, 0, .38);
+  font-family: var(--mono); font-size: .66rem; letter-spacing: .06em; text-transform: uppercase; color: var(--paper);
+  animation: setPinPulse 2.4s ease-in-out infinite;
 }
-.shop-set-pin img { width: 18px; height: 18px; object-fit: contain; display: block; pointer-events: none; }
-.shop-set-pin.is-open { background: var(--ink); color: var(--paper); }
+.shop-set-pin img { width: 20px; height: 20px; object-fit: contain; display: block; pointer-events: none; filter: brightness(0) invert(1); }
+.shop-set-pin.is-open { background: var(--paper); color: var(--ink); animation: none; }
+.shop-set-pin.is-open img { filter: none; }
+@keyframes setPinPulse {
+  0%, 100% { box-shadow: 0 6px 20px rgba(0, 0, 0, .38), 0 0 0 0 rgba(23, 20, 15, .35); }
+  50% { box-shadow: 0 6px 20px rgba(0, 0, 0, .38), 0 0 0 8px rgba(23, 20, 15, 0); }
+}
 
 .shop-set-popup {
   position: absolute; left: .8rem; bottom: 3.6rem; z-index: 6; width: 232px; box-sizing: border-box;
