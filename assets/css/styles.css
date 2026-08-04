@@ -762,10 +762,13 @@ body.mode-scroll #lookbookHeroImg {
    inset restores it, echoing the cover page's own big-shot + back-shot
    pairing already used elsewhere in the site. */
 body.mode-scroll .lookbook-hero-full {
+  /* no card/background here — the photo's own backdrop is a slightly
+     warm off-white, not pure --paper, so a white card behind it just
+     reads as a mismatched box; a drop shadow alone lifts it off the
+     hero photo cleanly */
   display: block; position: absolute; right: .7rem; bottom: .7rem; z-index: 2;
   height: 48%; width: auto; max-width: 32%; object-fit: contain;
-  background: var(--paper); padding: 3px;
-  box-shadow: 0 8px 20px -10px rgba(23,20,15,.55);
+  box-shadow: 0 6px 16px -6px rgba(0,0,0,.5);
 }
 body.mode-scroll .lookbook-info {
   flex: none; grid-column: auto; grid-row: auto; gap: .35rem; justify-content: flex-start;
