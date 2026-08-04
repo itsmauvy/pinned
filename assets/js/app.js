@@ -224,7 +224,7 @@
         <div class="shop-set-popup-list">
           ${items.map((p) => `
             <div class="shop-set-row" data-id="${p.id}">
-              <img src="${p.image}" alt="${p.name}" />
+              <img class="shop-set-row-thumb" src="${p.image}" alt="${p.name}" />
               <div class="shop-set-row-info">
                 <p class="shop-set-row-name">${p.name}</p>
                 <p class="shop-set-row-price">${money(p)}</p>
