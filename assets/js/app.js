@@ -217,18 +217,42 @@
     const pop = document.createElement("div");
     pop.className = "shop-set-popup open";
     pop.innerHTML = `
-      <p class="shop-set-popup-heading">${items.length}pieces in this look</p>
-      <div class="shop-set-popup-items">
-        ${items.map((p) => `<figure><img src="${p.image}" alt="${p.name}" /><figcaption>${p.name}</figcaption></figure>`).join("")}
-      </div>
-      <div class="shop-set-popup-foot">
-        <span class="shop-set-popup-total">${total.toLocaleString()}원</span>
-        <button type="button" class="solid" data-act="addall">담기</button>
+      <div class="shop-set-scrim"></div>
+      <div class="shop-set-card">
+        <button type="button" class="shop-set-close" aria-label="close">×</button>
+        <p class="shop-set-popup-heading">이 룩의 아이템 ${items.length}개</p>
+        <div class="shop-set-popup-list">
+          ${items.map((p) => `
+            <div class="shop-set-row" data-id="${p.id}">
+              <img src="${p.image}" alt="${p.name}" />
+              <div class="shop-set-row-info">
+                <p class="shop-set-row-name">${p.name}</p>
+                <p class="shop-set-row-price">${money(p)}</p>
+              </div>
+              <button type="button" class="shop-set-row-pin${isPinned(p.id) ? " pinned" : ""}" data-pin="${p.id}" aria-label="pin this piece">
+                <img src="${isPinned(p.id) ? SHOP_PIN_FILL_SRC : SHOP_PIN_OUTLINE_SRC}" alt="" />
+              </button>
+            </div>`).join("")}
+        </div>
+        <div class="shop-set-popup-foot">
+          <span class="shop-set-popup-total">total ${total.toLocaleString()}원</span>
+          <button type="button" class="solid" data-act="addall">전체 담기</button>
+        </div>
       </div>`;
     container.appendChild(pop);
     openPinPopup = pop;
     pop.addEventListener("click", (e) => e.stopPropagation());
+    $(".shop-set-scrim", pop).addEventListener("click", closePinPopup);
+    $(".shop-set-close", pop).addEventListener("click", closePinPopup);
 
+    $$(".shop-set-row-pin", pop).forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const now = togglePin(btn.dataset.pin);
+        btn.classList.toggle("pinned", now);
+        $("img", btn).src = now ? SHOP_PIN_FILL_SRC : SHOP_PIN_OUTLINE_SRC;
+        toast(now ? "pinned to your board" : "removed from board");
+      });
+    });
     $("[data-act=addall]", pop).addEventListener("click", () => {
       const added = addAllToBoard(ids);
       toast(added ? `${added}개 담김 — 이 룩 전체가 저장됐어요` : "이미 다 담겨있어요");
