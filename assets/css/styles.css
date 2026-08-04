@@ -432,7 +432,7 @@ body.mode-scroll .shop-filter {
 body.mode-scroll .shop-filter .count { display: none; }
 .shop-filter:hover { color: var(--ink); }
 
-body.mode-scroll .shop-title { margin: .4rem 0 .4rem; }
+body.mode-scroll .shop-title { margin: .4rem 0 .4rem; text-align: center; }
 body.mode-scroll .shop-filter-groups { margin-top: .3rem; }
 body.mode-scroll .shop-filter-group-head { padding: .3rem 0; }
 body.mode-scroll .shop-grid {
