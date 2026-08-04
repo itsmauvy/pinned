@@ -428,12 +428,17 @@ body.mode-scroll .shop-filter {
 body.mode-scroll .shop-filter .count { display: none; }
 .shop-filter:hover { color: var(--ink); }
 
+body.mode-scroll .shop-title { margin: .4rem 0 .6rem; }
+body.mode-scroll .shop-filter-groups { margin-top: .6rem; }
+body.mode-scroll .shop-filter-group-head { padding: .4rem 0; }
 body.mode-scroll .shop-grid {
   flex: none; min-height: auto;
   grid-template-rows: none; grid-auto-rows: auto;
+  margin-top: .8rem; gap: 1.1rem 1.4rem;
 }
 body.mode-scroll .shop-item { height: auto; min-height: 0; }
-body.mode-scroll .shop-item .pinned-photo { flex: none; aspect-ratio: 3/4; }
+body.mode-scroll .shop-item .pinned-photo { flex: none; aspect-ratio: 3/3.3; }
+body.mode-scroll .shop-pagination { margin-top: .5rem; }
 
 .shop-filter-groups { display: flex; flex-direction: column; margin-top: 1.3rem; border-top: 1px solid var(--hair); }
 .shop-filter-group { border-bottom: 1px solid var(--hair); }
@@ -723,6 +728,18 @@ body.mode-scroll .mag-close-shot {
   flex: none; position: relative; top: auto; right: auto;
   width: 52%; max-width: 215px; height: auto; aspect-ratio: 491/867;
 }
+
+/* lookbook picker: desktop's two-column grid (hero | info, filmstrip
+   below both) is too cramped as two ~160px-wide columns on a phone —
+   stack it into one column that fills exactly one screen instead. */
+body.mode-scroll .lookbook-page { display: flex; flex-direction: column; gap: .7rem; }
+body.mode-scroll .lookbook-hero { flex: 1; min-height: 0; grid-column: auto; grid-row: auto; }
+body.mode-scroll .lookbook-info {
+  flex: none; grid-column: auto; grid-row: auto; gap: .5rem; justify-content: flex-start;
+}
+body.mode-scroll .lookbook-name { font-size: 1.6rem; }
+body.mode-scroll .lookbook-desc { font-size: .85rem; line-height: 1.5; }
+body.mode-scroll .lookbook-filmstrip { flex: none; height: 90px; grid-column: auto; grid-row: auto; }
 
 @media (max-width: 640px) {
   .mast-issue { display: none; }
