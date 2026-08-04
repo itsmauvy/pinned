@@ -750,7 +750,9 @@ body.mode-scroll .lookbook-hero {
   flex: none; width: 100%; height: auto; aspect-ratio: 3/4.1; grid-column: auto; grid-row: auto;
 }
 body.mode-scroll .lookbook-hero img {
-  height: 100%; width: 100%; object-fit: cover; object-position: center 12%;
+  /* source photos have almost no headroom above the hair (~0.5% of
+     image height) — any positive top-crop here cuts into the head */
+  height: 100%; width: 100%; object-fit: cover; object-position: center top;
 }
 body.mode-scroll .lookbook-info {
   flex: none; grid-column: auto; grid-row: auto; gap: .35rem; justify-content: flex-start;
