@@ -175,6 +175,10 @@
     ["p01", "p15", "p10"],
     ["p02", "p17"],
   ];
+  // cover spread — P0 (halter vest + pleated skirt + boots) and its
+  // companion P1 (shorts + mary jane loafers + collar socks)
+  const COVER_SET = ["p20", "p18", "p13"];
+  const COVER_COMPANION_SET = ["p18", "p14", "p11"];
 
   let openPinPopup = null;
   function closePinPopup() {
@@ -265,6 +269,16 @@
       const ids = COLLECTION_SETS[i];
       if (ids) renderSetBadge(shot, ids);
     });
+    // anchor to the whole page-face, not the narrower .cover-right/.mag-stage
+    // column — those only span part of the page width on mobile, so a badge
+    // centered inside them (like collection/lookbook's full-width containers)
+    // lands off to one side instead of in the same spot as everywhere else.
+    const coverRight = $(".cover-right", root);
+    const coverPage = coverRight && coverRight.closest(".page-face");
+    if (coverPage) renderSetBadge(coverPage, COVER_SET);
+    const magStage = $(".mag-stage", root);
+    const magPage = magStage && magStage.closest(".page-face");
+    if (magPage) renderSetBadge(magPage, COVER_COMPANION_SET);
   }
 
   /* =================================================================
