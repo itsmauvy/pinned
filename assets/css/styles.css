@@ -198,7 +198,7 @@ button { font-family: inherit; cursor: pointer; }
    flush to the outer screen edge; a small inset only on the spine side
    so the photo doesn't crowd the book's centre fold. */
 .page-face.collection-page { padding: 0; justify-content: flex-start; }
-.collection-shot { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+.collection-shot { position: relative; margin: 0; width: 100%; height: 100%; overflow: hidden; }
 .collection-shot img { width: 100%; height: 100%; object-fit: cover; object-position: center 15%; display: block; }
 
 .page-base.right .collection-page,
@@ -377,6 +377,49 @@ button { font-family: inherit; cursor: pointer; }
 .lookbook-detail-crop { position: relative; aspect-ratio: 1/1; overflow: hidden; background: var(--paper-edge); }
 .lookbook-detail-crop img { position: absolute; width: 100%; height: 100%; object-fit: cover; }
 .lookbook-detail-label { font-family: var(--sans); font-size: .74rem; letter-spacing: .01em; color: var(--ink); text-align: center; }
+
+/* =====================================================================
+   SHOP-THE-LOOK PINS — tappable hotspots on a look/collection photo;
+   position is set inline in px by app.js (layoutPinLayer), computed
+   from the image's actual rendered box so it works cover-cropped or
+   uncropped without per-breakpoint coordinates.
+   ===================================================================== */
+.shop-pin-layer { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
+.shop-pin {
+  position: absolute; transform: translate(-50%, -50%); pointer-events: auto;
+  width: 22px; height: 22px; border-radius: 50%; padding: 0;
+  background: rgba(244, 241, 234, .92); border: 1.5px solid var(--ink);
+  display: grid; place-items: center; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(23, 20, 15, .3);
+  animation: pinPulse 2.2s ease-in-out infinite;
+}
+.shop-pin::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ink); }
+.shop-pin.is-open { background: var(--ink); animation: none; }
+.shop-pin.is-open::after { background: var(--paper); }
+@keyframes pinPulse {
+  0%, 100% { box-shadow: 0 2px 8px rgba(23, 20, 15, .3), 0 0 0 0 rgba(244, 241, 234, .55); }
+  50% { box-shadow: 0 2px 8px rgba(23, 20, 15, .3), 0 0 0 6px rgba(244, 241, 234, 0); }
+}
+
+.shop-pin-popup {
+  position: absolute; z-index: 6; width: 190px; box-sizing: border-box;
+  background: var(--paper); border-radius: 6px; box-shadow: 0 14px 34px -12px rgba(23, 20, 15, .5);
+  padding: .6rem; display: flex; gap: .6rem; align-items: center;
+}
+.shop-pin-popup img { width: 44px; height: 56px; object-fit: cover; border-radius: 3px; flex: none; background: var(--paper-edge); }
+.shop-pin-popup-info { flex: 1; min-width: 0; }
+.shop-pin-popup-name {
+  font-family: var(--mono); font-size: .66rem; letter-spacing: .03em; text-transform: uppercase;
+  color: var(--ink); margin: 0 0 .25rem; line-height: 1.3;
+}
+.shop-pin-popup-price { font-family: var(--mono); font-size: .66rem; color: var(--ink-soft); margin: 0 0 .5rem; }
+.shop-pin-popup-actions { display: flex; gap: .35rem; }
+.shop-pin-popup-actions button {
+  font-family: var(--mono); font-size: .58rem; letter-spacing: .06em; text-transform: uppercase;
+  padding: .32rem .5rem; border-radius: 100px; border: 1px solid var(--ink); background: none;
+  color: var(--ink); cursor: pointer;
+}
+.shop-pin-popup-actions button.solid { background: var(--ink); color: var(--paper); }
 
 /* caption deliberately breaks past the photo frame's edge, overlapping the boundary */
 .hero-vcaption.break-frame {

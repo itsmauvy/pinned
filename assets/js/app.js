@@ -102,6 +102,7 @@
       desc: "허리 라인을 강조하고 목에 레이스 리본 포인트를 더한 미니 원피스",
       color: "BLACK", fabric: "POLYESTER 95%  SPAN 5%", size: "S  M",
       hero: "assets/img/look1%20front.webp",
+      shopPins: [{ x: 50, y: 20, id: "p07" }],
       angleLabels: ["side", "3/4", "front", "3/4", "back"],
       angles: [
         "assets/img/look1%20left.webp",       // full left profile
@@ -123,6 +124,7 @@
       desc: "한쪽 어깨를 드러낸 셔츠와 컷오프 데님 반바지를 매치한 캐주얼룩.",
       color: "NAVY", fabric: "COTTON 80%  POLYESTER 20%", size: "S  M  L",
       hero: "assets/img/look2%20front%201.webp",
+      shopPins: [{ x: 44, y: 26, id: "p04" }, { x: 50, y: 64, id: "p15" }],
       angles: [
         "assets/img/look2%20left.webp",       // full left profile
         "assets/img/look2%20side%20left.webp",// 3/4 left
@@ -142,6 +144,7 @@
       desc: "밑단을 비대칭으로 컷팅한 데님 오버올 원피스에 블랙 오프숄더 이너로 포인트를 더했습니다.",
       color: "KHAKI", fabric: "COTTON 100%", size: "S  M",
       hero: "assets/img/look3%20front.webp",
+      shopPins: [{ x: 38, y: 14, id: "p03" }, { x: 50, y: 28, id: "p06" }],
       angles: [
         "assets/img/look3%20left.webp",       // full left profile
         "assets/img/look3%20side%20left.webp",// 3/4 left
@@ -158,6 +161,147 @@
     },
   ];
   let currentLook = 0;
+
+  /* =================================================================
+     SHOP-THE-LOOK PINS — small tappable hotspots over a look/collection
+     photo that open a mini popup (thumb + name + price + pin/view).
+     Mobile only for now: desktop's flip pages live inside a continuous
+     3D scroll-scrubbed transform, so a pin's on-screen position would
+     need recalculating every animation frame rather than just on
+     resize — a heavier job left for later if desktop pins are wanted.
+     Coordinates are % of the ORIGINAL photo; layoutPinLayer() maps them
+     to on-screen px by reading the image's actual rendered box, so the
+     same data works whether the photo is cover-cropped (mobile hero,
+     collection) or shown uncropped (contain / width:auto).
+     ================================================================= */
+  const COLLECTION_PINS = [
+    [{ x: 50, y: 26, id: "p01" }, { x: 50, y: 62, id: "p15" }, { x: 40, y: 90, id: "p10" }],
+    [{ x: 24, y: 24, id: "p02" }, { x: 76, y: 56, id: "p17" }],
+  ];
+
+  let openPinPopup = null;
+  function closePinPopup() {
+    if (openPinPopup) { openPinPopup.remove(); openPinPopup = null; }
+    $$(".shop-pin.is-open").forEach((b) => b.classList.remove("is-open"));
+  }
+  document.addEventListener("click", closePinPopup);
+
+  function layoutPinLayer(container, img) {
+    const layer = $(".shop-pin-layer", container);
+    if (!layer || !img.naturalWidth) return;
+    const containerRect = container.getBoundingClientRect();
+    const imgRect = img.getBoundingClientRect();
+    const fit = getComputedStyle(img).objectFit;
+    const baseLeft = imgRect.left - containerRect.left;
+    const baseTop = imgRect.top - containerRect.top;
+    const boxW = imgRect.width, boxH = imgRect.height;
+
+    let mapX = (x) => baseLeft + (x / 100) * boxW;
+    let mapY = (y) => baseTop + (y / 100) * boxH;
+    if (fit === "cover") {
+      const iw = img.naturalWidth, ih = img.naturalHeight;
+      const scale = Math.max(boxW / iw, boxH / ih);
+      const dispW = iw * scale, dispH = ih * scale;
+      const parts = getComputedStyle(img).objectPosition.split(" ");
+      // NB: `parseFloat(x) || 50` would silently turn a real 0% (top-aligned
+      // crop) into 50 (center), since 0 is falsy — check NaN explicitly.
+      const parsePos = (v) => { const n = parseFloat(v); return Number.isNaN(n) ? 50 : n; };
+      const posX = parsePos(parts[0]), posY = parsePos(parts[1]);
+      const offX = (dispW - boxW) * (posX / 100);
+      const offY = (dispH - boxH) * (posY / 100);
+      mapX = (x) => baseLeft + (x / 100) * dispW - offX;
+      mapY = (y) => baseTop + (y / 100) * dispH - offY;
+    }
+
+    $$(".shop-pin", layer).forEach((btn) => {
+      const left = mapX(+btn.dataset.x), top = mapY(+btn.dataset.y);
+      const within = left >= 4 && left <= containerRect.width - 4 && top >= 4 && top <= containerRect.height - 4;
+      btn.style.display = within ? "" : "none";
+      btn.style.left = `${left}px`;
+      btn.style.top = `${top}px`;
+    });
+  }
+
+  function setupPinLayer(container, img) {
+    if (mode !== "scroll" || !container || !img) return null;
+    let layer = $(".shop-pin-layer", container);
+    if (!layer) {
+      layer = document.createElement("div");
+      layer.className = "shop-pin-layer";
+      container.appendChild(layer);
+      const relayout = () => layoutPinLayer(container, img);
+      window.addEventListener("resize", relayout);
+      img.addEventListener("load", relayout);
+      layer._relayout = relayout;
+    }
+    return layer;
+  }
+
+  function setPins(container, img, pinsData) {
+    const layer = setupPinLayer(container, img);
+    if (!layer) return;
+    const data = pinsData || [];
+    layer.innerHTML = data.map((p) => `
+      <button type="button" class="shop-pin" data-x="${p.x}" data-y="${p.y}" data-piece="${p.id}" aria-label="shop this piece"></button>`).join("");
+    $$(".shop-pin", layer).forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const wasOpen = btn.classList.contains("is-open");
+        closePinPopup();
+        if (!wasOpen) openPinPopupFor(btn, container);
+      });
+    });
+    if (layer._relayout) {
+      layer._relayout();
+      // img.src just changed above (look switch) — 'load' can lag or, for an
+      // already-cached image, fire before naturalWidth/the new box settle;
+      // decode() reliably resolves once the new frame is ready to measure.
+      if (img.decode) img.decode().then(layer._relayout).catch(() => {});
+    }
+  }
+
+  function openPinPopupFor(btn, container) {
+    const piece = byId(btn.dataset.piece);
+    if (!piece) return;
+    btn.classList.add("is-open");
+    const pop = document.createElement("div");
+    pop.className = "shop-pin-popup open";
+    pop.innerHTML = `
+      <img src="${piece.image}" alt="" />
+      <div class="shop-pin-popup-info">
+        <p class="shop-pin-popup-name">${piece.name}</p>
+        <p class="shop-pin-popup-price">${money(piece)}</p>
+        <div class="shop-pin-popup-actions">
+          <button type="button" data-act="pin">${isPinned(piece.id) ? "핀됨 ✓" : "핀하기"}</button>
+          <button type="button" class="solid" data-act="view">자세히</button>
+        </div>
+      </div>`;
+    container.appendChild(pop);
+    openPinPopup = pop;
+    pop.addEventListener("click", (e) => e.stopPropagation());
+
+    const left = clamp(parseFloat(btn.style.left) - 95, 8, container.clientWidth - 198);
+    let top = parseFloat(btn.style.top) + 20;
+    if (top + 100 > container.clientHeight) top = parseFloat(btn.style.top) - 20 - 100;
+    pop.style.left = `${left}px`;
+    pop.style.top = `${Math.max(8, top)}px`;
+
+    $("[data-act=pin]", pop).addEventListener("click", () => {
+      const now = togglePin(piece.id);
+      $("[data-act=pin]", pop).textContent = now ? "핀됨 ✓" : "핀하기";
+      toast(now ? "pinned to your board" : "removed from board");
+    });
+    $("[data-act=view]", pop).addEventListener("click", () => { closePinPopup(); openDetail(piece.id); });
+  }
+
+  function initCollectionPins(root) {
+    if (mode !== "scroll") return;
+    $$(".collection-shot", root).forEach((shot, i) => {
+      const img = $("img", shot);
+      const pinsData = COLLECTION_PINS[i];
+      if (img && pinsData) setPins(shot, img, pinsData);
+    });
+  }
 
   /* =================================================================
      ANGLE ROW (right page) — every photographed angle laid out flat,
@@ -247,6 +391,8 @@
       thumbs.forEach((btn, i) => btn.classList.toggle("is-active", i === currentLook));
       renderAngles(look);
       renderDetails(look);
+      closePinPopup();
+      setPins(heroImg.parentElement, heroImg, look.shopPins);
     }
     render();
   }
@@ -278,6 +424,7 @@
   injectPlates(document);
   initAnglesRow(document);
   initLookbook(document);
+  initCollectionPins(document);
 
   /* keywords + issue lines */
   const keywordList = $("#keywordList");
