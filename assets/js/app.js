@@ -172,7 +172,7 @@
      convert: buy the look, not hunt piece by piece.
      ================================================================= */
   const COLLECTION_SETS = [
-    ["p01", "p15", "p10"],
+    ["p01", "p19", "p10"],
     ["p02", "p17"],
   ];
   // cover spread — P0 (halter vest + pleated skirt + boots) and its
