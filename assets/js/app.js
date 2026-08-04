@@ -102,7 +102,7 @@
       desc: "허리 라인을 강조하고 목에 레이스 리본 포인트를 더한 미니 원피스",
       color: "BLACK", fabric: "POLYESTER 95%  SPAN 5%", size: "S  M",
       hero: "assets/img/look1%20front.webp",
-      shopPins: [{ x: 50, y: 20, id: "p07" }],
+      set: ["p07"],
       angleLabels: ["side", "3/4", "front", "3/4", "back"],
       angles: [
         "assets/img/look1%20left.webp",       // full left profile
@@ -124,7 +124,7 @@
       desc: "한쪽 어깨를 드러낸 셔츠와 컷오프 데님 반바지를 매치한 캐주얼룩.",
       color: "NAVY", fabric: "COTTON 80%  POLYESTER 20%", size: "S  M  L",
       hero: "assets/img/look2%20front%201.webp",
-      shopPins: [{ x: 44, y: 26, id: "p04" }, { x: 50, y: 64, id: "p15" }],
+      set: ["p04", "p15"],
       angles: [
         "assets/img/look2%20left.webp",       // full left profile
         "assets/img/look2%20side%20left.webp",// 3/4 left
@@ -144,7 +144,7 @@
       desc: "밑단을 비대칭으로 컷팅한 데님 오버올 원피스에 블랙 오프숄더 이너로 포인트를 더했습니다.",
       color: "KHAKI", fabric: "COTTON 100%", size: "S  M",
       hero: "assets/img/look3%20front.webp",
-      shopPins: [{ x: 38, y: 14, id: "p03" }, { x: 50, y: 28, id: "p06" }],
+      set: ["p03", "p06"],
       angles: [
         "assets/img/look3%20left.webp",       // full left profile
         "assets/img/look3%20side%20left.webp",// 3/4 left
@@ -163,147 +163,83 @@
   let currentLook = 0;
 
   /* =================================================================
-     SHOP-THE-LOOK PINS — small tappable hotspots over a look/collection
-     photo that open a mini popup (thumb + name + price + pin/view).
-     Works on both the mobile scroll carousel and the desktop 3D flip
-     book: layoutPinLayer() positions pins using layout-space values
-     (offsetLeft/clientWidth), not getBoundingClientRect's post-transform
-     screen projection, so a pin — as an ordinary child of the photo's
-     container — rotates along with the page for free during the flip
-     animation instead of needing per-frame recalculation.
-     Coordinates are % of the ORIGINAL photo; layoutPinLayer() maps them
-     to on-screen px by reading the image's actual rendered box, so the
-     same data works whether the photo is cover-cropped (mobile hero,
-     collection) or shown uncropped (contain / width:auto).
+     SHOP-THE-LOOK — one small "pin this set" badge per look/collection
+     photo (fixed to the corner, not per-garment hotspots — guessing
+     exact garment coordinates on a photo was fragile and kept landing
+     wrong). Tapping it opens a mini popup listing every piece in that
+     look with a single "담기" action that adds the whole set to the
+     board at once — matches how these photos are actually meant to
+     convert: buy the look, not hunt piece by piece.
      ================================================================= */
-  const COLLECTION_PINS = [
-    [{ x: 50, y: 26, id: "p01" }, { x: 50, y: 62, id: "p15" }, { x: 40, y: 90, id: "p10" }],
-    [{ x: 24, y: 24, id: "p02" }, { x: 76, y: 56, id: "p17" }],
+  const COLLECTION_SETS = [
+    ["p01", "p15", "p10"],
+    ["p02", "p17"],
   ];
 
   let openPinPopup = null;
   function closePinPopup() {
     if (openPinPopup) { openPinPopup.remove(); openPinPopup = null; }
-    $$(".shop-pin.is-open").forEach((b) => b.classList.remove("is-open"));
+    $$(".shop-set-pin.is-open").forEach((b) => b.classList.remove("is-open"));
   }
   document.addEventListener("click", closePinPopup);
 
-  function layoutPinLayer(container, img) {
-    const layer = $(".shop-pin-layer", container);
-    if (!layer || !img.naturalWidth) return;
-    // offsetLeft/Top + clientWidth/Height are LAYOUT-space (pre-transform)
-    // values, not getBoundingClientRect's post-transform screen projection —
-    // using layout space means the pin layer, as a normal child, rotates
-    // along with the page for free during the desktop 3D flip animation
-    // instead of needing to be recomputed every animation frame.
-    const fit = getComputedStyle(img).objectFit;
-    const baseLeft = img.offsetLeft, baseTop = img.offsetTop;
-    const boxW = img.clientWidth, boxH = img.clientHeight;
-
-    let mapX = (x) => baseLeft + (x / 100) * boxW;
-    let mapY = (y) => baseTop + (y / 100) * boxH;
-    if (fit === "cover") {
-      const iw = img.naturalWidth, ih = img.naturalHeight;
-      const scale = Math.max(boxW / iw, boxH / ih);
-      const dispW = iw * scale, dispH = ih * scale;
-      const parts = getComputedStyle(img).objectPosition.split(" ");
-      // NB: `parseFloat(x) || 50` would silently turn a real 0% (top-aligned
-      // crop) into 50 (center), since 0 is falsy — check NaN explicitly.
-      const parsePos = (v) => { const n = parseFloat(v); return Number.isNaN(n) ? 50 : n; };
-      const posX = parsePos(parts[0]), posY = parsePos(parts[1]);
-      const offX = (dispW - boxW) * (posX / 100);
-      const offY = (dispH - boxH) * (posY / 100);
-      mapX = (x) => baseLeft + (x / 100) * dispW - offX;
-      mapY = (y) => baseTop + (y / 100) * dispH - offY;
-    }
-
-    const cw = container.clientWidth, ch = container.clientHeight;
-    $$(".shop-pin", layer).forEach((btn) => {
-      const left = mapX(+btn.dataset.x), top = mapY(+btn.dataset.y);
-      const within = left >= 4 && left <= cw - 4 && top >= 4 && top <= ch - 4;
-      btn.style.display = within ? "" : "none";
-      btn.style.left = `${left}px`;
-      btn.style.top = `${top}px`;
-    });
+  function addAllToBoard(ids) {
+    let added = 0;
+    ids.forEach((id) => { if (!isPinned(id)) { togglePin(id); added += 1; } });
+    return added;
   }
 
-  function setupPinLayer(container, img) {
-    if (!container || !img) return null;
-    let layer = $(".shop-pin-layer", container);
-    if (!layer) {
-      layer = document.createElement("div");
-      layer.className = "shop-pin-layer";
-      container.appendChild(layer);
-      const relayout = () => layoutPinLayer(container, img);
-      window.addEventListener("resize", relayout);
-      img.addEventListener("load", relayout);
-      layer._relayout = relayout;
-    }
-    return layer;
-  }
-
-  function setPins(container, img, pinsData) {
-    const layer = setupPinLayer(container, img);
-    if (!layer) return;
-    const data = pinsData || [];
-    layer.innerHTML = data.map((p) => `
-      <button type="button" class="shop-pin" data-x="${p.x}" data-y="${p.y}" data-piece="${p.id}" aria-label="shop this piece"></button>`).join("");
-    $$(".shop-pin", layer).forEach((btn) => {
-      btn.addEventListener("click", (e) => {
+  function renderSetBadge(container, ids) {
+    if (!container || !ids || !ids.length) return;
+    let badge = $(".shop-set-pin", container);
+    if (!badge) {
+      badge = document.createElement("button");
+      badge.type = "button";
+      badge.className = "shop-set-pin";
+      badge.innerHTML = `<img src="assets/img/pin%202.webp" alt="" aria-hidden="true" /><span>shop this look</span>`;
+      container.appendChild(badge);
+      badge.addEventListener("click", (e) => {
         e.stopPropagation();
-        const wasOpen = btn.classList.contains("is-open");
+        const wasOpen = badge.classList.contains("is-open");
         closePinPopup();
-        if (!wasOpen) openPinPopupFor(btn, container);
+        if (!wasOpen) openSetPopupFor(badge, container);
       });
-    });
-    if (layer._relayout) {
-      layer._relayout();
-      // img.src just changed above (look switch) — 'load' can lag or, for an
-      // already-cached image, fire before naturalWidth/the new box settle;
-      // decode() reliably resolves once the new frame is ready to measure.
-      if (img.decode) img.decode().then(layer._relayout).catch(() => {});
     }
+    badge.dataset.ids = ids.join(",");
   }
 
-  function openPinPopupFor(btn, container) {
-    const piece = byId(btn.dataset.piece);
-    if (!piece) return;
-    btn.classList.add("is-open");
+  function openSetPopupFor(badge, container) {
+    const ids = badge.dataset.ids.split(",");
+    const items = ids.map(byId).filter(Boolean);
+    if (!items.length) return;
+    badge.classList.add("is-open");
+    const total = items.reduce((sum, p) => sum + p.price, 0);
     const pop = document.createElement("div");
-    pop.className = "shop-pin-popup open";
+    pop.className = "shop-set-popup open";
     pop.innerHTML = `
-      <img src="${piece.image}" alt="" />
-      <div class="shop-pin-popup-info">
-        <p class="shop-pin-popup-name">${piece.name}</p>
-        <p class="shop-pin-popup-price">${money(piece)}</p>
-        <div class="shop-pin-popup-actions">
-          <button type="button" data-act="pin">${isPinned(piece.id) ? "핀됨 ✓" : "핀하기"}</button>
-          <button type="button" class="solid" data-act="view">자세히</button>
-        </div>
+      <p class="shop-set-popup-heading">${items.length}pieces in this look</p>
+      <div class="shop-set-popup-items">
+        ${items.map((p) => `<figure><img src="${p.image}" alt="${p.name}" /><figcaption>${p.name}</figcaption></figure>`).join("")}
+      </div>
+      <div class="shop-set-popup-foot">
+        <span class="shop-set-popup-total">${total.toLocaleString()}원</span>
+        <button type="button" class="solid" data-act="addall">담기</button>
       </div>`;
     container.appendChild(pop);
     openPinPopup = pop;
     pop.addEventListener("click", (e) => e.stopPropagation());
 
-    const left = clamp(parseFloat(btn.style.left) - 95, 8, container.clientWidth - 198);
-    let top = parseFloat(btn.style.top) + 20;
-    if (top + 100 > container.clientHeight) top = parseFloat(btn.style.top) - 20 - 100;
-    pop.style.left = `${left}px`;
-    pop.style.top = `${Math.max(8, top)}px`;
-
-    $("[data-act=pin]", pop).addEventListener("click", () => {
-      const now = togglePin(piece.id);
-      $("[data-act=pin]", pop).textContent = now ? "핀됨 ✓" : "핀하기";
-      toast(now ? "pinned to your board" : "removed from board");
+    $("[data-act=addall]", pop).addEventListener("click", () => {
+      const added = addAllToBoard(ids);
+      toast(added ? `${added}개 담김 — 이 룩 전체가 저장됐어요` : "이미 다 담겨있어요");
+      closePinPopup();
     });
-    $("[data-act=view]", pop).addEventListener("click", () => { closePinPopup(); openDetail(piece.id); });
   }
 
   function initCollectionPins(root) {
     $$(".collection-shot", root).forEach((shot, i) => {
-      const img = $("img", shot);
-      const pinsData = COLLECTION_PINS[i];
-      if (img && pinsData) setPins(shot, img, pinsData);
+      const ids = COLLECTION_SETS[i];
+      if (ids) renderSetBadge(shot, ids);
     });
   }
 
@@ -396,7 +332,7 @@
       renderAngles(look);
       renderDetails(look);
       closePinPopup();
-      setPins(heroImg.parentElement, heroImg, look.shopPins);
+      renderSetBadge(heroImg.parentElement, look.set);
     }
     render();
   }

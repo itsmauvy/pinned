@@ -379,47 +379,46 @@ button { font-family: inherit; cursor: pointer; }
 .lookbook-detail-label { font-family: var(--sans); font-size: .74rem; letter-spacing: .01em; color: var(--ink); text-align: center; }
 
 /* =====================================================================
-   SHOP-THE-LOOK PINS — tappable hotspots on a look/collection photo;
-   position is set inline in px by app.js (layoutPinLayer), computed
-   from the image's actual rendered box so it works cover-cropped or
-   uncropped without per-breakpoint coordinates.
+   SHOP-THE-LOOK — one fixed-corner "shop this look" badge per photo
+   (not per-garment hotspots — guessing exact garment coordinates on a
+   photo was fragile). Opens a popup listing the whole set with one
+   "add all" action.
    ===================================================================== */
-.shop-pin-layer { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
-.shop-pin {
-  position: absolute; transform: translate(-50%, -50%); pointer-events: auto;
-  width: 22px; height: 22px; border-radius: 50%; padding: 0;
-  background: rgba(244, 241, 234, .92); border: 1.5px solid var(--ink);
-  display: grid; place-items: center; cursor: pointer;
-  box-shadow: 0 2px 8px rgba(23, 20, 15, .3);
-  animation: pinPulse 2.2s ease-in-out infinite;
+.shop-set-pin {
+  /* bottom-left, not bottom-right — the lookbook hero already keeps a
+     full-body inset thumbnail pinned to the bottom-right on mobile */
+  position: absolute; left: .8rem; bottom: .8rem; z-index: 5;
+  display: flex; align-items: center; gap: .4rem;
+  padding: .5rem .8rem .5rem .6rem; border-radius: 100px;
+  background: rgba(244, 241, 234, .95); border: 1px solid var(--ink);
+  cursor: pointer; box-shadow: 0 4px 16px rgba(23, 20, 15, .28);
+  font-family: var(--mono); font-size: .62rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink);
 }
-.shop-pin::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ink); }
-.shop-pin.is-open { background: var(--ink); animation: none; }
-.shop-pin.is-open::after { background: var(--paper); }
-@keyframes pinPulse {
-  0%, 100% { box-shadow: 0 2px 8px rgba(23, 20, 15, .3), 0 0 0 0 rgba(244, 241, 234, .55); }
-  50% { box-shadow: 0 2px 8px rgba(23, 20, 15, .3), 0 0 0 6px rgba(244, 241, 234, 0); }
-}
+.shop-set-pin img { width: 18px; height: 18px; object-fit: contain; display: block; pointer-events: none; }
+.shop-set-pin.is-open { background: var(--ink); color: var(--paper); }
 
-.shop-pin-popup {
-  position: absolute; z-index: 6; width: 190px; box-sizing: border-box;
-  background: var(--paper); border-radius: 6px; box-shadow: 0 14px 34px -12px rgba(23, 20, 15, .5);
-  padding: .6rem; display: flex; gap: .6rem; align-items: center;
+.shop-set-popup {
+  position: absolute; left: .8rem; bottom: 3.6rem; z-index: 6; width: 232px; box-sizing: border-box;
+  background: var(--paper); border-radius: 10px; box-shadow: 0 16px 40px -12px rgba(23, 20, 15, .55);
+  padding: .9rem;
 }
-.shop-pin-popup img { width: 44px; height: 56px; object-fit: cover; border-radius: 3px; flex: none; background: var(--paper-edge); }
-.shop-pin-popup-info { flex: 1; min-width: 0; }
-.shop-pin-popup-name {
-  font-family: var(--mono); font-size: .66rem; letter-spacing: .03em; text-transform: uppercase;
-  color: var(--ink); margin: 0 0 .25rem; line-height: 1.3;
+.shop-set-popup-heading {
+  font-family: var(--mono); font-size: .62rem; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--muted); margin: 0 0 .6rem;
 }
-.shop-pin-popup-price { font-family: var(--mono); font-size: .66rem; color: var(--ink-soft); margin: 0 0 .5rem; }
-.shop-pin-popup-actions { display: flex; gap: .35rem; }
-.shop-pin-popup-actions button {
-  font-family: var(--mono); font-size: .58rem; letter-spacing: .06em; text-transform: uppercase;
-  padding: .32rem .5rem; border-radius: 100px; border: 1px solid var(--ink); background: none;
-  color: var(--ink); cursor: pointer;
+.shop-set-popup-items { display: flex; gap: .5rem; margin-bottom: .8rem; }
+.shop-set-popup-items figure { margin: 0; flex: 1; min-width: 0; }
+.shop-set-popup-items img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 4px; background: var(--paper-edge); display: block; }
+.shop-set-popup-items figcaption {
+  font-family: var(--sans); font-size: .6rem; color: var(--ink-soft); margin-top: .3rem; line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
-.shop-pin-popup-actions button.solid { background: var(--ink); color: var(--paper); }
+.shop-set-popup-foot { display: flex; align-items: center; justify-content: space-between; gap: .6rem; }
+.shop-set-popup-total { font-family: var(--mono); font-size: .78rem; color: var(--ink); }
+.shop-set-popup-foot button.solid {
+  font-family: var(--mono); font-size: .64rem; letter-spacing: .08em; text-transform: uppercase;
+  padding: .55rem 1.1rem; border-radius: 100px; border: none; background: var(--ink); color: var(--paper); cursor: pointer;
+}
 
 /* caption deliberately breaks past the photo frame's edge, overlapping the boundary */
 .hero-vcaption.break-frame {
