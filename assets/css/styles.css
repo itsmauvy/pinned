@@ -741,15 +741,25 @@ body.mode-scroll .mag-close-shot {
 
 /* lookbook picker: desktop's two-column grid (hero | info, filmstrip
    below both) is too cramped as two ~160px-wide columns on a phone —
-   stack it into one column that fills exactly one screen instead. */
-body.mode-scroll .lookbook-page { display: flex; flex-direction: column; gap: .7rem; }
-body.mode-scroll .lookbook-hero { flex: 1; min-height: 0; grid-column: auto; grid-row: auto; }
-body.mode-scroll .lookbook-info {
-  flex: none; grid-column: auto; grid-row: auto; gap: .5rem; justify-content: flex-start;
+   stack it into one column that fills exactly one screen instead. the
+   hero shot is a tall full-body photo, so sizing it by height (like
+   desktop) left it a sliver ~94px wide; crop it to fill the full width
+   instead so the model is actually visible. */
+body.mode-scroll .lookbook-page { display: flex; flex-direction: column; gap: .5rem; }
+body.mode-scroll .lookbook-hero {
+  flex: none; width: 100%; height: auto; aspect-ratio: 3/3.72; grid-column: auto; grid-row: auto;
 }
-body.mode-scroll .lookbook-name { font-size: 1.6rem; }
-body.mode-scroll .lookbook-desc { font-size: .85rem; line-height: 1.5; }
-body.mode-scroll .lookbook-filmstrip { flex: none; height: 90px; grid-column: auto; grid-row: auto; }
+body.mode-scroll .lookbook-hero img {
+  height: 100%; width: 100%; object-fit: cover; object-position: center 12%;
+}
+body.mode-scroll .lookbook-info {
+  flex: none; grid-column: auto; grid-row: auto; gap: .35rem; justify-content: flex-start;
+}
+body.mode-scroll .lookbook-name { font-size: 1.4rem; }
+body.mode-scroll .lookbook-rule { margin: .1rem 0; }
+body.mode-scroll .lookbook-desc { font-size: .78rem; line-height: 1.4; }
+body.mode-scroll .lookbook-specs { gap: .3rem; }
+body.mode-scroll .lookbook-filmstrip { flex: none; height: 72px; grid-column: auto; grid-row: auto; }
 
 @media (max-width: 640px) {
   .mast-issue { display: none; }
