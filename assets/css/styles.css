@@ -798,8 +798,8 @@ body.mode-scroll .lookbook-filmstrip-num {
    desktop-sized lede text (1.4rem, wrapping to 4+ short lines) ate the
    rest of the budget. Crop the photo to a proper portrait ratio and
    scale the copy down so both fit one screen without a bad crop. */
-body.mode-scroll .story-photo { flex: none; width: 100%; height: auto; aspect-ratio: 3/3.6; }
-body.mode-scroll .story-kicker { margin: .8rem 0 .6rem; }
+body.mode-scroll .story-photo { flex: none; width: 100%; height: auto; aspect-ratio: 3/3.54; }
+body.mode-scroll .story-kicker { margin: 1.5rem 0 .6rem; }
 body.mode-scroll .story-lede { font-size: 1rem; line-height: 1.6; margin-bottom: 1rem; }
 body.mode-scroll .story-tagline { margin: .6rem 0 1rem; }
 body.mode-scroll .story-tagline p { font-size: .76rem; }
