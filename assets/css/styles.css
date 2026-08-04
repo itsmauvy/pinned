@@ -318,6 +318,9 @@ button { font-family: inherit; cursor: pointer; }
 }
 .lookbook-hero { grid-column: 1; grid-row: 1; position: relative; min-height: 0; display: flex; align-items: center; justify-content: center; }
 .lookbook-hero img { height: 100%; width: auto; max-width: 100%; object-fit: contain; }
+/* desktop already shows the full body via the contain-fit hero image
+   above — this inset is only needed once mobile crops that hero to cover */
+.lookbook-hero-full { display: none; }
 
 .lookbook-info { grid-column: 2; grid-row: 1; display: flex; flex-direction: column; justify-content: center; gap: 1.1rem; padding: 0 .4rem 0 0; }
 .lookbook-kicker-row { display: flex; align-items: center; gap: .5rem; }
@@ -749,10 +752,20 @@ body.mode-scroll .lookbook-page { display: flex; flex-direction: column; gap: .5
 body.mode-scroll .lookbook-hero {
   flex: none; width: 100%; height: auto; aspect-ratio: 3/4.1; grid-column: auto; grid-row: auto;
 }
-body.mode-scroll .lookbook-hero img {
+body.mode-scroll #lookbookHeroImg {
   /* source photos have almost no headroom above the hair (~0.5% of
      image height) — any positive top-crop here cuts into the head */
   height: 100%; width: 100%; object-fit: cover; object-position: center top;
+}
+/* the cropped hero above loses the full silhouette (a problem for a
+   one-piece dress where the length IS the product) — a small corner
+   inset restores it, echoing the cover page's own big-shot + back-shot
+   pairing already used elsewhere in the site. */
+body.mode-scroll .lookbook-hero-full {
+  display: block; position: absolute; right: .7rem; bottom: .7rem; z-index: 2;
+  height: 48%; width: auto; max-width: 32%; object-fit: contain;
+  background: var(--paper); padding: 3px;
+  box-shadow: 0 8px 20px -10px rgba(23,20,15,.55);
 }
 body.mode-scroll .lookbook-info {
   flex: none; grid-column: auto; grid-row: auto; gap: .35rem; justify-content: flex-start;

@@ -209,6 +209,7 @@
      ================================================================= */
   function initLookbook(root) {
     const heroImg = $("#lookbookHeroImg", root);
+    const heroFullImg = $("#lookbookHeroFull", root);
     const filmstrip = $("#lookbookFilmstrip", root);
     if (!heroImg || !filmstrip) return;
     const kickerEl = $("#lookbookKicker", root);
@@ -236,6 +237,7 @@
       const look = LOOKS[currentLook];
       heroImg.src = look.hero;
       heroImg.alt = look.name;
+      if (heroFullImg) { heroFullImg.src = look.hero; heroFullImg.alt = `${look.name} — full look`; }
       if (kickerEl) kickerEl.textContent = `look ${String(currentLook + 1).padStart(2, "0")}`;
       if (nameEl) nameEl.textContent = look.name;
       if (descEl) descEl.textContent = look.desc || "";
