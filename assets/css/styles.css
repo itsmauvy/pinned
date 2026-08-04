@@ -691,6 +691,12 @@ body.mode-scroll .page-face {
 }
 body.mode-scroll .plates-page,
 body.mode-scroll .story-photo-page { height: 100vh; }
+/* full-bleed photo pages: the generic .page-face padding above (needed
+   for text pages, to clear the fixed masthead) otherwise overrides these
+   pages' padding:0 and leaves blank gutters around the cropped photo —
+   the masthead already blends over photos via mix-blend-mode, so these
+   can safely run edge-to-edge under it instead. */
+body.mode-scroll .page-face.collection-page { padding: 0; }
 body.mode-scroll .plates-page .pinned-photo:first-of-type { width: 72%; }
 body.mode-scroll .plates-page .pinned-photo.offset { width: 60%; }
 body.mode-scroll .archive-wall { height: auto; max-height: none; overflow: visible; }
