@@ -280,7 +280,7 @@ button { font-family: inherit; cursor: pointer; }
      a vh-based height clamp was tried first but a fixed vh fraction
      doesn't track the title's own vw-based position, so it still
      overlapped at some widths in this range (confirmed at 850px). */
-  .cover-big-shot { flex: none; width: clamp(160px, 24vw, 360px); height: auto; max-width: none; aspect-ratio: 615 / 995; align-self: center; margin: 0; }
+  .cover-big-shot { flex: none; width: clamp(160px, 24vw, 360px); height: auto; max-width: none; aspect-ratio: 615 / 995; align-self: flex-end; margin: 0; }
   /* pixel-checked: the source file has a solid-black sliver (another
      figure's sleeve) baked into its own left edge, x=0-30 of 646px —
      the slightly-narrower aspect-ratio above + object-position:right
