@@ -647,6 +647,19 @@ body.mode-scroll .shop-pagination { margin-top: .3rem; }
 .detail-specs { display: grid; grid-template-columns: auto 1fr; gap: .4rem 1rem; margin: 0 0 1.6rem; }
 .detail-specs dt { font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
 .detail-specs dd { margin: 0; font-size: .92rem; color: var(--ink); }
+.detail-size { margin: 0 0 1.6rem; }
+.detail-size-label {
+  font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-soft); margin: 0 0 .6rem;
+}
+.size-select { display: flex; flex-wrap: wrap; gap: .5rem; }
+.size-btn {
+  min-width: 42px; padding: .5rem .4rem; border-radius: 4px; border: 1px solid var(--hair);
+  background: none; font-family: var(--mono); font-size: .78rem; color: var(--ink); cursor: pointer;
+}
+.size-btn:hover:not(.disabled) { border-color: var(--ink); }
+.size-btn.active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.size-btn.disabled { color: var(--muted); border-color: var(--hair); text-decoration: line-through; cursor: not-allowed; }
 .detail-foot { margin-top: auto; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; padding-top: 1rem; border-top: 1px solid var(--hair); }
 .detail-price { font-family: var(--mono); font-weight: 700; font-size: 1.5rem; letter-spacing: -.01em; color: var(--ink); }
 .detail-actions { display: flex; gap: .6rem; }

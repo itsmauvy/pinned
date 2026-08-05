@@ -178,7 +178,7 @@
   // cover spread — P0 (halter vest + pleated skirt + boots) and its
   // companion P1 (shorts + mary jane loafers + collar socks)
   const COVER_SET = ["p20", "p18", "p13"];
-  const COVER_COMPANION_SET = ["p18", "p14", "p11"];
+  const COVER_COMPANION_SET = ["p14", "p11"];
 
   let openPinPopup = null;
   function closePinPopup() {
@@ -543,10 +543,13 @@
      PRODUCT DETAIL overlay
      ================================================================= */
   const overlay = $("#detailOverlay");
+  const STANDARD_SIZES = ["XS", "S", "M", "L", "XL"];
   let currentDetail = null;
+  let selectedSize = null;
   function openDetail(id) {
     const p = byId(id); if (!p) return;
     currentDetail = id;
+    selectedSize = null;
     $("#detailFigure").className = p.image ? "pinned-photo photo-real" : `pinned-photo tone-${p.tone}`;
     $("#detailPlate").className = p.image ? "plate-fill photo" : "plate-fill";
     $("#detailPlate").innerHTML = p.image
@@ -559,7 +562,12 @@
     $("#detailNote").textContent = p.note;
     $("#detailPrice").textContent = money(p);
     $("#detailSpecs").innerHTML =
-      `<dt>condition</dt><dd>${p.condition}</dd><dt>material</dt><dd>${p.material}</dd><dt>size</dt><dd>${p.size}</dd><dt>house</dt><dd>${p.house}</dd>`;
+      `<dt>condition</dt><dd>${p.condition}</dd><dt>material</dt><dd>${p.material}</dd><dt>house</dt><dd>${p.house}</dd>`;
+    const available = (p.size || "").split(/\s+/).filter(Boolean);
+    $("#detailSizeSelect").innerHTML = STANDARD_SIZES.map((s) => {
+      const inStock = available.includes(s);
+      return `<button type="button" class="size-btn${inStock ? "" : " disabled"}" data-size="${s}"${inStock ? "" : " disabled"}>${s}</button>`;
+    }).join("");
     const pinBtn = $("#detailPin");
     pinBtn.classList.toggle("pinned", isPinned(id));
     pinBtn.textContent = isPinned(id) ? "pinned ✓" : "pin this piece";
@@ -567,8 +575,16 @@
   }
   const closeDetail = () => { overlay.hidden = true; currentDetail = null; document.body.style.overflow = ""; };
 
+  $("#detailSizeSelect").addEventListener("click", (e) => {
+    const btn = e.target.closest(".size-btn");
+    if (!btn || btn.disabled) return;
+    selectedSize = btn.dataset.size;
+    $$(".size-btn", $("#detailSizeSelect")).forEach((b) => b.classList.toggle("active", b === btn));
+  });
+
   $("#detailPin").addEventListener("click", () => {
     if (!currentDetail) return;
+    if (!selectedSize) { toast("사이즈를 먼저 선택해주세요"); return; }
     const now = togglePin(currentDetail);
     const b = $("#detailPin");
     b.classList.toggle("pinned", now); b.textContent = now ? "pinned ✓" : "pin this piece";
@@ -576,6 +592,7 @@
   });
   $("#detailBuy").addEventListener("click", () => {
     if (!currentDetail) return;
+    if (!selectedSize) { toast("사이즈를 먼저 선택해주세요"); return; }
     toast("checkout is a demo — but the taste is real");
   });
 
