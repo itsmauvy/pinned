@@ -237,7 +237,11 @@ button { font-family: inherit; cursor: pointer; }
 
 .cover-right { position: relative; flex: 1; min-height: 0; min-width: 0; display: flex; justify-content: flex-end; }
 .cover-big-shot {
-  z-index: 7; flex: 0 1 auto; width: auto; aspect-ratio: 646 / 995;
+  /* width is derived from the oversized height above via aspect-ratio,
+     which on a real 1440px screen grew wide enough to bleed all the way
+     into .cover-left and cover the "pieces worth pinning." title —
+     max-width keeps it a big dramatic bleed shot without eating the copy */
+  z-index: 7; flex: 0 1 auto; width: auto; max-width: 90%; aspect-ratio: 646 / 995;
   height: calc(100% + clamp(2rem, 5vw, 5rem));
   margin: 0 calc(-1 * clamp(2rem, 5vw, 5.5rem) + 5.5rem) calc(-1 * clamp(2rem, 5vw, 5rem)) 0;
 }
