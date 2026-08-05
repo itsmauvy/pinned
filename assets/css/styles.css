@@ -274,13 +274,18 @@ button { font-family: inherit; cursor: pointer; }
   /* the big shot's dramatic bleed-past-the-page height, at this width
      range, produces a native-ratio width wide enough to bleed into
      .cover-left and cover the "pieces worth pinning." title entirely
-     (measured on a real 1440px screen). height:100% (not the bleed
-     calc()) + a capped max-width keeps the box's own ratio close to the
-     photo's native one so object-fit:cover only crops the sides
-     moderately, instead of squashing the box to a ~0.41 ratio against
-     the photo's 0.649 (that combination — tall bleed height + a narrow
-     max-width — was cropping over a third of it away). */
-  .cover-big-shot { flex: none; height: 100%; max-width: clamp(180px, 25vw, 400px); align-self: stretch; margin: 0; }
+     (measured on a real 1440px screen). Driven by WIDTH (vw-based
+     clamp — the actual constraint is horizontal, clearing the title
+     column) with height:auto so the box keeps the photo's own ratio —
+     a vh-based height clamp was tried first but a fixed vh fraction
+     doesn't track the title's own vw-based position, so it still
+     overlapped at some widths in this range (confirmed at 850px). */
+  .cover-big-shot { flex: none; width: clamp(160px, 24vw, 360px); height: auto; max-width: none; aspect-ratio: 615 / 995; align-self: center; margin: 0; }
+  /* pixel-checked: the source file has a solid-black sliver (another
+     figure's sleeve) baked into its own left edge, x=0-30 of 646px —
+     the slightly-narrower aspect-ratio above + object-position:right
+     crops exactly that sliver off instead of showing it at the edge */
+  .cover-big-shot > img { object-position: right top; }
 }
 
 /* right-page companion spread — "summer collection" */
