@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>주문/결제 — pinned</title>
+  <meta name="description" content="pinned 주문/결제 — 담아둔 아이템을 확인하고 결제를 진행하세요." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <header class="masthead">
+    <a class="wordmark" href="index.html" aria-label="pinned — home">
+      <img src="assets/img/pinned%20logo%201.svg" alt="pinned" />
+    </a>
+  </header>
+
+  <main class="checkout-main">
+    <div class="checkout-wrap" id="checkoutWrap"></div>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="assets/js/data.js"></script>
+  <script>
+    (function () {
+      "use strict";
+      const DATA = window.PINNED_DATA;
+      const { pieces } = DATA;
+      const byId = (id) => pieces.find((p) => p.id === id);
+      const $ = (s, r = document) => r.querySelector(s);
+      const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+      const money = (n) => `${n.toLocaleString()}원`;
+
+      const STORE = "pinned.board.v1";
+      const QTY_STORE = "pinned.board.qty.v1";
+      const getPins = () => { try { return JSON.parse(localStorage.getItem(STORE)) || []; } catch { return []; } };
+      const getQtyMap = () => { try { return JSON.parse(localStorage.getItem(QTY_STORE)) || {}; } catch { return {}; } };
+      const getQty = (id) => getQtyMap()[id] || 1;
+
+      const SHIPPING_FEE = 3000;
+      const FREE_SHIPPING_MIN = 50000;
+
+      let toastTimer;
+      function toast(msg) {
+        const t = $("#toast");
+        t.textContent = msg; t.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
+      }
+
+      const wrap = $("#checkoutWrap");
+
+      function renderEmpty() {
+        wrap.innerHTML = `
+          <div class="checkout-empty">
+            <p class="kicker">주문/결제</p>
+            <h1 class="page-head">담아둔 아이템이 없어요</h1>
+            <p class="body">마음에 드는 피스를 먼저 핀해주세요.</p>
+            <a class="cta solid" href="index.html">쇼핑 계속하기</a>
+          </div>`;
+      }
+
+      function renderCheckout() {
+        const list = getPins().map(byId).filter(Boolean);
+        if (!list.length) { renderEmpty(); return; }
+
+        const subtotal = list.reduce((s, p) => s + p.price * getQty(p.id), 0);
+        const shipping = subtotal >= FREE_SHIPPING_MIN ? 0 : SHIPPING_FEE;
+        const discount = list.length >= 2 ? Math.round(subtotal * 0.05) : 0;
+        const total = subtotal + shipping - discount;
+
+        wrap.innerHTML = `
+          <p class="kicker">checkout</p>
+          <h1 class="page-head">주문/결제</h1>
+          <div class="checkout-grid">
+            <section class="checkout-left">
+              <h2 class="checkout-section-title">주문 상품 (${list.length})</h2>
+              <div class="checkout-items">
+                ${list.map((p) => `
+                  <div class="board-row">
+                    <div class="board-thumb ${p.image ? "photo-real" : `tone-${p.tone}`}">
+                      ${p.image ? `<img src="${p.image}" alt="${p.name}" />` : ""}
+                    </div>
+                    <div class="board-info">
+                      <h4>${p.name}</h4>
+                      <p class="board-meta">size / ${p.size} · qty / ${getQty(p.id)}</p>
+                    </div>
+                    <div class="board-row-side">
+                      <div class="bprice">${money(p.price * getQty(p.id))}</div>
+                    </div>
+                  </div>`).join("")}
+              </div>
+
+              <h2 class="checkout-section-title">배송 정보</h2>
+              <form class="login-form checkout-form" id="shippingForm">
+                <label>받는 사람<input type="text" id="shipName" required autocomplete="name" /></label>
+                <label>연락처<input type="tel" id="shipPhone" required autocomplete="tel" placeholder="010-0000-0000" /></label>
+                <label>배송 주소<input type="text" id="shipAddress" required autocomplete="street-address" /></label>
+                <label>배송 메모 (선택)<input type="text" id="shipMemo" placeholder="예: 부재 시 경비실에 맡겨주세요" /></label>
+              </form>
+
+              <h2 class="checkout-section-title">결제 수단</h2>
+              <div class="payment-options" id="paymentOptions">
+                <label class="payment-option"><input type="radio" name="pay" value="card" checked /> 신용·체크카드</label>
+                <label class="payment-option"><input type="radio" name="pay" value="kakao" /> 카카오페이</label>
+                <label class="payment-option"><input type="radio" name="pay" value="naver" /> 네이버페이</label>
+              </div>
+            </section>
+
+            <aside class="checkout-right">
+              <div class="checkout-summary-card">
+                <div class="board-summary">
+                  <div class="board-summary-row"><span>subtotal</span><span>${money(subtotal)}</span></div>
+                  <div class="board-summary-row"><span>shipping</span><span>${shipping === 0 ? "free" : money(shipping)}</span></div>
+                  ${discount > 0 ? `<div class="board-summary-row"><span>discount</span><span>-${money(discount)}</span></div>` : ""}
+                </div>
+                <div class="board-total"><span class="lbl">total</span><span class="val">${money(total)}</span></div>
+                <button type="button" class="cta solid" style="width:100%" id="placeOrderBtn">결제하기</button>
+                <a class="board-continue" href="index.html">쇼핑 계속하기</a>
+              </div>
+            </aside>
+          </div>`;
+
+        $("#placeOrderBtn").addEventListener("click", () => {
+          const form = $("#shippingForm");
+          if (!form.reportValidity()) { toast("배송 정보를 입력해주세요"); return; }
+          const pay = $("input[name=pay]:checked", $("#paymentOptions")).value;
+          const payLabel = { card: "신용·체크카드", kakao: "카카오페이", naver: "네이버페이" }[pay];
+          renderSuccess(total, payLabel);
+          localStorage.removeItem(STORE);
+          localStorage.removeItem(QTY_STORE);
+        });
+      }
+
+      function renderSuccess(total, payLabel) {
+        const orderNo = `PN${Date.now().toString().slice(-8)}`;
+        wrap.innerHTML = `
+          <div class="checkout-success">
+            <p class="kicker">order complete</p>
+            <h1 class="page-head">주문이 완료됐어요</h1>
+            <p class="body">데모 결제라 실제로 청구되지는 않아요 — 그래도 취향은 진짜예요.</p>
+            <dl class="detail-specs checkout-success-specs">
+              <dt>주문번호</dt><dd>${orderNo}</dd>
+              <dt>결제수단</dt><dd>${payLabel}</dd>
+              <dt>결제금액</dt><dd>${money(total)}</dd>
+            </dl>
+            <a class="cta solid" href="index.html">쇼핑 계속하기</a>
+          </div>`;
+      }
+
+      renderCheckout();
+    })();
+  </script>
+</body>
+</html>

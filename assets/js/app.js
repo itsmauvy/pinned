@@ -649,7 +649,7 @@
       <div class="board-total"><span class="lbl">total</span><span class="val">${total.toLocaleString()}${currency}</span></div>
       <button class="cta solid" style="width:100%" id="boardCheckout">checkout</button>
       <button class="board-continue" id="boardContinue">continue shopping</button>`;
-    $("#boardCheckout").addEventListener("click", () => toast("checkout is a demo — but the taste is real"));
+    $("#boardCheckout").addEventListener("click", () => { window.location.href = "checkout.html"; });
     $("#boardContinue").addEventListener("click", closeBoard);
   }
 
