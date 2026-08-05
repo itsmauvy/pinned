@@ -96,8 +96,10 @@
 
               <h2 class="checkout-section-title">배송 정보</h2>
               <form class="login-form checkout-form" id="shippingForm">
-                <label>받는 사람<input type="text" id="shipName" required autocomplete="name" /></label>
-                <label>연락처<input type="tel" id="shipPhone" required autocomplete="tel" placeholder="010-0000-0000" /></label>
+                <div class="checkout-form-row">
+                  <label>받는 사람<input type="text" id="shipName" required autocomplete="name" /></label>
+                  <label>연락처<input type="tel" id="shipPhone" required autocomplete="tel" placeholder="010-0000-0000" /></label>
+                </div>
                 <label>배송 주소<input type="text" id="shipAddress" required autocomplete="street-address" /></label>
                 <label>배송 메모 (선택)<input type="text" id="shipMemo" placeholder="예: 부재 시 경비실에 맡겨주세요" /></label>
               </form>
