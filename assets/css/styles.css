@@ -24,7 +24,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: auto; }
+html { scroll-behavior: auto; overflow-x: hidden; }
 body {
   margin: 0;
   background: #ffffff;   /* the desk the book sits on */
@@ -137,7 +137,11 @@ button { font-family: inherit; cursor: pointer; }
 }
 .book {
   position: relative;
-  width: 100vw;
+  /* 100% of body, not 100vw — vw includes a classic (non-overlay) vertical
+     scrollbar's width, which body's own box does not, so 100vw can render
+     a few px wider than the actually-visible area and get clipped/pushed
+     off-screen on the side. */
+  width: 100%;
   height: 100vh;
   perspective: 3000px;
   transform-style: preserve-3d;
