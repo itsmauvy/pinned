@@ -803,33 +803,47 @@ body.mode-scroll .shop-pagination { margin-top: .3rem; }
 /* =====================================================================
    CHECKOUT
    ===================================================================== */
-.checkout-main { min-height: 100vh; padding: clamp(6rem, 12vw, 7.5rem) 1.5rem 4rem; }
-.checkout-wrap { max-width: 960px; margin: 0 auto; }
-.checkout-wrap .kicker { margin-bottom: .6rem; }
-.checkout-wrap .page-head { margin-bottom: 2rem; }
-.checkout-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+.checkout-main { min-height: 100vh; padding: clamp(4.4rem, 8vw, 5.2rem) 1.5rem 2rem; }
+.checkout-wrap { max-width: 1000px; margin: 0 auto; }
+.checkout-wrap .kicker { margin-bottom: .4rem; }
+.checkout-wrap .page-head { margin-bottom: 1rem; font-size: clamp(1.6rem, 3vw, 2.1rem); }
+/* one bordered panel, not two loose floating columns — the summary
+   side gets its own shaded background stretched to match the left
+   column's height, so a short order doesn't just trail off into bare
+   page-white space beside it. */
+.checkout-grid {
+  display: grid; grid-template-columns: 1.5fr 1fr; align-items: stretch;
+  border: 1px solid var(--hair); border-radius: 4px; overflow: hidden;
+}
+.checkout-left { padding: clamp(1.6rem, 3vw, 2.2rem); }
+.checkout-right { padding: clamp(1.6rem, 3vw, 2.2rem); border-left: 1px solid var(--hair); background: var(--paper-edge); }
 .checkout-section-title {
-  font-family: var(--mono); font-size: .74rem; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--ink-soft); margin: 2.2rem 0 .8rem;
+  font-family: var(--mono); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-soft); margin: 1.2rem 0 .5rem;
 }
 .checkout-section-title:first-of-type { margin-top: 0; }
-.checkout-items { border-top: 1px solid var(--hair); }
-.checkout-form { gap: 1rem; }
-.payment-options { display: flex; flex-direction: column; gap: .7rem; }
+/* internal scroll, not page scroll — a long order shouldn't push the
+   shipping form/payment/total off-screen; this section scrolls on its
+   own instead while everything else stays put */
+.checkout-items { border-top: 1px solid var(--hair); max-height: 190px; overflow-y: auto; }
+.checkout-items .board-row { padding: .6rem 0; grid-template-columns: 52px 1fr auto; }
+.checkout-items .board-thumb { width: 52px; }
+.checkout-form { gap: .6rem; }
+.checkout-form label { gap: .3rem; font-size: .66rem; }
+.checkout-form input { font-size: .9rem; padding: .4rem 0; }
+.payment-options { display: flex; flex-direction: column; gap: .5rem; }
 .payment-option {
-  display: flex; align-items: center; gap: .7rem; font-family: var(--sans); font-size: .95rem;
-  color: var(--ink-soft); cursor: pointer; padding: .3rem 0;
+  display: flex; align-items: center; gap: .7rem; font-family: var(--sans); font-size: .92rem;
+  color: var(--ink-soft); cursor: pointer; padding: .2rem 0;
 }
 .payment-option input { accent-color: var(--ink); width: 1rem; height: 1rem; cursor: pointer; }
-.checkout-summary-card {
-  background: var(--paper-edge); border-radius: 4px; padding: clamp(1.6rem, 3vw, 2rem);
-  position: sticky; top: 7rem; box-shadow: 0 20px 50px -30px rgba(23,20,15,.35);
-}
+.checkout-summary-card { position: sticky; top: 7rem; }
 .checkout-empty, .checkout-success { max-width: 440px; margin: 4rem auto; text-align: center; }
 .checkout-empty .cta, .checkout-success .cta { margin: 1.4rem auto 0; }
-.checkout-success-specs { text-align: left; margin: 1.6rem 0; background: var(--paper-2); padding: 1.2rem 1.4rem; border-radius: 4px; }
+.checkout-success-specs { text-align: left; margin: 1.6rem 0; background: var(--paper-edge); padding: 1.2rem 1.4rem; border-radius: 4px; }
 @media (max-width: 760px) {
   .checkout-grid { grid-template-columns: 1fr; }
+  .checkout-right { border-left: none; border-top: 1px solid var(--hair); }
   .checkout-summary-card { position: static; }
 }
 
